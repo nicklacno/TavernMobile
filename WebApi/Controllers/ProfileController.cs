@@ -14,10 +14,10 @@ namespace WebApi.Controllers
             _logger = logger;
         }
 
-        [HttpGet("GetProfile")]
-        public IEnumerable<Profile> Get(int i)
+        [HttpGet("{id}")]
+        public Profile Get(int id)
         {
-
+            return Profile.GetProfile(id);
         }
     }
 }
