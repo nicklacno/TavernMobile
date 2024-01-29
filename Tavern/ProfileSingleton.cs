@@ -36,5 +36,11 @@ namespace Tavern
                 ProfileId = id;
             return await _httpClient.GetStringAsync($"{BASE_ADDRESS}/Profile/{ProfileId}");
         }
+        public async Task<string> GetFriendsList()
+        {
+            if (ProfileId < 0)
+                return null;
+            return await _httpClient.GetStringAsync($"{BASE_ADDRESS}/Profile/{ProfileId}/Friends");
+        }
     }
 }

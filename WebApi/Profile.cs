@@ -64,5 +64,51 @@ namespace WebApi
                 return null;
             }
         }
+
+        public static string GetFriends(int id)
+        {
+            try
+            {
+                string friends = "";
+                List<int> ids = new List<int>();
+                using (SqlConnection  conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = $"SELECT UserID_1, UserID_2 FROM tavern.dbo.PrivateChat WHERE Relationship='F' AND (UserID_1={id} OR UserID_2={id})";
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            if (reader.GetInt32(0) == id)
+                                ids.Add(reader.GetInt32(1));
+                            else
+                                ids.Add(reader.GetInt32(0));
+                        }
+                    }
+                    conn.Close();
+                    if (ids.Count < 0)
+                        return "";
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = $"SELECT UserID, UserName FROM tavern.dbo.Customer";
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            if (ids.Contains(reader.GetInt32(0)))
+                                friends += reader.GetString(1) + ",";
+                        }
+                    }
+                }
+                return friends;
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
+            }
+        }
     }
 }

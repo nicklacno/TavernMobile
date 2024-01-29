@@ -19,5 +19,11 @@ namespace WebApi.Controllers
         {
             return Profile.GetProfile(id);
         }
+
+        [HttpGet("{id}/Friends")]
+        public string GetFriends(int id)
+        {
+            return Profile.GetFriends(id);
+        }
     }
 }
