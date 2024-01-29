@@ -5,7 +5,8 @@ namespace WebApi
 {
     public class Profile
     {
-        private const string connectionString = "Server = satou.cset.oit.edu, 5433; " +
+        private const string connectionString = 
+            "Server = satou.cset.oit.edu, 5433; " +
             "Database = tavern; " +
             "User Id = tavern; " +
             "Password = T@vern5!; " +
