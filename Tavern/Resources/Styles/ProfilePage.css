@@ -4,7 +4,7 @@
     border: 40 0 20 0;
     padding: 10;
     background-color: #432900;
-    font-weight: bold;
+    font-weight: bolder;
 }
 #Bio
 {
@@ -24,4 +24,24 @@
 
 label {
     color: white;
+}
+
+#FriendsList
+{
+    background-color: #432900;
+    border: 10;
+    margin-top: 20;
+    padding: 10;
+}
+
+#FriendsList label
+{
+    font-weight: bold;
+    font-size: 25;
+}
+
+#friend
+{
+    font-weight:normal;
+    font-size: 15;
 }
