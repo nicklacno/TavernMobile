@@ -1,25 +1,27 @@
 ﻿#Name
 {
-    font-size: 40;
-    color: white;
-    border: 20;
-    padding: 10 40 10 40;
+    font-size: 35;
+    border: 40 0 20 0;
+    padding: 10;
     background-color: #432900;
+    font-weight: bold;
 }
 #Bio
 {
     font-size: 15;
     color: white;
-    max-lines: 5;
+    padding: 10;
+    border: 20;
+    background-color: #432900;
 }
 
-verticalstacklayout
+^contentpage>verticalstacklayout
 {
     background-color: #331900;
     border: 20;
+    padding: 10;
 }
 
-^contentview
-{
-
+label {
+    color: white;
 }

@@ -6,19 +6,21 @@
     <ContentPage.Resources>
         <StyleSheet Source="/Resources/Styles/ProfilePage.css" />
     </ContentPage.Resources>
-    <VerticalStackLayout x:Name="Profile">
+    <VerticalStackLayout>
         <Label 
             x:Name="Name"
             Text="Abcdefghijklmnopqrst"
             VerticalOptions="Center" 
-            HorizontalOptions="CenterAndExpand" 
+            HorizontalOptions="Fill" 
             HorizontalTextAlignment="Center"
             />
         <Label
             x:Name="Bio"
             Text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec."
             VerticalOptions="Center"
-            HorizontalOptions="CenterAndExpand" />
+            HorizontalOptions="Fill" 
+            MaxLines="10"
+            />
         <VerticalStackLayout x:Name="FriendsList">
             <Label>Friends</Label>
             <Rectangle HorizontalOptions="CenterAndExpand" HeightRequest="4"/>
