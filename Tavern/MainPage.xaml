@@ -2,8 +2,20 @@
 <TabbedPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local ="clr-namespace:Tavern"
-             x:Class="Tavern.MainPage">
-    <local:ProfilePage Title="My Profile" />
-
-
+             x:Class="Tavern.MainPage"
+             xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
+             android:TabbedPage.ToolbarPlacement="Bottom"
+             android:TabbedPage.IsSwipePagingEnabled="False">
+    <TabbedPage.Style>
+        <Style TargetType="TabbedPage">
+            <Setter Property="BarTextColor" Value="white" />
+            <Setter Property="SelectedTabColor" Value="#331900"/>
+            <Setter Property="UnselectedTabColor" Value="#230900" />
+            <Setter Property="BarBackgroundColor" Value="#230900" />
+        </Style>
+    </TabbedPage.Style>
+    <local:ProfilePage Title="Home"/>
+    <local:ProfilePage Title="Messages" />
+    <local:ProfilePage Title="Find Groups" />
+    <local:ProfilePage Title="My Profile"/>
 </TabbedPage>

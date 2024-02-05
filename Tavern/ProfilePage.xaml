@@ -4,7 +4,7 @@
              x:Class="Tavern.ProfilePage"
              Title="ProfilePage">
     <ContentPage.Resources>
-        <StyleSheet Source="/Resources/Styles/ProfilePage.css" />
+        <StyleSheet Source="/Resources/Styles/PageStyles/ProfilePage.css" />
     </ContentPage.Resources>
     <VerticalStackLayout>
         <Label 
@@ -24,7 +24,8 @@
         <VerticalStackLayout x:Name="FriendsList">
             <Label>Friends</Label>
             <Rectangle HorizontalOptions="CenterAndExpand" HeightRequest="4"/>
-            <Label x:Name="friend">Test Friend</Label>
+            <Label StyleClass="friend">Test Friend</Label>
+            <Label StyleClass="friend">Another Test Friend</Label>
         </VerticalStackLayout>
     </VerticalStackLayout>
 </ContentPage>
