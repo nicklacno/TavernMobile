@@ -1,15 +1,20 @@
-﻿#Name
+﻿label 
+{
+    color: white;
+}
+
+#Name
 {
     font-size: 35;
     border: 40 0 20 0;
     padding: 10;
-    background-color: #432900;
+    background-color: #4a3000;
     font-weight: bolder;
 }
 #Bio
 {
     font-size: 15;
-    color: white;
+    color: #f7f7f7;
     padding: 10;
     border: 20;
     background-color: #432900;
@@ -22,11 +27,7 @@
     padding: 10;
 }
 
-label {
-    color: white;
-}
-
-#FriendsList
+#FriendsList, #GroupList
 {
     background-color: #432900;
     border: 10;
@@ -34,14 +35,26 @@ label {
     padding: 10;
 }
 
-#FriendsList label
+#FriendsList label, #GroupList label
 {
     font-weight: bold;
     font-size: 25;
+    background-color: #533900;
 }
 
-.friend
+.friend, .group
 {
     font-weight:normal;
     font-size: 15;
+    padding: 5 10 5 10;
+}
+
+#ProfileEdit
+{
+    color: white;
+    background-color: #432900;
+    font-size:20;
+    padding: 5 10 5 10;
+    border: 10;
+    margin-top: 10;
 }
