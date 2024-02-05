@@ -14,7 +14,7 @@ namespace Tavern
         public int ProfileId { get; set; }
 
         private readonly HttpClient _httpClient = new();
-        private const string BASE_ADDRESS = "https://fz14z60p-5273.usw2.devtunnels.ms";
+        private const string BASE_ADDRESS = "https://nlk70t0m-5273.usw2.devtunnels.ms";
 
         private ProfileSingleton()
         {

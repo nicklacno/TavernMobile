@@ -1,0 +1,25 @@
+﻿#Name
+{
+    font-size: 40;
+    color: white;
+    border: 20;
+    padding: 10 40 10 40;
+    background-color: #432900;
+}
+#Bio
+{
+    font-size: 15;
+    color: white;
+    max-lines: 5;
+}
+
+verticalstacklayout
+{
+    background-color: #331900;
+    border: 20;
+}
+
+^contentview
+{
+
+}
