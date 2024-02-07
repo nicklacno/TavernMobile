@@ -12,6 +12,8 @@ namespace Tavern
         private bool isLoggedIn;
 
         public int ProfileId { get; set; }
+        public string ProfileName { get; set; }
+        public string ProfileBio { get; set; }
 
         private readonly HttpClient _httpClient = new();
         private const string BASE_ADDRESS = "https://nlk70t0m-5273.usw2.devtunnels.ms";
@@ -42,5 +44,6 @@ namespace Tavern
                 return null;
             return await _httpClient.GetStringAsync($"{BASE_ADDRESS}/Profile/{ProfileId}/Friends");
         }
+
     }
 }

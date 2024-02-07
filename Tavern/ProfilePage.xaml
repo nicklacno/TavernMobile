@@ -9,14 +9,14 @@
     <VerticalStackLayout>
         <Label 
             x:Name="Name"
-            Text="Abcdefghijklmnopqrst"
+            Text=""
             VerticalOptions="Center" 
             HorizontalOptions="Fill" 
             HorizontalTextAlignment="Center"
             />
         <Label
             x:Name="Bio"
-            Text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec."
+            Text=""
             VerticalOptions="Center"
             HorizontalOptions="Fill" 
             MaxLines="10"

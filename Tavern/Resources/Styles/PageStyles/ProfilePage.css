@@ -3,6 +3,11 @@
     color: white;
 }
 
+^contentpage
+{
+    background-image:src("../../Images/tavern.jpg");
+}
+
 #Name
 {
     font-size: 35;
@@ -22,7 +27,7 @@
 
 ^contentpage>verticalstacklayout
 {
-    background-color: #331900;
+    background-color: rgba(0,0,0,0.1);
     border: 20;
     padding: 10;
 }

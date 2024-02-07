@@ -42,7 +42,7 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = $"SELECT UserName FROM tavern.dbo.Customer WHERE UserID = {id}";
+                        cmd.CommandText = $"SELECT UserName FROM tavern.dbo.Customers WHERE UserID = {id}";
                         SqlDataReader reader = cmd.ExecuteReader();
                         if (reader.Read())
                         {
@@ -92,7 +92,7 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = $"SELECT UserID, UserName FROM tavern.dbo.Customer";
+                        cmd.CommandText = $"SELECT UserID, UserName FROM tavern.dbo.Customers";
                         SqlDataReader reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
