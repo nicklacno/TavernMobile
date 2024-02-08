@@ -25,14 +25,14 @@
 
         <VerticalStackLayout x:Name="GroupList">
             <Label HorizontalTextAlignment="Center">Groups</Label>
-            <Rectangle HorizontalOptions="Fill" HeightRequest="4" Fill="#4b3100"/>
+            <Rectangle HorizontalOptions="Fill" HeightRequest="4" Opacity="0"/>
             <Label StyleClass="group">Test Group</Label>
             <Label StyleClass="group">Another Test Group</Label>
         </VerticalStackLayout>
         
         <VerticalStackLayout x:Name="FriendsList">
             <Label HorizontalTextAlignment="Center">Friends</Label>
-            <Rectangle HorizontalOptions="Fill" HeightRequest="4" Fill="#4b3100"/>
+            <Rectangle HorizontalOptions="Fill" HeightRequest="4" Opacity="0"/>
             <Label StyleClass="friend">Test Friend</Label>
             <Label StyleClass="friend">Another Test Friend</Label>
         </VerticalStackLayout>

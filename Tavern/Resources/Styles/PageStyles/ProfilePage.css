@@ -8,21 +8,19 @@
     background-image:src("../../Images/tavern.jpg");
 }
 
-#Name
-{
+#Name {
     font-size: 35;
     border: 40 0 20 0;
     padding: 10;
-    background-color: #4a3000;
+    background-color: rgba(67, 41, 0, 0.8);
     font-weight: bolder;
 }
-#Bio
-{
+#Bio {
     font-size: 15;
     color: #f7f7f7;
     padding: 10;
     border: 20;
-    background-color: #432900;
+    background-color: rgba(67, 41, 0, 0.7);
 }
 
 ^contentpage>verticalstacklayout
@@ -34,7 +32,7 @@
 
 #FriendsList, #GroupList
 {
-    background-color: #432900;
+    background-color: rgba(67, 41, 0, 0.5);
     border: 10;
     margin-top: 20;
     padding: 10;
@@ -44,7 +42,7 @@
 {
     font-weight: bold;
     font-size: 25;
-    background-color: #533900;
+    background-color: rgba(83, 57, 0, 0.5);
 }
 
 .friend, .group
@@ -57,7 +55,7 @@
 #ProfileEdit
 {
     color: white;
-    background-color: #432900;
+    background-color: rgba(67, 41, 0, 0.7);
     font-size:20;
     padding: 5 10 5 10;
     border: 10;

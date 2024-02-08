@@ -4,7 +4,7 @@
              x:Class="Tavern.ErrorPage"
              Title="ErrorPage">
     <ContentPage.Resources>
-        <!--StyleSheet Source="/Resources/Styles/PageStyles/ErrorPage.css"/>
+        <!--StyleSheet Source="/Resources/Styles/PageStyles/ErrorPage.css"/>-->
     </ContentPage.Resources>
     <VerticalStackLayout>
         <Label 
