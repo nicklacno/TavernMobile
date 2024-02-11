@@ -1,0 +1,63 @@
+﻿label 
+{
+    color: white;
+}
+
+^contentpage
+{
+    background-image:src("../../Images/tavern.jpg");
+}
+
+#Name {
+    font-size: 35;
+    border: 40 0 20 0;
+    padding: 10;
+    background-color: rgba(67, 41, 0, 0.8);
+    font-weight: bolder;
+}
+#Bio {
+    font-size: 15;
+    color: #f7f7f7;
+    padding: 10;
+    border: 20;
+    background-color: rgba(67, 41, 0, 0.7);
+}
+
+^contentpage>verticalstacklayout
+{
+    background-color: rgba(0,0,0,0.1);
+    border: 20;
+    padding: 10;
+}
+
+#FriendsList, #GroupList
+{
+    background-color: rgba(67, 41, 0, 0.5);
+    border: 10;
+    margin-top: 20;
+    padding: 10;
+}
+
+#FriendsList label, #GroupList label
+{
+    font-weight: bold;
+    font-size: 25;
+    background-color: rgba(83, 57, 0, 0.5);
+}
+
+.friend, .group
+{
+    font-weight:normal;
+    font-size: 15;
+    padding: 5 10 5 10;
+}
+
+#ProfileEdit
+{
+    color: white;
+    background-color: rgba(67, 41, 0, 0.7);
+    font-size:20;
+    padding: 5 10 5 10;
+    border: 10;
+    margin-top: 10;
+}
