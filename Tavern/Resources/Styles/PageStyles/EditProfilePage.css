@@ -5,19 +5,22 @@
 
 }
 
-entry 
+entry editor
 {
     color: white;
     margin-botton: 10;
+    font-size: 20;
 }
 
 label 
 {
     color:white;
     margin-bottom: 10;
+    font-size: 25;
+    font-weight: bold;
 }
 
-^conntentpage
+verticalstacklayout
 {
-    background-image:src("../../Images/tavern.png");
+    background-color: rgba(83, 57, 0, 0.5);
 }
