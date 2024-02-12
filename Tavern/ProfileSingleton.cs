@@ -11,6 +11,8 @@ namespace Tavern
         private static ProfileSingleton _instance;
         private bool isLoggedIn;
 
+        public delegate void ErrorMessage(string message);
+
         public int ProfileId { get; set; }
         public string ProfileName { get; set; }
         public string ProfileBio { get; set; }
@@ -18,16 +20,16 @@ namespace Tavern
         private readonly HttpClient _httpClient = new();
         private const string BASE_ADDRESS = "https://nlk70t0m-5273.usw2.devtunnels.ms";
 
-        private ProfileSingleton()
+        private ProfileSingleton(int id)
         {
-            ProfileId = -1;
+            ProfileId = id;
         }
 
-        public static ProfileSingleton GetInstance()
+        public static ProfileSingleton GetInstance(int id = -1)
         { 
             if (_instance == null)
             {
-                _instance = new ProfileSingleton();
+                _instance = new ProfileSingleton(id);
             }
             return _instance;
         }
@@ -36,6 +38,9 @@ namespace Tavern
         {
             if (id > 0)
                 ProfileId = id;
+
+            if (ProfileId < 0)
+                return null;
             return await _httpClient.GetStringAsync($"{BASE_ADDRESS}/Profile/{ProfileId}");
         }
         public async Task<string> GetFriendsList()
@@ -44,6 +49,5 @@ namespace Tavern
                 return null;
             return await _httpClient.GetStringAsync($"{BASE_ADDRESS}/Profile/{ProfileId}/Friends");
         }
-
     }
 }

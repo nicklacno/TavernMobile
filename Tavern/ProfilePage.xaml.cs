@@ -8,7 +8,8 @@ public partial class ProfilePage : ContentPage
 	public ProfilePage()
 	{
 		InitializeComponent();
-		TryGetData();
+		//TryGetData();
+		TempData();
 	}
 
 	public async void GetProfile()
@@ -28,20 +29,33 @@ public partial class ProfilePage : ContentPage
 		ProfileSingleton singleton = ProfileSingleton.GetInstance();
 		try
 		{
-			string json = await singleton.GetProfileData(5);
+			string json = await singleton.GetProfileData(1);
 			if (json != null)
 			{
 				JObject profile = JObject.Parse(json);
 				singleton.ProfileName = (string)profile["name"];
 				singleton.ProfileBio = (string)profile["bio"];
-
+				Name.Text = singleton.ProfileName;
+				Bio.Text = singleton.ProfileBio;
 			}
-			Name.Text = singleton.ProfileName;
-			Bio.Text = singleton.ProfileBio;
+			else
+			{
+				throw new Exception("Data not found");
+			}
 		}
 		catch (Exception ex)
 		{
-			await Navigation.PushAsync(new ErrorPage(ex.Message));
+			//await singleton.ShowError(ex.Message);
 		}
+	}
+
+	public void TempData()
+	{
+		ProfileSingleton singleton = ProfileSingleton.GetInstance();
+		singleton.ProfileName = "Admin";
+		singleton.ProfileBio = "This is a test profile text\nChangable";
+
+		Name.Text = singleton.ProfileName;
+		Bio.Text = singleton.ProfileBio;
 	}
 }
