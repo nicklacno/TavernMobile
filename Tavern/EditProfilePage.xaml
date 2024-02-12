@@ -4,9 +4,30 @@
              x:Class="Tavern.EditProfilePage"
              Title="EditProfilePage">
     <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+        <VerticalStackLayout x:Name="stackUsername">
+            <Label>Username</Label>
+            <Entry
+                x:Name="entryUsername"
+                MaxLength="100"
+                />
+            <Button
+                x:Name="btnUsername"
+                Text="Save"
+                Clicked="Update"
+                />
+        </VerticalStackLayout>
+        <VerticalStackLayout x:Name="stackBio">
+            <Label>Bio</Label>
+            <Entry
+                x:Name="entryBio"
+                MaxLength="300"
+                />
+            <Button
+                x:Name="btnBio"
+                Text="Save"
+                Clicked="Update"
+                />
+        </VerticalStackLayout>
+        
     </VerticalStackLayout>
 </ContentPage>

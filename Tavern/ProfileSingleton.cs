@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,10 @@ namespace Tavern
 
         public delegate void ErrorMessage(string message);
 
+        public delegate void UpdateProfile();
+
+        public UpdateProfile updateProfile;
+
         public int ProfileId { get; set; }
         public string ProfileName { get; set; }
         public string ProfileBio { get; set; }
@@ -23,6 +28,7 @@ namespace Tavern
         private ProfileSingleton(int id)
         {
             ProfileId = id;
+            updateProfile = new UpdateProfile(PushToDatabase);
         }
 
         public static ProfileSingleton GetInstance(int id = -1)
@@ -48,6 +54,11 @@ namespace Tavern
             if (ProfileId < 0)
                 return null;
             return await _httpClient.GetStringAsync($"{BASE_ADDRESS}/Profile/{ProfileId}/Friends");
+        }
+
+        public void PushToDatabase()
+        {
+            Debug.WriteLine("Pushed?");
         }
     }
 }

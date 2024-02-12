@@ -10,6 +10,8 @@ public partial class ProfilePage : ContentPage
 		InitializeComponent();
 		//TryGetData();
 		TempData();
+
+		ProfileSingleton.GetInstance().updateProfile += UpdateProfile;
 	}
 
 	public async void GetProfile()
@@ -35,8 +37,7 @@ public partial class ProfilePage : ContentPage
 				JObject profile = JObject.Parse(json);
 				singleton.ProfileName = (string)profile["name"];
 				singleton.ProfileBio = (string)profile["bio"];
-				Name.Text = singleton.ProfileName;
-				Bio.Text = singleton.ProfileBio;
+				UpdateProfile();
 			}
 			else
 			{
@@ -55,12 +56,18 @@ public partial class ProfilePage : ContentPage
 		singleton.ProfileName = "Admin";
 		singleton.ProfileBio = "This is a test profile text\nChangable";
 
-		Name.Text = singleton.ProfileName;
-		Bio.Text = singleton.ProfileBio;
+		UpdateProfile();
 	}
 
 	public async void EditProfile(object sender, EventArgs e)
 	{
 		await Navigation.PushAsync(new EditProfilePage());
 	}
+
+	public void UpdateProfile()
+	{
+        ProfileSingleton singleton = ProfileSingleton.GetInstance();
+        Name.Text = singleton.ProfileName;
+        Bio.Text = singleton.ProfileBio;
+    }
 }
