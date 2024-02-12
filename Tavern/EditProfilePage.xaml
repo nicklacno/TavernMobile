@@ -3,6 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Tavern.EditProfilePage"
              Title="EditProfilePage">
+    <ContentPage.Resources>
+        <StyleSheet Source="/Resources/Styles/PageStyles/EditProfilePage.css" />
+    </ContentPage.Resources>
     <VerticalStackLayout>
         <VerticalStackLayout x:Name="stackUsername">
             <Label>Username</Label>
@@ -14,6 +17,7 @@
                 x:Name="btnUsername"
                 Text="Save"
                 Clicked="Update"
+                HorizontalOptions="End"
                 />
         </VerticalStackLayout>
         <VerticalStackLayout x:Name="stackBio">
@@ -26,6 +30,7 @@
                 x:Name="btnBio"
                 Text="Save"
                 Clicked="Update"
+                HorizontalOptions="End"
                 />
         </VerticalStackLayout>
         

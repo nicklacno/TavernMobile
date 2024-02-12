@@ -1,0 +1,23 @@
+﻿verticalstacklayout>verticalstacklayout
+{
+    margin-top: 20;
+    padding: 10;
+
+}
+
+entry 
+{
+    color: white;
+    margin-botton: 10;
+}
+
+label 
+{
+    color:white;
+    margin-bottom: 10;
+}
+
+^conntentpage
+{
+    background-image:src("../../Images/tavern.png");
+}
