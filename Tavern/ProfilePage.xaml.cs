@@ -58,4 +58,9 @@ public partial class ProfilePage : ContentPage
 		Name.Text = singleton.ProfileName;
 		Bio.Text = singleton.ProfileBio;
 	}
+
+	public async void EditProfile(object sender, EventArgs e)
+	{
+		await Navigation.PushAsync(new EditProfilePage());
+	}
 }
