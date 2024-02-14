@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
-    [Route("[controller]")]
+    [Route("[controller]")] //all http calls are through /Profile/
     [ApiController]
     public class ProfileController : ControllerBase
     {
@@ -14,16 +14,23 @@ namespace WebApi.Controllers
             _logger = logger;
         }
 
+        /**
+         * GetFriends - HttpGet method that returns the friends for a given profile id
+         * @return - json string of friend usernames
+         */
         [HttpGet("{id}")]
         public Profile Get(int id)
         {
             return Profile.GetProfile(id);
         }
-
+        /**
+         * GetFriends - HttpGet method that returns the friends for a given profile id
+         * @return - json string of friend usernames
+         */
         [HttpGet("{id}/Friends")]
         public string GetFriends(int id)
         {
-            return Profile.GetFriends(id);
+            return Profile.GetFriends(id); //calls singleton
         }
 
 

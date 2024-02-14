@@ -1,73 +1,65 @@
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using System.Text.Json;
 
 namespace Tavern;
 
 public partial class ProfilePage : ContentPage
 {
+	/**
+	 * ProfilePage - constructor for the personal profile page
+	 */
 	public ProfilePage()
 	{
 		InitializeComponent();
 		TryGetData();
-		//TempData();
 
-		ProfileSingleton.GetInstance().updateProfile += UpdateProfile;
+		ProfileSingleton.GetInstance().updateProfile += UpdateProfile; //adds to dedlegate
 	}
-
-	public async void GetProfile()
-	{
-		string json = await ProfileSingleton.GetInstance().GetProfileData(1);
-		if (json != null)
-		{
-			JObject profile = JObject.Parse(json);
-			Name.Text = (string)profile["name"];
-			Bio.Text = (string)profile["bio"];
-		}
-		
-	}
-
+	/**
+	 * TryGetData - Attempts to get the data for the profile from the database using the singleton
+	 */
 	public async void TryGetData()
 	{
-		ProfileSingleton singleton = ProfileSingleton.GetInstance();
+		ProfileSingleton singleton = ProfileSingleton.GetInstance(); //gets singleton
 		try
 		{
 			string json = await singleton.GetProfileData(5);
 			if (json != null)
 			{
-				JObject profile = JObject.Parse(json);
-				singleton.ProfileName = (string)profile["name"];
-				singleton.ProfileBio = (string)profile["bio"];
-				UpdateProfile();
+				JObject profile = JObject.Parse(json); //parses the json
+				singleton.ProfileName = (string)profile["name"]; //gets the name of the profile
+				singleton.ProfileBio = (string)profile["bio"]; //gets the bio for the profile
+				
+				UpdateProfile(); //calls the update profile page
 			}
-			else
+			else //throws exception for catch statement
 			{
 				throw new Exception("Data not found");
 			}
 		}
-		catch (Exception ex)
+		catch (Exception ex) //Supposed to show error screen Need to fix!!!
 		{
 			//await singleton.ShowError(ex.Message);
 		}
 	}
-
-	public void TempData()
-	{
-		ProfileSingleton singleton = ProfileSingleton.GetInstance();
-		singleton.ProfileName = "Admin";
-		singleton.ProfileBio = "This is a test profile text\nChangable";
-
-		UpdateProfile();
-	}
-
+	/**
+	 * EditProfile - Helper method that pushes the EditProfilePage onto the Navigation Page stack
+	 */
 	public async void EditProfile(object sender, EventArgs e)
 	{
-		await Navigation.PushAsync(new EditProfilePage());
+		await Navigation.PushAsync(new EditProfilePage()); //push onto stack
 	}
 
+	/**
+	 * UpdateProfile - Method that updates changes to the profile
+	 */
 	public void UpdateProfile()
 	{
         ProfileSingleton singleton = ProfileSingleton.GetInstance();
-        Name.Text = singleton.ProfileName;
-        Bio.Text = singleton.ProfileBio;
+        Name.Text = singleton.ProfileName;//sets profile name
+        Bio.Text = singleton.ProfileBio;//sets profile bio
+
+		//Need to add updating friends and groups !!!
     }
 }

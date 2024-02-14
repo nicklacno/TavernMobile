@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 using System.Text.Json;
 
@@ -50,13 +51,14 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "SELECT UserName, Bio FROM tavern.dbo.Customers WHERE UserID = @ProfileID"; //Query to get data
-                        cmd.Parameters.AddWithValue("@ProfileID", id); //Adding using parameters to prevent injection, though it cant be accessed by users
+                        cmd.CommandText = "SELECT UserName, Bio FROM tavern.dbo.Customers WHERE UserID = @IdP"; //Query to get data
+                        cmd.Parameters.AddWithValue("@IdP", id); //Adding using parameters to prevent injection, though it cant be accessed by users
                         SqlDataReader reader = cmd.ExecuteReader(); //Run query and pass data to reader
                         if (reader.Read()) //If statement because there should only be one
                         {
                             profile.Name = reader.GetString(0);//Sets Profile Name
-                            profile.Bio = reader.GetString(1);//Sets Profile Bio
+                            if (!reader.IsDBNull(1))
+                                profile.Bio = reader.GetString(1);//Sets Profile Bio
                         }
                         else //if reader has no rows, sets profile to null to return null
                         {
@@ -138,7 +140,40 @@ namespace WebApi
          */
         public static int GetProfileId(string username, string password)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT UserID,SaltedPassword,Salt FROM Customers WHERE UserName = @UserP";
+                        cmd.Parameters.AddWithValue("@UserP", username);
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            string temp = Convert.ToBase64String(HashPassword(password, Convert.FromBase64String(reader["Salt"].ToString())));
+                            if (string.Equals(reader["SaltedPassword"].ToString(), temp))
+                            {
+                                return reader.GetInt32(0);
+                            }
+                        }
+                        conn.Close();
+                        return -1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return -1;
+            }
+        }
+
+        private static byte[] HashPassword(string password, byte[] salt)
+        {
+            return KeyDerivation.Pbkdf2(password, salt, KeyDerivationPrf.HMACSHA1, 6, 48);
         }
     }
 }
