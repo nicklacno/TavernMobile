@@ -40,7 +40,7 @@ namespace WebApi
          * @param id - Id of the profile
          * @return valid Profile Data or null if not found
          */
-        public static Profile GetProfile(int id)
+        public static Profile? GetProfile(int id)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace WebApi
                         }
                         else //if reader has no rows, sets profile to null to return null
                         {
-                            profile = null; 
+                            throw new Exception("Missing Profile");
                         }
                     }
                     conn.Close(); //closes connection
@@ -82,7 +82,7 @@ namespace WebApi
          * @param id - Profile Id to retrieve friends
          * @return - Json of Friends, empty if none, null if error along the way
          */
-        public static string GetFriends(int id)
+        public static string? GetFriends(int id)
         {
             try
             {
@@ -180,6 +180,45 @@ namespace WebApi
         private static byte[] HashPassword(string password, byte[] salt)
         {
             return KeyDerivation.Pbkdf2(password, salt, KeyDerivationPrf.HMACSHA1, 6, 48);
+        }
+        
+        /**
+         * GetGroups - calls the database and returns a json of a list of group names
+         * @param id - the id of the user
+         * @return - the json of the users groups, null if error, empty if none
+         */
+        public static string? GetGroups(int id)
+        {
+            try
+            {
+                List<string> groups = new List<string>();//creates list of group names
+
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT GroupName FROM Groups " +
+                            "JOIN MemberGroup ON MemberGroup.GroupID = Groups.GroupID " +
+                            "WHERE MemberGroup.UserID = @IdParam";
+                        cmd.Parameters.AddWithValue("@IdParam", id);
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read()) //add to list of groups if has rows
+                        {
+                            groups.Add(reader.GetString(0)); 
+                        }
+                    }
+                    conn.Close();
+                }
+
+                return JsonSerializer.Serialize(groups); //serializes list of group names to a json string
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine (ex.Message);
+                return null; //returns null if empty
+            }
         }
     }
 }

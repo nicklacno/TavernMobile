@@ -19,20 +19,31 @@ namespace WebApi.Controllers
          * @return - json string of profile data
          */
         [HttpGet("{id}")]
-        public Profile Get(int id)
+        public Profile? Get(int id)
         {
             return Profile.GetProfile(id); //calls singleton
         }
         /**
          * GetFriends - HttpGet method that returns the friends for a given profile id
+         * @param id - the id of the user
          * @return - json string of friend usernames
          */
         [HttpGet("{id}/Friends")]
-        public string GetFriends(int id)
+        public string? GetFriends(int id)
         {
             return Profile.GetFriends(id); //calls singleton
         }
 
+        /**
+         * GetGroups - HttpGet method that returns the names of the groups that the user is apart of
+         * @param id - the id of the user
+         * @return - json string of the group names
+         */
+        [HttpGet("{id}/Groups")]
+        public string? GetGroups(int id)
+        {
+            return Profile.GetGroups(id);
+        }
 
         /**
          * Request login to the Website. Should Return id number or -1 if failed login
