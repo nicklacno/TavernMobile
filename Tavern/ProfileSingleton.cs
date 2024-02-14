@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Tavern
@@ -28,6 +30,7 @@ namespace Tavern
         private ProfileSingleton(int id)
         {
             ProfileId = id;
+            _httpClient.BaseAddress = new Uri(BASE_ADDRESS);
             updateProfile = new UpdateProfile(PushToDatabase);
         }
 
@@ -49,16 +52,42 @@ namespace Tavern
                 return null;
             return await _httpClient.GetStringAsync($"{BASE_ADDRESS}/Profile/{ProfileId}");
         }
+        
+        /**
+         * GetFriendsList - Calls the Api for the friends list of a given user
+         * Return - json of an array of strings will be returned a
+         */
         public async Task<string> GetFriendsList()
         {
             if (ProfileId < 0)
                 return null;
-            return await _httpClient.GetStringAsync($"{BASE_ADDRESS}/Profile/{ProfileId}/Friends");
+            return await _httpClient.GetStringAsync($"Profile/{ProfileId}/Friends");
         }
-
+        /**
+         * PushToDatabase - temporary function to be called when the delegate is called
+         */
         public void PushToDatabase()
         {
             Debug.WriteLine("Pushed?");
+        }
+        
+        /**
+         * Login - Attempting Login to the Database
+         */
+        public async Task<bool> Login(string username, string password)
+        {
+            var values = new Dictionary<string, string>()
+            {
+                { "username", username },
+                { "password", password }
+            };
+
+            var json = JsonSerializer.Serialize(values);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync("Profile/Login", content);
+            Debug.WriteLine(response.IsSuccessStatusCode);
+            return false;
         }
     }
 }

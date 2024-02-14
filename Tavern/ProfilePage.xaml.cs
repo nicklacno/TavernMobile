@@ -8,8 +8,8 @@ public partial class ProfilePage : ContentPage
 	public ProfilePage()
 	{
 		InitializeComponent();
-		//TryGetData();
-		TempData();
+		TryGetData();
+		//TempData();
 
 		ProfileSingleton.GetInstance().updateProfile += UpdateProfile;
 	}
@@ -31,7 +31,7 @@ public partial class ProfilePage : ContentPage
 		ProfileSingleton singleton = ProfileSingleton.GetInstance();
 		try
 		{
-			string json = await singleton.GetProfileData(1);
+			string json = await singleton.GetProfileData(5);
 			if (json != null)
 			{
 				JObject profile = JObject.Parse(json);

@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{6B501713-907F-4217-AF17-57408C740EDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tavern", "Tavern\Tavern.csproj", "{BFBF392E-2069-49A2-81A9-79D5A681DB51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tavern", "Tavern\Tavern.csproj", "{BFBF392E-2069-49A2-81A9-79D5A681DB51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

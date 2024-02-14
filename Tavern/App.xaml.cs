@@ -6,7 +6,13 @@
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new MainPage());
+            //MainPage = new NavigationPage(new MainPage());
+            LoginToPage();
+        }
+
+        public void LoginToPage()
+        {
+            MainPage = new LoginPage();
         }
     }
 }

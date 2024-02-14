@@ -25,5 +25,16 @@ namespace WebApi.Controllers
         {
             return Profile.GetFriends(id);
         }
+
+
+        /**
+         * Request login to the Website. Should Return id number or -1 if failed login
+         * @param creds - the username and password for the profile login
+         */
+        [HttpPost("Login")]
+        public int PostLogin([FromBody] Dictionary<string, string> creds)
+        {
+            return Profile.GetProfileId(creds["username"], creds["password"]);
+        }
     }
 }
