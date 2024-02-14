@@ -14,20 +14,19 @@ namespace Tavern
         private static ProfileSingleton _instance;
         public bool isLoggedIn;
 
-        public delegate void ErrorMessage(string message);
-
-        public delegate void UpdateProfile();
+        public delegate void ErrorMessage(string message); //object not created, need to fix!!!
+        public delegate void UpdateProfile(); 
         public delegate void LoginSuccessful();
 
-        public UpdateProfile updateProfile;
-        public LoginSuccessful loginSuccessful;
+        public UpdateProfile updateProfile; //update profile delegate
+        public LoginSuccessful loginSuccessful; //login successful delegate
 
         public int ProfileId { get; set; }
         public string ProfileName { get; set; }
         public string ProfileBio { get; set; }
 
-        private readonly HttpClient _httpClient = new();
-        private const string BASE_ADDRESS = "https://nlk70t0m-5273.usw2.devtunnels.ms";
+        private readonly HttpClient _httpClient = new(); //creates client
+        private const string BASE_ADDRESS = "https://nlk70t0m-5273.usw2.devtunnels.ms"; //base address for persistent dev-tunnel for api
 
         /**
          * ProfileSingleton - private constructor to make the singleton

@@ -3,8 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Tavern.LoginPage"
              Title="Login Page">
+    <ContentPage.Resources>
+        <StyleSheet Source="/Resources/Styles/PageStyles/LoginPage.css" />
+    </ContentPage.Resources>
     <VerticalStackLayout>
         <Label 
+            x:Name="lblTitle"
             Text="Tavern"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
@@ -17,10 +21,27 @@
             Placeholder="Password"
             IsPassword="True"
             />
+        
+        <HorizontalStackLayout>
+            <CheckBox
+                x:Name="checkRemember"
+                HorizontalOptions="Start"
+                />
+            <Label
+                Text="Remember Me"
+                VerticalOptions="Center"
+                />
+        </HorizontalStackLayout>
         <Button
             x:Name="btnLogin"
             Text="Login"
             Clicked="AttemptLogin"
+            HorizontalOptions="Center"
+            />
+        <Button
+            x:Name="btnForgot"
+            Text="Forgot Password?"
+            HorizontalOptions="End"
             />
     </VerticalStackLayout>
 </ContentPage>

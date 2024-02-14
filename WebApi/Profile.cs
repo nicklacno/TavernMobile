@@ -148,29 +148,35 @@ namespace WebApi
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
                         cmd.CommandText = "SELECT UserID,SaltedPassword,Salt FROM Customers WHERE UserName = @UserP";
-                        cmd.Parameters.AddWithValue("@UserP", username);
+                        cmd.Parameters.AddWithValue("@UserP", username); //query parameter
 
                         SqlDataReader reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
                             string temp = Convert.ToBase64String(HashPassword(password, Convert.FromBase64String(reader["Salt"].ToString())));
-                            if (string.Equals(reader["SaltedPassword"].ToString(), temp))
+                            if (string.Equals(reader["SaltedPassword"].ToString(), temp)) //salted passwords match
                             {
-                                return reader.GetInt32(0);
+                                return reader.GetInt32(0);  //return id of profile
                             }
                         }
                         conn.Close();
-                        return -1;
+                        return -1; //not found, return -1
                     }
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                return -1;
+                return -1; //error, return -1;
             }
         }
 
+        /**
+         * HashPassword - Helper function that hashes the password for inserting or retrieving
+         * @param password - unsalted password
+         * @param salt - salt used for hashing
+         * @return - the salted password
+         */
         private static byte[] HashPassword(string password, byte[] salt)
         {
             return KeyDerivation.Pbkdf2(password, salt, KeyDerivationPrf.HMACSHA1, 6, 48);

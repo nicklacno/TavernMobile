@@ -1,0 +1,23 @@
+﻿
+
+label entry
+{
+    color:white;
+}
+
+#txtUsername #txtPassword
+{
+    font-size: 10;
+    -maui-placeholder-color: white;
+}
+
+#lblTitle
+{
+    font-size: 35;
+}
+
+^contentpage 
+{
+    background-image: src(../../Images/logintavern.png);
+    padding: 30;
+}

@@ -15,13 +15,13 @@ namespace WebApi.Controllers
         }
 
         /**
-         * GetFriends - HttpGet method that returns the friends for a given profile id
-         * @return - json string of friend usernames
+         * Get - HttpGet method that returns the profile data
+         * @return - json string of profile data
          */
         [HttpGet("{id}")]
         public Profile Get(int id)
         {
-            return Profile.GetProfile(id);
+            return Profile.GetProfile(id); //calls singleton
         }
         /**
          * GetFriends - HttpGet method that returns the friends for a given profile id
