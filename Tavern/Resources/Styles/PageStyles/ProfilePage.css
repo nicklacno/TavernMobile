@@ -5,7 +5,7 @@
 
 ^contentpage
 {
-    background-image:src("../../Images/tavern.jpg");
+    background-image:src("../../Images/tavern.png");
 }
 
 #Name {
@@ -40,17 +40,10 @@
 
 #FriendsList label, #GroupList label
 {
-    font-weight: bold;
-    font-size: 25;
+    font-size: 20;
     background-color: rgba(83, 57, 0, 0.5);
 }
 
-.friend, .group
-{
-    font-weight:normal;
-    font-size: 15;
-    padding: 5 10 5 10;
-}
 
 #ProfileEdit
 {
@@ -61,3 +54,4 @@
     border: 10;
     margin-top: 10;
 }
+

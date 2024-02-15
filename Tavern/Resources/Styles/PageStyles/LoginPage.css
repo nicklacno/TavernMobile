@@ -1,0 +1,35 @@
+﻿
+
+label, entry
+{
+    color:white;
+}
+
+#txtUsername, #txtPassword
+{
+    font-size: 20;
+    -maui-placeholder-color: white;
+}
+
+#lblTitle
+{
+    font-size: 35;
+}
+
+^contentpage 
+{
+    background-image: src(../../Images/logintavern.png);
+    padding: 30;
+}
+
+button 
+{
+   background-color: rgba(67, 41, 0, 1);
+   color: white;
+   margin-bottom: 40;
+}
+
+verticalstacklayout {
+    padding: 10;
+    background-color: rgba(67, 41, 0, 0.5);
+}

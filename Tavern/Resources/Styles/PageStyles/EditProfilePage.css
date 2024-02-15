@@ -1,0 +1,26 @@
+﻿verticalstacklayout>verticalstacklayout
+{
+    margin-top: 20;
+    padding: 10;
+
+}
+
+entry editor
+{
+    color: white;
+    margin-botton: 10;
+    font-size: 20;
+}
+
+label 
+{
+    color:white;
+    margin-bottom: 10;
+    font-size: 25;
+    font-weight: bold;
+}
+
+verticalstacklayout
+{
+    background-color: rgba(83, 57, 0, 0.5);
+}
