@@ -1,10 +1,8 @@
 ﻿namespace Tavern
 {
-    public partial class MainPage : TabbedPage
+    public partial class TabbedMainPage : TabbedPage
     {
-        int count = 0;
-
-        public MainPage()
+        public TabbedMainPage()
         {
             InitializeComponent();
         }

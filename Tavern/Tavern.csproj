@@ -57,6 +57,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="TabbedMainPage.xaml.cs">
+	    <DependentUpon>TabbedMainPage.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="EditProfilePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

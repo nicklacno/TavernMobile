@@ -25,6 +25,9 @@ namespace Tavern
         public string ProfileName { get; set; }
         public string ProfileBio { get; set; }
 
+        public List<string> Friends { get; set; }
+        public List<string> Groups {  get; set; }
+
         private readonly HttpClient _httpClient = new(); //creates client
         private const string BASE_ADDRESS = "https://nlk70t0m-5273.usw2.devtunnels.ms"; //base address for persistent dev-tunnel for api
 
@@ -71,11 +74,11 @@ namespace Tavern
         
         /**
          * GetFriendsList - Calls the Api for the friends list of a given user
-         * @return - json of an array of strings will be returned a
+         * @return - json of an array of strings
          */
         public async Task<string> GetFriendsList()
         {
-            if (ProfileId < 0)
+            if (ProfileId < 0) // retest !!!
                 return null;
             return await _httpClient.GetStringAsync($"Profile/{ProfileId}/Friends");
         }
@@ -112,6 +115,17 @@ namespace Tavern
                 isLoggedIn = true; //sets the bool for logged in, later used for the remember me
             }
             return isLoggedIn; //returns true if updated, else false
+        }
+
+        /**
+         * GetGroupsList - Returns a list of group names using the stored id
+         * @return - List of group names
+         */
+        public async Task<string> GetGroupsList()
+        {
+            if (ProfileId < 0)
+                return null;
+            return await _httpClient.GetStringAsync($"Profile/{ProfileId}/Groups");
         }
     }
 }

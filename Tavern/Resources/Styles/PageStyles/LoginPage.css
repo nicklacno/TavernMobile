@@ -1,13 +1,13 @@
 ﻿
 
-label entry
+label, entry
 {
     color:white;
 }
 
-#txtUsername #txtPassword
+#txtUsername, #txtPassword
 {
-    font-size: 10;
+    font-size: 20;
     -maui-placeholder-color: white;
 }
 
@@ -20,4 +20,16 @@ label entry
 {
     background-image: src(../../Images/logintavern.png);
     padding: 30;
+}
+
+button 
+{
+   background-color: rgba(67, 41, 0, 1);
+   color: white;
+   margin-bottom: 40;
+}
+
+verticalstacklayout {
+    padding: 10;
+    background-color: rgba(67, 41, 0, 0.5);
 }

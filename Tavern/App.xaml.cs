@@ -11,7 +11,10 @@
 
             ProfileSingleton singleton = ProfileSingleton.GetInstance(); //gets singleton
             if (singleton.isLoggedIn) //checks login, storage will hold temporary data
-                MainPage = new NavigationPage(new MainPage());//sets page to MainPage (need to change!!!), navigation page base allows stacking
+            {
+                NavigationPage navPage = new NavigationPage(new TabbedMainPage());//sets page to MainPage, navigation page base allows stacking
+                MainPage = navPage;
+            }
             else
             {
                 MainPage = new LoginPage(); //Sets to login page if not currently logged in
@@ -24,7 +27,7 @@
          */
         public void MoveToMainPage()
         {
-            MainPage = new NavigationPage(new MainPage()); //same as in constructor
+            MainPage = new NavigationPage(new TabbedMainPage()); //same as in constructor
         }
     }
 }

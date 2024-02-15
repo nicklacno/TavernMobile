@@ -187,7 +187,7 @@ namespace WebApi
          * @param id - the id of the user
          * @return - the json of the users groups, null if error, empty if none
          */
-        public static string? GetGroups(int id)
+        public static List<string>? GetGroups(int id)
         {
             try
             {
@@ -212,7 +212,7 @@ namespace WebApi
                     conn.Close();
                 }
 
-                return JsonSerializer.Serialize(groups); //serializes list of group names to a json string
+                return groups; //serializes list of group names to a json string
             }
             catch (Exception ex)
             {

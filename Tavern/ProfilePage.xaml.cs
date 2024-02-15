@@ -1,3 +1,4 @@
+using Microsoft.Maui.Controls.Shapes;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Text.Json;
@@ -54,12 +55,48 @@ public partial class ProfilePage : ContentPage
 	/**
 	 * UpdateProfile - Method that updates changes to the profile
 	 */
-	public void UpdateProfile()
+	public async void UpdateProfile()
 	{
         ProfileSingleton singleton = ProfileSingleton.GetInstance();
         Name.Text = singleton.ProfileName;//sets profile name
         Bio.Text = singleton.ProfileBio;//sets profile bio
 
+		await AddGroup();
+
 		//Need to add updating friends and groups !!!
     }
+
+	public async Task AddGroup()
+	{
+		GroupList.Children.Clear();
+		AddHeader("Groups", GroupList);
+		ProfileSingleton singleton = ProfileSingleton.GetInstance();
+		string list = await singleton.GetGroupsList();
+
+		List<string> groups = JsonSerializer.Deserialize<List<string>>(list);
+
+		foreach (string group in groups)
+		{
+			Label label = new Label();
+			label.Text = group;
+
+			GroupList.Children.Add(label);
+		}
+		
+	}
+
+	public void AddHeader(string title, VerticalStackLayout layout)
+	{
+		Label label = new Label();
+		label.Text = title;
+		label.HorizontalTextAlignment = TextAlignment.Center;
+		label.FontSize = 25;
+		layout.Children.Add(label);
+
+		Rectangle rect = new Rectangle();
+		rect.HorizontalOptions = LayoutOptions.Fill;
+		rect.HeightRequest = 4;
+		rect.Opacity = 0;
+		layout.Children.Add(rect);
+	}
 }

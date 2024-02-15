@@ -37,6 +37,7 @@
             Text="Login"
             Clicked="AttemptLogin"
             HorizontalOptions="Center"
+            WidthRequest="200"
             />
         <Button
             x:Name="btnForgot"

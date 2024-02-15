@@ -40,7 +40,7 @@ namespace WebApi.Controllers
          * @return - json string of the group names
          */
         [HttpGet("{id}/Groups")]
-        public string? GetGroups(int id)
+        public List<string>? GetGroups(int id)
         {
             return Profile.GetGroups(id);
         }
