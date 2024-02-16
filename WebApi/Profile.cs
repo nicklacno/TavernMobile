@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Net.Http.Headers;
 using System.Diagnostics;
 using System.Text.Json;
 
@@ -11,12 +13,7 @@ namespace WebApi
     public class Profile
     {
         //connection string
-        private const string connectionString = 
-            "Server = satou.cset.oit.edu, 5433; " +
-            "Database = tavern; " +
-            "User Id = tavern; " +
-            "Password = T@vern5!; " +
-            "TrustServerCertificate=true";
+        private static string connectionString = null;
 
         /**
          * Profile - Basic Profile Constructor that initializes any values passed to it
@@ -42,6 +39,7 @@ namespace WebApi
          */
         public static Profile? GetProfile(int id)
         {
+            SetConnectionString();
             try
             {
                 Profile profile = new Profile(id); //Creates Profile to store data
@@ -84,6 +82,7 @@ namespace WebApi
          */
         public static string? GetFriends(int id)
         {
+            SetConnectionString();
             try
             {
                 List<string> friends = new List<string>(); //List that stores the friend username(s)
@@ -140,6 +139,7 @@ namespace WebApi
          */
         public static int GetProfileId(string username, string password)
         {
+            SetConnectionString();
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -189,6 +189,7 @@ namespace WebApi
          */
         public static List<string>? GetGroups(int id)
         {
+            SetConnectionString();
             try
             {
                 List<string> groups = new List<string>();//creates list of group names
@@ -218,6 +219,15 @@ namespace WebApi
             {
                 Debug.WriteLine (ex.Message);
                 return null; //returns null if empty
+            }
+        }
+
+        public static void SetConnectionString()
+        {
+            if (connectionString == null)
+            {
+                IConfigurationRoot builder = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+                connectionString = builder.GetConnectionString("sqlServerString");
             }
         }
     }
