@@ -6,33 +6,38 @@
     <ContentPage.Resources>
         <StyleSheet Source="/Resources/Styles/PageStyles/ProfilePage.css" />
     </ContentPage.Resources>
-    <VerticalStackLayout>
-        <Label 
-            x:Name="Name"
-            Text=""
-            VerticalOptions="Center" 
-            HorizontalOptions="Fill" 
-            HorizontalTextAlignment="Center"
-            />
-        <Label
-            x:Name="Bio"
-            Text=""
-            VerticalOptions="Center"
-            HorizontalOptions="Fill" 
-            MaxLines="10"
-            />
-        <Button x:Name="ProfileEdit" HorizontalOptions="End" Text="Edit Profile" Clicked="EditProfile"/>
+    <Grid Padding="15">
+        <Image Source="/Resources/Images/paper_login.jpg" Aspect="AspectFill" />
+        <VerticalStackLayout VerticalOptions="Start">
+            <Label 
+                x:Name="Name"
+                Text=""
+                VerticalOptions="Center" 
+                HorizontalOptions="Fill" 
+                HorizontalTextAlignment="Center"
+                />
+            <Label
+                x:Name="Bio"
+                Text=""
+                VerticalOptions="Center"
+                HorizontalOptions="Fill" 
+                MaxLines="10"
+                />
+            <Button x:Name="ProfileEdit" HorizontalOptions="End" Text="Edit Profile" Clicked="EditProfile"/>
 
-        <VerticalStackLayout x:Name="GroupList">
-            <Label HorizontalTextAlignment="Center">Groups</Label>
-            <Rectangle HorizontalOptions="Fill" HeightRequest="4" Opacity="0"/>
-            <Label StyleClass="group">Test Group</Label>
+            <VerticalStackLayout x:Name="GroupList">
+                <Label HorizontalTextAlignment="Center">Groups</Label>
+                <Rectangle HorizontalOptions="Fill" HeightRequest="4" Opacity="0"/>
+                <Label StyleClass="group">Test Group</Label>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout x:Name="FriendsList">
+                <Label HorizontalTextAlignment="Center">Friends</Label>
+                <Rectangle HorizontalOptions="Fill" HeightRequest="4" Opacity="0"/>
+                <Label StyleClass="friend">Test Friend</Label>
+            </VerticalStackLayout>
+
         </VerticalStackLayout>
-        
-        <VerticalStackLayout x:Name="FriendsList">
-            <Label HorizontalTextAlignment="Center">Friends</Label>
-            <Rectangle HorizontalOptions="Fill" HeightRequest="4" Opacity="0"/>
-            <Label StyleClass="friend">Test Friend</Label>
-        </VerticalStackLayout>
-    </VerticalStackLayout>
+    </Grid>
+
 </ContentPage>

@@ -1,6 +1,6 @@
 ﻿label 
 {
-    color: white;
+    color: #3f3f3f;
 }
 
 ^contentpage
@@ -12,7 +12,6 @@
     font-size: 35;
     border: 40 0 20 0;
     padding: 10;
-    background-color: rgba(67, 41, 0, 0.8);
     font-weight: bolder;
 }
 #Bio {
@@ -20,35 +19,31 @@
     color: #f7f7f7;
     padding: 10;
     border: 20;
-    background-color: rgba(67, 41, 0, 0.7);
 }
 
 ^contentpage>verticalstacklayout
 {
-    background-color: rgba(0,0,0,0.1);
     border: 20;
     padding: 10;
 }
 
-#FriendsList, #GroupList
+#FriendsList, #GroupList, #BlockedUsersList
 {
-    background-color: rgba(67, 41, 0, 0.5);
     border: 10;
     margin-top: 20;
     padding: 10;
 }
 
-#FriendsList label, #GroupList label
+#FriendsList label, #GroupList label, #BlockedUsersList label
 {
     font-size: 20;
-    background-color: rgba(83, 57, 0, 0.5);
 }
 
 
 #ProfileEdit
 {
     color: white;
-    background-color: rgba(67, 41, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.4);
     font-size:20;
     padding: 5 10 5 10;
     border: 10;

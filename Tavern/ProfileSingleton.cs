@@ -27,6 +27,7 @@ namespace Tavern
 
         public List<string> Friends { get; set; }
         public List<string> Groups {  get; set; }
+        public List<string> BlockedUsers { get; set; }
 
         private readonly HttpClient _httpClient = new(); //creates client
         private const string BASE_ADDRESS = "https://nlk70t0m-5273.usw2.devtunnels.ms"; //base address for persistent dev-tunnel for api
@@ -40,7 +41,7 @@ namespace Tavern
             ProfileId = id;//sets the profile id
             _httpClient.BaseAddress = new Uri(BASE_ADDRESS); //sets the base address of the httpclient
             updateProfile = new UpdateProfile(PushToDatabase); //initalizes the delegate object for updateProfile
-            isLoggedIn = false; //sets the isLoggedIn to false, will change when retaining data
+            isLoggedIn = true; //sets the isLoggedIn to false, will change when retaining data
         }
 
         /**
