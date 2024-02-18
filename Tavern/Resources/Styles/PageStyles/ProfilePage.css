@@ -1,4 +1,10 @@
-﻿label 
+﻿/*
+    main text color: #3f3f3f
+    secondary text color: #4f4f4f
+    main button color: rgba(0,0,0,0.4)
+*/
+
+label 
 {
     color: #3f3f3f;
 }
@@ -16,7 +22,7 @@
 }
 #Bio {
     font-size: 15;
-    color: #f7f7f7;
+    color: #4f4f4f;
     padding: 10;
     border: 20;
 }

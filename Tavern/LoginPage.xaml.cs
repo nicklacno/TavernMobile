@@ -1,3 +1,5 @@
+using CommunityToolkit.Maui.Views;
+
 namespace Tavern;
 
 public partial class LoginPage : ContentPage
@@ -17,5 +19,10 @@ public partial class LoginPage : ContentPage
 		{
 			ProfileSingleton.GetInstance().loginSuccessful.Invoke(); //if successful, switch base page to main page
 		}
+        else
+        {
+			var popup = new ErrorPopup("Failed to Login To Tavern");
+			this.ShowPopup(popup);
+        }
     }
 }

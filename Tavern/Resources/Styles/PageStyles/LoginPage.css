@@ -1,19 +1,25 @@
-﻿
+﻿/*
+    main text color: #3f3f3f
+    secondary text color: #4f4f4f
+    main button color: rgba(0,0,0,0.4)
+*/
 
 label, entry
 {
-    color:white;
+    color:#3f3f3f;
 }
 
 #txtUsername, #txtPassword
 {
     font-size: 20;
-    -maui-placeholder-color: white;
+    -maui-placeholder-color: #3f3f3f;
 }
 
 #lblTitle
 {
     font-size: 35;
+    font-weight: bolder;
+    color: black;
 }
 
 ^contentpage 
@@ -24,12 +30,11 @@ label, entry
 
 button 
 {
-   background-color: rgba(67, 41, 0, 1);
-   color: white;
-   margin-bottom: 40;
+    background-color: rgba(0,0,0,0.4);
+    color: white;
+    margin-bottom: 40;
 }
 
 verticalstacklayout {
     padding: 10;
-    background-color: rgba(67, 41, 0, 0.5);
 }

@@ -2,47 +2,52 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Tavern.LoginPage"
-             Title="Login Page">
+             Title="Login Page"
+             Shell.NavBarIsVisible="False">
     <ContentPage.Resources>
         <StyleSheet Source="/Resources/Styles/PageStyles/LoginPage.css" />
     </ContentPage.Resources>
-    <VerticalStackLayout>
-        <Label 
-            x:Name="lblTitle"
-            Text="Tavern"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-        <Entry
-            x:Name="txtUsername"
-            Placeholder="Username"
-            />
-        <Entry
-            x:Name="txtPassword"
-            Placeholder="Password"
-            IsPassword="True"
-            />
-        
-        <HorizontalStackLayout>
-            <CheckBox
-                x:Name="checkRemember"
-                HorizontalOptions="Start"
+    <Grid Padding="15,60,15,60">
+        <Image Source="/Resources/Images/paper_login.png" Aspect="Fill"/>
+        <VerticalStackLayout VerticalOptions="Start">
+            <Label 
+                x:Name="lblTitle"
+                Text="Tavern"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center" />
+            <Entry
+                x:Name="txtUsername"
+                Placeholder="Username"
                 />
-            <Label
-                Text="Remember Me"
-                VerticalOptions="Center"
+            <Entry
+                x:Name="txtPassword"
+                Placeholder="Password"
+                IsPassword="True"
                 />
-        </HorizontalStackLayout>
-        <Button
-            x:Name="btnLogin"
-            Text="Login"
-            Clicked="AttemptLogin"
-            HorizontalOptions="Center"
-            WidthRequest="200"
-            />
-        <Button
-            x:Name="btnForgot"
-            Text="Forgot Password?"
-            HorizontalOptions="End"
-            />
-    </VerticalStackLayout>
+            
+            <HorizontalStackLayout>
+                <CheckBox
+                    x:Name="checkRemember"
+                    HorizontalOptions="Start"
+                    />
+                <Label
+                    Text="Remember Me"
+                    VerticalOptions="Center"
+                    />
+            </HorizontalStackLayout>
+            <Button
+                x:Name="btnLogin"
+                Text="Login"
+                Clicked="AttemptLogin"
+                HorizontalOptions="Center"
+                WidthRequest="200"
+                />
+            <Button
+                x:Name="btnForgot"
+                Text="Forgot Password?"
+                HorizontalOptions="End"
+                />
+        </VerticalStackLayout>
+    </Grid>
+    
 </ContentPage>
