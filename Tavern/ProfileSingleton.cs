@@ -14,7 +14,6 @@ namespace Tavern
         private static ProfileSingleton _instance;
         public bool isLoggedIn;
 
-        public delegate void ErrorMessage(string message); //object not created, need to fix!!!
         public delegate void UpdateProfile(); 
         public delegate void LoginSuccessful();
 
@@ -43,7 +42,7 @@ namespace Tavern
             updateProfile = new UpdateProfile(PushToDatabase); //initalizes the delegate object for updateProfile
             
             //set to true for tabbed page, false for login
-            isLoggedIn = true; //sets the isLoggedIn to false, will change when retaining data
+            isLoggedIn = false; //sets the isLoggedIn to false, will change when retaining data
         }
 
         /**

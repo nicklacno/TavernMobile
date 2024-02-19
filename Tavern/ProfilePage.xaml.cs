@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.Controls.Shapes;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
@@ -39,9 +40,9 @@ public partial class ProfilePage : ContentPage
 				throw new Exception("Data not found");
 			}
 		}
-		catch (Exception ex) //Supposed to show error screen Need to fix!!!
+		catch (Exception ex) 
 		{
-			//await singleton.ShowError(ex.Message);
+			this.ShowPopup(new ErrorPopup(ex.Message, true));
 		}
 	}
 	/**
