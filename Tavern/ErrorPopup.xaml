@@ -3,9 +3,14 @@
                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                x:Class="Tavern.ErrorPopup">
+    <toolkit:Popup.Resources>
+        <StyleSheet Source="/Resources/Styles/PageStyles/ErrorPopup.css" />
+    </toolkit:Popup.Resources>
 
     <VerticalStackLayout>
-        <Label Text="This is a very important message!" />
+        <Label x:Name="txtErrorMessage" 
+               Text="Error Message"
+               />
     </VerticalStackLayout>
 
 </toolkit:Popup>

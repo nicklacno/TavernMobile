@@ -7,6 +7,7 @@ public partial class LoginPage : ContentPage
 	public LoginPage()
 	{
 		InitializeComponent();
+		this.ShowPopup(new ErrorPopup("Some Test Error that would work"));
 	}
 	
 	/** 

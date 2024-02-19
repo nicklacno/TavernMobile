@@ -1,0 +1,12 @@
+﻿verticalstacklayout
+{
+    padding: 20;
+    height: 100;
+}
+
+label
+{
+    font-size: 20;
+    word-wrap:break-word;
+    vertical-align:middle;
+}
