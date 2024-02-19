@@ -41,7 +41,9 @@ namespace Tavern
             ProfileId = id;//sets the profile id
             _httpClient.BaseAddress = new Uri(BASE_ADDRESS); //sets the base address of the httpclient
             updateProfile = new UpdateProfile(PushToDatabase); //initalizes the delegate object for updateProfile
-            isLoggedIn = false; //sets the isLoggedIn to false, will change when retaining data
+            
+            //set to true for tabbed page, false for login
+            isLoggedIn = true; //sets the isLoggedIn to false, will change when retaining data
         }
 
         /**

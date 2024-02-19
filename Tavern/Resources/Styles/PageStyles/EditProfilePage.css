@@ -1,26 +1,33 @@
-﻿verticalstacklayout>verticalstacklayout
+﻿/*
+    main text color: #3f3f3f
+    secondary text color: #4f4f4f
+    main button color: rgba(0,0,0,0.4)
+*/
+
+verticalstacklayout>verticalstacklayout
 {
     margin-top: 20;
     padding: 10;
 
 }
 
-entry editor
-{
-    color: white;
+entry, editor {
+    color: #3f3f3f;
     margin-botton: 10;
     font-size: 20;
+    -maui-placeholder-color: #3f3f3f;
 }
 
 label 
 {
-    color:white;
+    color:#3f3f3f;
     margin-bottom: 10;
     font-size: 25;
     font-weight: bold;
 }
 
-verticalstacklayout
+button
 {
-    background-color: rgba(83, 57, 0, 0.5);
+    background-color: rgba(0,0,0,0.4);
+    color: white;
 }

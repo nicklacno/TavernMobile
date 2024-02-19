@@ -6,34 +6,37 @@
     <ContentPage.Resources>
         <StyleSheet Source="/Resources/Styles/PageStyles/EditProfilePage.css" />
     </ContentPage.Resources>
-    <VerticalStackLayout>
-        <VerticalStackLayout x:Name="stackUsername">
-            <Label>Username</Label>
-            <Entry
-                x:Name="entryUsername"
-                MaxLength="100"
-                />
-            <Button
-                x:Name="btnUsername"
-                Text="Save"
-                Clicked="Update"
-                HorizontalOptions="End"
-                />
+    <Grid>
+        <Image Source="/Resources/Images/paper_login.jpg" Aspect="AspectFill" />
+        <VerticalStackLayout>
+            <VerticalStackLayout x:Name="stackUsername">
+                <Label>Username</Label>
+                <Entry
+                    x:Name="entryUsername"
+                    MaxLength="100"
+                    />
+                <Button
+                    x:Name="btnUsername"
+                    Text="Save"
+                    Clicked="Update"
+                    HorizontalOptions="End"
+                    />
+            </VerticalStackLayout>
+            <VerticalStackLayout x:Name="stackBio">
+                <Label>Bio</Label>
+                <Editor
+                    x:Name="entryBio"
+                    MaxLength="300"
+                    AutoSize="TextChanges"
+                    />
+                <Button
+                    x:Name="btnBio"
+                    Text="Save"
+                    Clicked="Update"
+                    HorizontalOptions="End"
+                    />
+            </VerticalStackLayout>
         </VerticalStackLayout>
-        <VerticalStackLayout x:Name="stackBio">
-            <Label>Bio</Label>
-            <Editor
-                x:Name="entryBio"
-                MaxLength="300"
-                AutoSize="TextChanges"
-                />
-            <Button
-                x:Name="btnBio"
-                Text="Save"
-                Clicked="Update"
-                HorizontalOptions="End"
-                />
-        </VerticalStackLayout>
-        
-    </VerticalStackLayout>
+    </Grid>
+   
 </ContentPage>
