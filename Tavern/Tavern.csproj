@@ -51,12 +51,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui" Version="6.1.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="System.Text.Json" Version="8.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="ErrorPopup.xaml.cs">
+	    <DependentUpon>ErrorPopup.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="TabbedMainPage.xaml.cs">
 	    <DependentUpon>TabbedMainPage.xaml</DependentUpon>
 	  </Compile>
@@ -66,7 +70,7 @@
 	  <MauiXaml Update="EditProfilePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="ErrorPage.xaml">
+	  <MauiXaml Update="ErrorPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="LoginPage.xaml">

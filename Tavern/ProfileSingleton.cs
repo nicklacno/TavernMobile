@@ -14,7 +14,6 @@ namespace Tavern
         private static ProfileSingleton _instance;
         public bool isLoggedIn;
 
-        public delegate void ErrorMessage(string message); //object not created, need to fix!!!
         public delegate void UpdateProfile(); 
         public delegate void LoginSuccessful();
 
@@ -27,6 +26,7 @@ namespace Tavern
 
         public List<string> Friends { get; set; }
         public List<string> Groups {  get; set; }
+        public List<string> BlockedUsers { get; set; }
 
         private readonly HttpClient _httpClient = new(); //creates client
         private const string BASE_ADDRESS = "https://nlk70t0m-5273.usw2.devtunnels.ms"; //base address for persistent dev-tunnel for api
@@ -40,6 +40,8 @@ namespace Tavern
             ProfileId = id;//sets the profile id
             _httpClient.BaseAddress = new Uri(BASE_ADDRESS); //sets the base address of the httpclient
             updateProfile = new UpdateProfile(PushToDatabase); //initalizes the delegate object for updateProfile
+            
+            //set to true for tabbed page, false for login
             isLoggedIn = false; //sets the isLoggedIn to false, will change when retaining data
         }
 
@@ -105,16 +107,25 @@ namespace Tavern
 
             var json = JsonSerializer.Serialize(values); //serializes the dictionary into a json string
             var content = new StringContent(json, Encoding.UTF8, "application/json"); // encodes the dictionary into an application/json
-
-            var response = await _httpClient.PostAsync("Profile/Login", content); //gets the response message
-            int id = JsonSerializer.Deserialize<int>(response.Content.ReadAsStringAsync().Result); //Deserializes the response to an int and sets a variable
-
-            if (id >= 0) // greater than 0 is a valid id
+            
+            try
             {
-                ProfileId = id; //sets the id for the singleton
-                isLoggedIn = true; //sets the bool for logged in, later used for the remember me
+                var response = await _httpClient.PostAsync("Profile/Login", content); //gets the response message
+                int id = JsonSerializer.Deserialize<int>(response.Content.ReadAsStringAsync().Result); //Deserializes the response to an int and sets a variable
+
+                if (id >= 0) // greater than 0 is a valid id
+                {
+                    ProfileId = id; //sets the id for the singleton
+                    isLoggedIn = true; //sets the bool for logged in, later used for the remember me
+                }
+                return isLoggedIn; //returns true if updated, else false
             }
-            return isLoggedIn; //returns true if updated, else false
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return false;
+            }
+            
         }
 
         /**
