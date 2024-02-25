@@ -17,7 +17,7 @@ namespace WebApi
          * @param id - Id for the group
          * @return - The data for the group
          */
-        static Group? GetGroup(int id)
+        public static Group? GetGroup(int id)
         {
             SetConnectionString();
             try
@@ -29,7 +29,15 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "SELECT ";
+                        cmd.CommandText = "SELECT OwnerID, GroupName, GroupBio FROM Groups WHERE GroupID = @GID";
+                        cmd.Parameters.AddWithValue("@GID", id);
+                        SqlDataReader reader  = cmd.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            group.OwnerId = reader.GetInt32(0);
+                            group.Name = reader.GetString(1);
+                            group.Bio = reader.GetString(2);
+                        }
                     }
                 }
 
