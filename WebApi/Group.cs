@@ -49,6 +49,25 @@ namespace WebApi
             }
         }
 
+        /**
+         * GetMembers - helper method that retrieves the data from the database
+         * @param id - Group Id the members are apart of
+         * @return - the list of names of the group members, null if error
+         */
+        private static List<string>? GetMembers(int id) 
+        {
+            try
+            {
+                List<string> members = new List<string>();
+                return members;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
         public static void SetConnectionString()
         {
             if (connectionString == null)
