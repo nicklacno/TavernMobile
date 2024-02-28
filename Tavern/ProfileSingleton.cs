@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -138,5 +139,34 @@ namespace Tavern
                 return null;
             return await _httpClient.GetStringAsync($"Profile/{ProfileId}/Groups");
         }
+        
+        /**
+         * GetGroup - returns a group object from the given id
+         * @param id - id for the given group
+         * @return - a group object with the information
+         */
+        public async Task<Group> GetGroup(int id)
+        {
+            try
+            {
+                Group group = new Group(id);
+                string json = await _httpClient.GetStringAsync($"Groups/{id}");
+                if (json != null)
+                {
+                    JObject data = JObject.Parse(json);
+                    group.Name = (string)data["name"];
+                    group.Bio = (string)data["bio"];
+                    group.OwnerId = (int)data["ownerId"];
+                    group.Members = data["members"].Values<string>().ToList();
+                    group.Tags = data["tags"].Values<string>().ToList();
+                }
+                return group;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
     }
-}
+} 

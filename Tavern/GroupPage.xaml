@@ -16,5 +16,20 @@
             HorizontalOptions="Center"
             HorizontalTextAlignment="Start"
             />
+        <FlexLayout x:Name="layoutTags" Wrap="Wrap" >
+            <Label
+                x:Name="lbTagHead"
+                Text="Tags:"
+                FontSize="24"
+                />
+
+        </FlexLayout>
+        <VerticalStackLayout x:Name="layoutMembers">
+            <Label 
+                x:Name="lbMemberHead"
+                Text="Members"
+                FontSize="24"
+                />
+        </VerticalStackLayout>
     </VerticalStackLayout>
 </ContentPage>

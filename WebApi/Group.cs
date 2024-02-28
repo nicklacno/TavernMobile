@@ -10,8 +10,8 @@ namespace WebApi
         public string? Name { get; set; }
         public string? Bio { get; set; }
         public int OwnerId { get; set; }
-        public List<string>? members { get; set; }
-        public List<string>? tags { get; set; }
+        public List<string>? Members { get; set; }
+        public List<string>? Tags { get; set; }
 
         /**
          * GetGroup - Returns the group given the specific id
@@ -39,8 +39,8 @@ namespace WebApi
                             group.Name = reader.GetString(1);
                             group.Bio = reader.GetString(2);
 
-                            group.members = GetMembers(id);
-                            group.tags = GetTags(id);
+                            group.Members = GetMembers(id);
+                            group.Tags = GetTags(id);
                         }
                     }
                 }
