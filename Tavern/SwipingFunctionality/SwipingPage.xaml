@@ -4,7 +4,6 @@
              xmlns:local="clr-namespace:Tavern.SwipingFunctionality"
              x:Class="Tavern.SwipingFunctionality.SwipingPage"
              Title="SwipingPage">
-    <Grid Padding="20">
-        <local:SwipingView/>
+    <Grid x:Name="GridGroup" Padding="20">
     </Grid>
 </ContentPage>
