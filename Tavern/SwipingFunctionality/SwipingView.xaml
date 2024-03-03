@@ -19,9 +19,21 @@
             />
     </SwipeView.RightItems>
     <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+        <Label
+            x:Name="lbGroupName"
+            Text="Test Group"
+            />
+        <Label
+            x:Name="lbGroupBio"
+            Text="Test Group Bio"
+            />
+        <Label
+            x:Name="lbMemberCount"
+            Text="Members: 0"
+            />
+        <VerticalStackLayout x:Name="stackTags">
+            <Label>Tag1</Label>
+            <Label>Tag2</Label>
+        </VerticalStackLayout>
     </VerticalStackLayout>
 </SwipeView>
