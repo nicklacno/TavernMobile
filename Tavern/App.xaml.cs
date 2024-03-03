@@ -1,4 +1,6 @@
-﻿namespace Tavern
+﻿using Tavern.SwipingFunctionality;
+
+namespace Tavern
 {
     public partial class App : Application
     {
@@ -22,7 +24,7 @@
                 singleton.loginSuccessful = new ProfileSingleton.LoginSuccessful(MoveToMainPage); //sets delegate for when successful login
             }
             */
-            MainPage = new GroupPage(6);  
+            MainPage = new SwipingPage();
         }
         /**
          * MoveToMainPage - Gets called via delegate to switch the page the user is viewing

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<SwipeView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Tavern.SwipingFunctionality.SwipingView">
+    <SwipeView.LeftItems>
+        <SwipeItem
+            x:Name="swipeLeft"
+            Text="Skip"
+            BackgroundColor="Red"
+            Invoked="OnSkipGroup"
+            />
+    </SwipeView.LeftItems>
+    <SwipeView.RightItems>
+        <SwipeItem
+            x:Name="swipeRight"
+            Text="Request"
+            BackgroundColor="Green"
+            Invoked="OnJoinGroup"
+            />
+    </SwipeView.RightItems>
+    <VerticalStackLayout>
+        <Label 
+            Text="Welcome to .NET MAUI!"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+    </VerticalStackLayout>
+</SwipeView>

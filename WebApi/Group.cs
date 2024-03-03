@@ -10,7 +10,23 @@ namespace WebApi
         public string? Name { get; set; }
         public string? Bio { get; set; }
         public int OwnerId { get; set; }
-        public List<string>? Members { get; set; }
+        public List<string>? Members
+        {
+            get
+            {
+                return Members;
+            }
+            set
+            {
+                Members = value;
+                if (Members != null)
+                {
+                    MemberCount = Members.Count;
+                }
+
+            }
+        }
+        public int MemberCount { get; set; }
         public List<string>? Tags { get; set; }
 
         /**
@@ -32,7 +48,7 @@ namespace WebApi
                     {
                         cmd.CommandText = "SELECT OwnerID, GroupName, GroupBio FROM Groups WHERE GroupID = @GID";
                         cmd.Parameters.AddWithValue("@GID", id);
-                        SqlDataReader reader  = cmd.ExecuteReader();
+                        SqlDataReader reader = cmd.ExecuteReader();
                         if (reader.Read())
                         {
                             group.OwnerId = reader.GetInt32(0);
@@ -58,7 +74,7 @@ namespace WebApi
          * @param id - Group Id the members are apart of
          * @return - the list of names of the group members, null if error
          */
-        private static List<string>? GetMembers(int id) 
+        private static List<string>? GetMembers(int id)
         {
             SetConnectionString();
             try
@@ -67,7 +83,7 @@ namespace WebApi
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    using (SqlCommand cmd = conn.CreateCommand()) 
+                    using (SqlCommand cmd = conn.CreateCommand())
                     {
                         cmd.CommandText = "SELECT UserName FROM MemberGroup JOIN Customers " +
                                             "ON MemberGroup.UserID = Customers.UserID " +
@@ -75,7 +91,7 @@ namespace WebApi
                         cmd.Parameters.AddWithValue("@GroupP", id);
 
                         SqlDataReader reader = cmd.ExecuteReader();
-                        while (reader.Read()) 
+                        while (reader.Read())
                         {
                             members.Add(reader.GetString(0));
                         }
@@ -113,7 +129,7 @@ namespace WebApi
                         SqlDataReader reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
-                            tags.Add(reader.GetString(0));  
+                            tags.Add(reader.GetString(0));
                         }
                     }
                 }
