@@ -10,23 +10,7 @@ namespace WebApi
         public string? Name { get; set; }
         public string? Bio { get; set; }
         public int OwnerId { get; set; }
-        public List<string>? Members
-        {
-            get
-            {
-                return Members;
-            }
-            set
-            {
-                Members = value;
-                if (Members != null)
-                {
-                    MemberCount = Members.Count;
-                }
-
-            }
-        }
-        public int MemberCount { get; set; }
+        public List<string>? Members {  get; set; }
         public List<string>? Tags { get; set; }
 
         /**
