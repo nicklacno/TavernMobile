@@ -6,10 +6,10 @@ public partial class SwipingView : SwipeView
 {
 	private Group groupData;
 
-	public SwipingView(int groupId = -1)
+	public SwipingView(Group group = null)
 	{
 		InitializeComponent();
-		PopulateData(groupId);
+		PopulateData(group);
 	}
 
 	/**
@@ -18,6 +18,7 @@ public partial class SwipingView : SwipeView
 	async void OnJoinGroup(object sender, EventArgs e)
 	{
 		Debug.WriteLine("Join");
+		SwipingSingleton.RequestGroup.Invoke();
 	}
 	
 	/**
@@ -26,11 +27,12 @@ public partial class SwipingView : SwipeView
 	async void OnSkipGroup(object sender, EventArgs e)
 	{
 		Debug.WriteLine("Skip");
+		SwipingSingleton.SkipGroup.Invoke();
 	}
 
-	async Task PopulateData(int groupId)
+	void PopulateData(Group group)
 	{
-		groupData = await ProfileSingleton.GetInstance().GetGroup(groupId);
+		groupData = group;
 		if (groupData != null)
 		{
 			lbGroupName.Text = groupData.Name;

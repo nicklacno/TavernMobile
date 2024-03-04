@@ -5,12 +5,16 @@ public partial class GroupPage : ContentPage
 {
 	public Group GroupData { get; set; }
 
-	public GroupPage(int id = -1)
+	public GroupPage(int id)
 	{
 		InitializeComponent();
 		UpdatePage(id);
 	}
 
+	/**
+	 * UpdatePage - Helper function to put all the data onto the screen
+	 * @param group - the data being shown to the user
+	 */
     private async Task UpdatePage(int id)
     {
 		GroupData = await ProfileSingleton.GetInstance().GetGroup(id);
@@ -21,7 +25,7 @@ public partial class GroupPage : ContentPage
 
 			Label lb;
 
-			foreach (string tag in GroupData.Tags)
+			foreach (string tag in GroupData.Tags) 
 			{
 				lb = new Label();
 				lb.Text = tag;
