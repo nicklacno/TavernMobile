@@ -15,5 +15,6 @@
             <Setter Property="BarBackgroundColor" Value="#230900" />
         </Style>
     </TabbedPage.Style>
-    <local:ProfilePage Title="My Profile" x:Name="Profile"/>
+    <local:HomePage Title="Home"/>
+    <local:ProfilePage Title="My Profile"/>
 </TabbedPage>
