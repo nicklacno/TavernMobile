@@ -5,6 +5,16 @@ public partial class HomePage : ContentPage
 	public HomePage()
 	{
 		InitializeComponent();
-		ProfileSingleton.GetInstance(5).GetGroupsList();
+		AddGroupsToHomePage();
+	}
+
+	public async Task AddGroupsToHomePage()
+	{
+		ProfileSingleton singleton = ProfileSingleton.GetInstance();//temporarily putting 5 for testing
+		await singleton.GetGroupsList();
+		foreach (Group group in singleton.Groups)
+		{
+			layoutGroup.Children.Add(new GroupCard(group));
+		}
 	}
 }

@@ -14,12 +14,13 @@ public partial class ProfilePage : ContentPage
 	public ProfilePage()
 	{
 		InitializeComponent();
-		TryGetData();
+		UpdateProfile();
 
 		ProfileSingleton.GetInstance().updateProfile += UpdateProfile; //adds to dedlegate
 	}
 	/**
 	 * TryGetData - Attempts to get the data for the profile from the database using the singleton
+	 * !!! Depricated Method
 	 */
 	public async void TryGetData()
 	{

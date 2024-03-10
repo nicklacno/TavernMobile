@@ -3,12 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Tavern.HomePage"
              Title="HomePage">
-    <FlexLayout 
+    <VerticalStackLayout 
         x:Name="layoutGroup"
         HorizontalOptions="Center" 
         Padding="10"
-        BackgroundColor="White"
         >
         
-    </FlexLayout>
+    </VerticalStackLayout>
 </ContentPage>

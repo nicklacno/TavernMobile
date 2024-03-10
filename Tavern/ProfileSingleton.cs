@@ -46,6 +46,22 @@ namespace Tavern
             
             //set to true for tabbed page, false for login
             isLoggedIn = false; //sets the isLoggedIn to false, will change when retaining data
+
+        }
+
+        private async Task SetValues()
+        {
+            string profileData = await this.GetProfileData();
+            if (profileData != null)
+            {
+                JObject profile = JObject.Parse(profileData); //parses the json
+                ProfileName = (string)profile["name"]; //gets the name of the profile
+                ProfileBio = (string)profile["bio"]; //gets the bio for the profile
+
+                await this.GetGroupsList();
+            }
+
+
         }
 
         /**
@@ -120,6 +136,7 @@ namespace Tavern
                 {
                     ProfileId = id; //sets the id for the singleton
                     isLoggedIn = true; //sets the bool for logged in, later used for the remember me
+                    await SetValues();
                 }
                 return isLoggedIn; //returns true if updated, else false
             }
@@ -139,6 +156,7 @@ namespace Tavern
         {
             if (ProfileId < 0)
                 return null;
+
             ConvertToGroupList(await _httpClient.GetStringAsync($"Profile/{ProfileId}/Groups"));
             return Groups;
         }

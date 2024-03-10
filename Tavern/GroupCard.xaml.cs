@@ -2,11 +2,14 @@ namespace Tavern;
 
 public partial class GroupCard : ContentView
 {
+	private Group groupData = null;
+
 	public GroupCard(Group group)
 	{
 		InitializeComponent();
 
-		if (group != null )
+		groupData = group;
+		if (groupData != null)
 		{
 			lbName.Text = group.Name;
 			lbBio.Text = group.Bio;
@@ -23,5 +26,10 @@ public partial class GroupCard : ContentView
 			}
 			
 		}
+	}
+
+	public void OnViewGroup(object sender, EventArgs e)
+	{
+		Navigation.PushAsync(new GroupPage(groupData));
 	}
 }

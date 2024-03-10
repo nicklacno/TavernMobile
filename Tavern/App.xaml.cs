@@ -11,8 +11,7 @@ namespace Tavern
         {
             InitializeComponent(); //Initializes the xaml elements
 
-            /*
-            ProfileSingleton singleton = ProfileSingleton.GetInstance(); //gets singleton
+            ProfileSingleton singleton = ProfileSingleton.GetInstance(5); //gets singleton
             if (singleton.isLoggedIn) //checks login, storage will hold temporary data
             {
                 NavigationPage navPage = new NavigationPage(new TabbedMainPage());//sets page to MainPage, navigation page base allows stacking
@@ -23,8 +22,6 @@ namespace Tavern
                 MainPage = new LoginPage(); //Sets to login page if not currently logged in
                 singleton.loginSuccessful = new ProfileSingleton.LoginSuccessful(MoveToMainPage); //sets delegate for when successful login
             }
-            */
-            MainPage = new HomePage();
         }
         /**
          * MoveToMainPage - Gets called via delegate to switch the page the user is viewing

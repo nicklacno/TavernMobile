@@ -4,6 +4,7 @@
              xmlns:local ="clr-namespace:Tavern"
              x:Class="Tavern.TabbedMainPage"
              xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
+             xmlns:swiping="clr-namespace:Tavern.SwipingFunctionality"
              android:TabbedPage.ToolbarPlacement="Bottom"
              android:TabbedPage.IsSwipePagingEnabled="False"
              >
@@ -16,5 +17,6 @@
         </Style>
     </TabbedPage.Style>
     <local:HomePage Title="Home"/>
+    <!--<swiping:SwipingPage Title="Find Groups"/>-->
     <local:ProfilePage Title="My Profile"/>
 </TabbedPage>
