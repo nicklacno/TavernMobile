@@ -24,6 +24,12 @@ public partial class GroupCard : ContentView
 					hStackTag.Children.Add(lb);
 				}
 			}
+			else
+			{
+				Label lb = new Label();
+				lb.Text = "None";
+				hStackTag.Children.Add(lb);
+			}
 			
 		}
 	}

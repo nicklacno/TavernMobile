@@ -44,12 +44,13 @@ public partial class GroupPage : ContentPage
 
 			lb = new Label();
 			lb.FontSize = 20;
-			lb.Text = GroupData.Members[0];
+			lb.Text = "* " + GroupData.Members[0] + " *";
 			layoutMembers.Add(lb);
 
 			for (int i = 1; i < GroupData.Members.Count; i++)
 			{
 				lb = new Label();
+				lb.FontSize = 18;
 				lb.Text = GroupData.Members[i];
 				layoutMembers.Add(lb);
 			}

@@ -23,7 +23,10 @@ public partial class SwipingPage : ContentPage
 			GridGroup.Children.Clear();
 			GridGroup.Children.Add(new SwipingView(groups.Dequeue()));
 		}
-		
+		else
+		{
+			Navigation.PopAsync();
+		}	
 	}
 
 	/**

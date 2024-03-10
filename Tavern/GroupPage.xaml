@@ -3,33 +3,43 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Tavern.GroupPage"
              Title="GroupPage">
-    <VerticalStackLayout>
-        <Label 
-            x:Name="lbGroupName"
-            Text="Group Name"
-            HorizontalOptions="Center" 
-            HorizontalTextAlignment="Center"
-            />
-        <Label
-            x:Name="lbGroupBio"
-            Text="Insert Group Bio Here"
-            HorizontalOptions="Center"
-            HorizontalTextAlignment="Start"
-            />
-        <FlexLayout x:Name="layoutTags" Wrap="Wrap" >
+    <ContentPage.Resources>
+        <StyleSheet Source="/Resources/Styles/PageStyles/GroupPage.css" />
+    </ContentPage.Resources>
+    <Grid>
+        <Image Source="/Resources/Images/paper_login.png" Aspect="Fill"/>
+        <VerticalStackLayout Padding="10">
+            <Label 
+                x:Name="lbGroupName"
+                Text="Group Name"
+                HorizontalOptions="Center" 
+                HorizontalTextAlignment="Center"
+                />
+            <Label
+                x:Name="lbGroupBio"
+                Text="Insert Group Bio Here"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Start"
+                />
             <Label
                 x:Name="lbTagHead"
                 Text="Tags:"
                 FontSize="24"
                 />
-
-        </FlexLayout>
-        <VerticalStackLayout x:Name="layoutMembers">
-            <Label 
-                x:Name="lbMemberHead"
-                Text="Members"
-                FontSize="24"
+            <FlexLayout 
+                x:Name="layoutTags" 
+                Wrap="Wrap"
+                JustifyContent="SpaceEvenly"
+                HorizontalOptions="Center"
                 />
+            <VerticalStackLayout x:Name="layoutMembers">
+                <Label 
+                    x:Name="lbMemberHead"
+                    Text="Members: "
+                    FontSize="24"
+                    />
+            </VerticalStackLayout>
         </VerticalStackLayout>
-    </VerticalStackLayout>
+    </Grid>
+    
 </ContentPage>

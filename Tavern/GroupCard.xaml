@@ -2,16 +2,32 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Tavern.GroupCard">
-    <VerticalStackLayout>
-        <Label x:Name="lbName" />
-        <Label x:Name="lbBio" MaxLines="2" />
-        <HorizontalStackLayout x:Name="hStackTag"></HorizontalStackLayout>
-        <Label x:Name="lbMembers" />
+    <ContentView.Resources>
+        <StyleSheet Source="Resources/Styles/PageStyles/GroupCard.css"/>
+    </ContentView.Resources>
 
-        <Button 
-            x:Name="btnViewGroup"
-            Text="View Group"
-            Clicked="OnViewGroup"
-            />
-    </VerticalStackLayout>
+    <Grid Padding="5" VerticalOptions="Start" MaximumHeightRequest="300">
+        <Image Source="/Resources/Images/paper_login.png" Aspect="Fill"/>
+        <VerticalStackLayout VerticalOptions="StartAndExpand" Padding="10" Spacing="10" HorizontalOptions="CenterAndExpand">
+            <Label x:Name="lbName" HorizontalTextAlignment="Center" HorizontalOptions="Center"/>
+            <Label x:Name="lbBio" MaxLines="2" />
+            <Label
+                x:Name="lbTagHead"
+                Text="Tags:"
+                FontSize="24"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                />
+            <FlexLayout x:Name="hStackTag" JustifyContent="SpaceEvenly" HorizontalOptions="CenterAndExpand" ></FlexLayout>
+            <Label x:Name="lbMembers" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+  
+            <Button 
+                x:Name="btnViewGroup"
+                Text="View Group"
+                Clicked="OnViewGroup"
+                VerticalOptions="End"
+                />
+        </VerticalStackLayout>
+    </Grid>
+    
 </ContentView>

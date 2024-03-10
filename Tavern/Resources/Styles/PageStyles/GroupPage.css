@@ -1,0 +1,27 @@
+﻿label
+{
+    color: black;
+}
+
+#lbGroupName
+{
+    font-size: 40;
+    font-weight: 400;
+}
+
+#lbGroupBio 
+{
+    font-size: 25;
+}
+
+layoutTags>label
+{
+    margin: 20;
+    font-size: 15;
+}
+
+layoutMembers>label
+{
+    margin: 20;
+}
+

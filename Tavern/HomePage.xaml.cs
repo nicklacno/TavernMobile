@@ -17,4 +17,9 @@ public partial class HomePage : ContentPage
 			layoutGroup.Children.Add(new GroupCard(group));
 		}
 	}
+
+    private void NavigateToSwipe(object sender, EventArgs e)
+    {
+		Navigation.PushAsync(new SwipingFunctionality.SwipingPage());
+    }
 }
