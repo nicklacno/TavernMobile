@@ -24,7 +24,7 @@ namespace Tavern
                 singleton.loginSuccessful = new ProfileSingleton.LoginSuccessful(MoveToMainPage); //sets delegate for when successful login
             }
             */
-            MainPage = new SwipingPage();
+            MainPage = new HomePage();
         }
         /**
          * MoveToMainPage - Gets called via delegate to switch the page the user is viewing

@@ -72,14 +72,11 @@ public partial class ProfilePage : ContentPage
 		GroupList.Children.Clear();
 		AddHeader("Groups", GroupList);
 		ProfileSingleton singleton = ProfileSingleton.GetInstance();
-		string list = await singleton.GetGroupsList();
 
-		List<string> groups = JsonSerializer.Deserialize<List<string>>(list);
-
-		foreach (string group in groups)
+		foreach (Group group in singleton.Groups)
 		{
 			Label label = new Label();
-			label.Text = group;
+			label.Text = group.Name;
 
 			GroupList.Children.Add(label);
 		}
