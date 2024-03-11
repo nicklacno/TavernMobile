@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:Tavern.SwipingFunctionality"
              x:Class="Tavern.SwipingFunctionality.SwipingPage"
              Title="Find Groups">
-    <Grid x:Name="GridGroup" Padding="20">
+    <Grid x:Name="GridGroup">
     </Grid>
 </ContentPage>
