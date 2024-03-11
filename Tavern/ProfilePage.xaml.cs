@@ -14,12 +14,13 @@ public partial class ProfilePage : ContentPage
 	public ProfilePage()
 	{
 		InitializeComponent();
-		TryGetData();
+		UpdateProfile();
 
 		ProfileSingleton.GetInstance().updateProfile += UpdateProfile; //adds to dedlegate
 	}
 	/**
 	 * TryGetData - Attempts to get the data for the profile from the database using the singleton
+	 * !!! Depricated Method
 	 */
 	public async void TryGetData()
 	{
@@ -72,14 +73,11 @@ public partial class ProfilePage : ContentPage
 		GroupList.Children.Clear();
 		AddHeader("Groups", GroupList);
 		ProfileSingleton singleton = ProfileSingleton.GetInstance();
-		string list = await singleton.GetGroupsList();
 
-		List<string> groups = JsonSerializer.Deserialize<List<string>>(list);
-
-		foreach (string group in groups)
+		foreach (Group group in singleton.Groups)
 		{
 			Label label = new Label();
-			label.Text = group;
+			label.Text = group.Name;
 
 			GroupList.Children.Add(label);
 		}

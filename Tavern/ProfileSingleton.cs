@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,6 +8,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Tavern
 {
@@ -26,7 +28,7 @@ namespace Tavern
         public string ProfileBio { get; set; }
 
         public List<string> Friends { get; set; }
-        public List<string> Groups {  get; set; }
+        public List<Group> Groups {  get; set; }
         public List<string> BlockedUsers { get; set; }
 
         private readonly HttpClient _httpClient = new(); //creates client
@@ -44,6 +46,22 @@ namespace Tavern
             
             //set to true for tabbed page, false for login
             isLoggedIn = false; //sets the isLoggedIn to false, will change when retaining data
+
+        }
+
+        private async Task SetValues()
+        {
+            string profileData = await this.GetProfileData();
+            if (profileData != null)
+            {
+                JObject profile = JObject.Parse(profileData); //parses the json
+                ProfileName = (string)profile["name"]; //gets the name of the profile
+                ProfileBio = (string)profile["bio"]; //gets the bio for the profile
+
+                await this.GetGroupsList();
+            }
+
+
         }
 
         /**
@@ -118,6 +136,7 @@ namespace Tavern
                 {
                     ProfileId = id; //sets the id for the singleton
                     isLoggedIn = true; //sets the bool for logged in, later used for the remember me
+                    await SetValues();
                 }
                 return isLoggedIn; //returns true if updated, else false
             }
@@ -133,13 +152,45 @@ namespace Tavern
          * GetGroupsList - Returns a list of group names using the stored id
          * @return - List of group names
          */
-        public async Task<string> GetGroupsList()
+        public async Task<List<Group>> GetGroupsList()
         {
             if (ProfileId < 0)
                 return null;
-            return await _httpClient.GetStringAsync($"Profile/{ProfileId}/Groups");
+
+            ConvertToGroupList(await _httpClient.GetStringAsync($"Profile/{ProfileId}/Groups"));
+            return Groups;
         }
         
+
+        /**
+         * ConvertToGroupList - takes a json and converts it into a list of Group Objects
+         * @param json - the json that needs to be parsed
+         */
+        private void ConvertToGroupList(string json)
+        {
+            try
+            {
+                List<Group> groups = new List<Group>();
+
+                if (json != null)
+                {
+                    JToken data = JToken.Parse(json);
+                    foreach (JObject groupData in data.Children())
+                    {
+                        groups.Add(ConvertToGroup(groupData));
+                    }
+                }
+                
+
+                Groups = groups;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                Groups = null;
+            }
+        }
+
         /**
          * GetGroup - returns a group object from the given id
          * @param id - id for the given group
@@ -154,11 +205,8 @@ namespace Tavern
                 if (json != null)
                 {
                     JObject data = JObject.Parse(json);
-                    group.Name = (string)data["name"];
-                    group.Bio = (string)data["bio"];
-                    group.OwnerId = (int)data["ownerId"];
-                    group.Members = data["members"].Values<string>().ToList();
-                    group.Tags = data["tags"].Values<string>().ToList();
+
+                    group = ConvertToGroup(data);
                 }
                 return group;
             }
@@ -167,6 +215,25 @@ namespace Tavern
                 Debug.WriteLine(ex);
                 return null;
             }
+        }
+
+        /**
+         * ConvertToGroup - takes a JObject and converts it into group object
+         * @param data - the JObject that stores the data
+         * @return - the group object
+         */
+        private Group ConvertToGroup(JObject data)
+        {
+            int id = (int)data["groupId"];
+            Group group = new Group(id);
+
+            group.Name = (string)data["name"];
+            group.Bio = (string)data["bio"];
+            group.OwnerId = (int)data["ownerId"];
+            group.Members = data["members"].Values<string>().ToList();
+            group.Tags = data["tags"].Values<string>().ToList();
+
+            return group;
         }
     }
 } 

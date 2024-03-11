@@ -35,11 +35,24 @@ public partial class SwipingView : SwipeView
 		groupData = group;
 		if (groupData != null)
 		{
-			lbGroupName.Text = groupData.Name;
-			lbGroupBio.Text = groupData.Bio;
-			lbMemberCount.Text = "Members: " + groupData.Members.Count;
-		}
+			lbName.Text = groupData.Name;
+			lbBio.Text = groupData.Bio;
+			lbMembers.Text = "Members: " + groupData.Members.Count;
 
+			foreach (string tag in groupData.Tags)
+			{
+				Label lb = new Label();
+				lb.Text = tag;
+				hStackTag.Children.Add(lb);
+			}
+
+			if (hStackTag.Children.Count == 0)
+			{
+				Label lb = new Label();
+				lb.Text = "None";
+				hStackTag.Children.Add(lb);
+			}
+		}
 		
 	}
 }

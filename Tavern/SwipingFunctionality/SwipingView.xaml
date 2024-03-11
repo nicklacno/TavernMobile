@@ -18,22 +18,32 @@
             Invoked="OnJoinGroup"
             />
     </SwipeView.RightItems>
-    <VerticalStackLayout>
-        <Label
-            x:Name="lbGroupName"
-            Text="Test Group"
-            />
-        <Label
-            x:Name="lbGroupBio"
-            Text="Test Group Bio"
-            />
-        <Label
-            x:Name="lbMemberCount"
-            Text="Members: 0"
-            />
-        <VerticalStackLayout x:Name="stackTags">
-            <Label>Tag1</Label>
-            <Label>Tag2</Label>
+    <SwipeView.Resources>
+        <StyleSheet Source="../Resources/Styles/PageStyles/GroupCard.css"/>
+    </SwipeView.Resources>
+    <Grid>
+        <Image Source="/Resources/Images/paper_login.jpg" Aspect="Fill"/> 
+        <VerticalStackLayout Padding="10" Spacing="10">
+            <Label
+                x:Name="lbName"
+                Text="Test Group"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                />
+            <Label
+                x:Name="lbBio"
+                Text="Test Group Bio"
+                />
+            <Label
+                x:Name="lbTagHead"
+                Text="Tags:"
+                FontSize="24"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                />
+            <FlexLayout x:Name="hStackTag" JustifyContent="SpaceEvenly" HorizontalOptions="CenterAndExpand" ></FlexLayout>
+            <Label x:Name="lbMembers" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
         </VerticalStackLayout>
-    </VerticalStackLayout>
+    </Grid>
+    
 </SwipeView>

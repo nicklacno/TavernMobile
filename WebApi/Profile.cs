@@ -187,27 +187,29 @@ namespace WebApi
          * @param id - the id of the user
          * @return - the json of the users groups, null if error, empty if none
          */
-        public static List<string>? GetGroups(int id)
+        public static List<Group>? GetGroups(int id)
         {
             SetConnectionString();
             try
             {
-                List<string> groups = new List<string>();//creates list of group names
+                List<Group> groups = new List<Group>();//creates list of group names
 
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "SELECT GroupName FROM Groups " +
-                            "JOIN MemberGroup ON MemberGroup.GroupID = Groups.GroupID " +
-                            "WHERE MemberGroup.UserID = @IdParam";
+                        cmd.CommandText = "SELECT GroupID FROM MemberGroup WHERE UserID = @IdParam;";
                         cmd.Parameters.AddWithValue("@IdParam", id);
 
                         SqlDataReader reader = cmd.ExecuteReader();
                         while (reader.Read()) //add to list of groups if has rows
                         {
-                            groups.Add(reader.GetString(0)); 
+                            Group? g = Group.GetGroup(reader.GetInt32(0));
+                            if (g != null) 
+                            { 
+                                groups.Add(g);
+                            }
                         }
                     }
                     conn.Close();
