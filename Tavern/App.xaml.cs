@@ -11,7 +11,7 @@ namespace Tavern
         {
             InitializeComponent(); //Initializes the xaml elements
 
-            ProfileSingleton singleton = ProfileSingleton.GetInstance(5); //gets singleton
+            ProfileSingleton singleton = ProfileSingleton.GetInstance(); //gets singleton
             if (singleton.isLoggedIn) //checks login, storage will hold temporary data
             {
                 NavigationPage navPage = new NavigationPage(new TabbedMainPage());//sets page to MainPage, navigation page base allows stacking
