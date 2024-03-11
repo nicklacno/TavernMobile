@@ -8,7 +8,7 @@
 
     <Grid Padding="5" VerticalOptions="Start" MaximumHeightRequest="300">
         <Image Source="/Resources/Images/paper_login.png" Aspect="Fill"/>
-        <VerticalStackLayout VerticalOptions="StartAndExpand" Padding="10" Spacing="10" HorizontalOptions="CenterAndExpand">
+        <VerticalStackLayout VerticalOptions="StartAndExpand" Padding="10" Spacing="10" HorizontalOptions="FillAndExpand">
             <Label x:Name="lbName" HorizontalTextAlignment="Center" HorizontalOptions="Center"/>
             <Label x:Name="lbBio" MaxLines="2" />
             <Label
@@ -26,6 +26,7 @@
                 Text="View Group"
                 Clicked="OnViewGroup"
                 VerticalOptions="End"
+                HorizontalOptions="Fill"
                 />
         </VerticalStackLayout>
     </Grid>

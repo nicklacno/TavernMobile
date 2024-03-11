@@ -1,10 +1,10 @@
-﻿label
-{
-    color: black;
+﻿label {
+    color: #4f4f4f;
 }
 
 #lbGroupName
 {
+    color: #3f3f3f;
     font-size: 40;
     font-weight: 400;
 }

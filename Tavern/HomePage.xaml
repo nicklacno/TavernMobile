@@ -2,24 +2,31 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Tavern.HomePage"
-             Title="HomePage">
-    
-    <ScrollView
-        Padding="0"
-        VerticalScrollBarVisibility="Never"
-        >
-        <VerticalStackLayout 
-            x:Name="layoutGroup"
-            HorizontalOptions="Fill" 
-            Padding="10"
-            Spacing="10"
-            >
+             Title="Home">
+    <ContentPage.Resources>
+        <StyleSheet Source="/Resources/Styles/PageStyles/HomePage.css"/>
+    </ContentPage.Resources>
 
-            <Button
-                x:Name="btnSwipeNavigate"
-                Text="Find Groups"
-                Clicked="NavigateToSwipe"
-                />
-        </VerticalStackLayout>
-    </ScrollView>
+    <Grid>
+        <Image Source="/Resources/Images/tavern.png" Aspect="AspectFill" />
+        <ScrollView
+            Padding="0"
+            VerticalScrollBarVisibility="Never"
+            >
+            <VerticalStackLayout 
+                x:Name="layoutGroup"
+                HorizontalOptions="Fill" 
+                Padding="10"
+                Spacing="10"
+                >
+
+                <Button
+                    x:Name="btnSwipeNavigate"
+                    Text="Find Groups"
+                    Clicked="NavigateToSwipe"
+                    />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+    
 </ContentPage>

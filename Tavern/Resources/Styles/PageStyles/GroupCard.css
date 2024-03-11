@@ -1,8 +1,9 @@
 ﻿label {
-    color: black;
+    color: #4f4f4f;
 }
 
 #lbName {
+    color: #3f3f3f;
     font-size: 40;
     font-weight: 400;
 }
@@ -14,4 +15,13 @@
 layoutTags > label {
     margin: 20;
     font-size: 15;
+}
+
+#btnViewGroup {
+    color: white;
+    background-color: rgba(0, 0, 0, 0.4);
+    font-size: 20;
+    padding: 5 10 5 10;
+    border: 10;
+    margin-top: 10;
 }
