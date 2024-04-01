@@ -233,9 +233,73 @@ namespace WebApi
             }
         }
 
-        internal static int Register(Dictionary<string, string> data)
+        /**
+         * Register - Checks information for data already in table
+         */
+        public static int Register(Dictionary<string, string> data)
         {
-            throw new NotImplementedException();
+            if (DuplicateUsername(data["username"]))
+                return -2;
+            if (DuplicateEmail(data["email"]))
+                return -3;
+
+        }
+
+        static bool DuplicateUsername(string name)
+        {
+            SetConnectionString();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT UserID FROM Customers WHERE UserName = @UserP";
+                        cmd.Parameters.AddWithValue("@UserP", name);
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        if (reader.Read())
+                        {
+                            return true;
+                        }
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
+        }
+        static bool DuplicateEmail(string email)
+        {
+            SetConnectionString();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT UserID FROM Customers WHERE UserEmail = @EmailP";
+                        cmd.Parameters.AddWithValue("@EmailP", email);
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        if (reader.Read())
+                        {
+                            return true;
+                        }
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
         }
     }
 }

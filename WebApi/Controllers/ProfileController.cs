@@ -56,7 +56,11 @@ namespace WebApi.Controllers
         }
 
         /**
-         * Requests Registration of user for website. Will return id number or -1 if failed register for a particular reason
+         * Requests Registration of user for website. Will return id number or negative if failed register for a particular reason
+         * -1, server error, should not appear in api code
+         * -2, duplicate username
+         * -3, duplicate email
+         * 
          * @param data - the data for the account
          */
         [HttpPost("Register")]
