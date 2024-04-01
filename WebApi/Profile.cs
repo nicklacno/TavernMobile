@@ -232,5 +232,10 @@ namespace WebApi
                 connectionString = builder.GetConnectionString("sqlServerString");
             }
         }
+
+        internal static int Register(Dictionary<string, string> data)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

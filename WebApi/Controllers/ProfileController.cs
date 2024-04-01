@@ -54,5 +54,15 @@ namespace WebApi.Controllers
         {
             return Profile.GetProfileId(creds["username"], creds["password"]);
         }
+
+        /**
+         * Requests Registration of user for website. Will return id number or -1 if failed register for a particular reason
+         * @param data - the data for the account
+         */
+        [HttpPost("Register")]
+        public int PostRegister([FromBody] Dictionary<string, string> data) 
+        {
+            return Profile.Register(data);
+        }
     }
 }
