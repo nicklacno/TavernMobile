@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Net.Http.Headers;
 using System.Diagnostics;
+using System.Security.Cryptography;
 using System.Text.Json;
 
 namespace WebApi
@@ -242,7 +243,44 @@ namespace WebApi
                 return -2;
             if (DuplicateEmail(data["email"]))
                 return -3;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        byte[] salt = GetSalt();
+                        cmd.CommandText = " INSERT INTO Customers(UserName, Bio, SaltedPassword, Salt, UserEmail, UserCity, UserState) " +
+                            "VALUES (@UserName, null, @SaltedPassword, @Salt, @UserEmail, @UserCity, @UserState);";
+                        cmd.Parameters.AddWithValue("@UserName", data["username"]);
+                        cmd.Parameters.AddWithValue("@SaltedPassword", Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                                data["password"],
+                                salt,
+                                KeyDerivationPrf.HMACSHA1,
+                                6,
+                                48)));
+                        cmd.Parameters.AddWithValue("@Salt", salt);
+                        cmd.Parameters.AddWithValue("@UserEmail", data["email"]);
+                        cmd.Parameters.AddWithValue("@UserCity", data["city"]);
+                        cmd.Parameters.AddWithValue("@UserState", data["state"]);
 
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    return GetProfileId(data["username"], data["password"]);
+                }
+            }
+            catch (Exception ex)
+            { return -1; }
+        }
+
+        static byte[] GetSalt()
+        {
+            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+            byte[] salt = new byte[48];
+            rng.GetNonZeroBytes(salt);
+            return salt;
         }
 
         static bool DuplicateUsername(string name)
