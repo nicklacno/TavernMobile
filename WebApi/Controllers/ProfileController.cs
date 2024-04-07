@@ -64,9 +64,21 @@ namespace WebApi.Controllers
          * @param data - the data for the account
          */
         [HttpPost("Register")]
-        public int PostRegister([FromBody] Dictionary<string, string> data) 
+        public int PostRegister([FromBody] Dictionary<string, string> data)
         {
             return Profile.Register(data);
+        }
+
+
+        /**
+         * Requests for the modification for a user's profile. Will return 0 if editted or other number if wrong
+         * -1, server problem, should not appear in api code
+         * -2, login verification is invalid
+         */
+        [HttpPost("EditProfile")]
+        public int PostEditProfile([FromBody] Dictionary<string, string> data)
+        {
+            return Profile.EditProfile(data);
         }
     }
 }
