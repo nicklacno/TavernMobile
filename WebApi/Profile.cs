@@ -260,16 +260,15 @@ namespace WebApi
                                 KeyDerivationPrf.HMACSHA1,
                                 6,
                                 48)));
-                        cmd.Parameters.AddWithValue("@Salt", salt);
+                        cmd.Parameters.AddWithValue("@Salt", Convert.ToBase64String(salt));
                         cmd.Parameters.AddWithValue("@UserEmail", data["email"]);
                         cmd.Parameters.AddWithValue("@UserCity", data["city"]);
                         cmd.Parameters.AddWithValue("@UserState", data["state"]);
 
                         cmd.ExecuteNonQuery();
                     }
-
-                    return GetProfileId(data["username"], data["password"]);
                 }
+                return GetProfileId(data["username"], data["password"]);
             }
             catch (Exception ex)
             { return -1; }
