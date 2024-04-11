@@ -92,4 +92,5 @@ namespace WebApi.Controllers
         {
             return Group.CreateGroup(data);
         }
+    }
 }

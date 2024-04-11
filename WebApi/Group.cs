@@ -137,7 +137,64 @@ namespace WebApi
 
         public static int CreateGroup(Dictionary<string,string> data) 
         {
-            
+            SetConnectionString();
+            try
+            {
+                return -1;
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
+        }
+
+        private static int GetGroupId(string groupName)
+        {
+            SetConnectionString();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        
+                    }
+                }
+                return -1;
+
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
+        }
+
+        private static bool DuplicateGroupName(string groupName)
+        {
+            SetConnectionString();
+            try
+            {
+                using(SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using(SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT groupId, ";
+                    }
+                }
+                return false;
+            }
+            catch(Exception ex)
+            {
+                return true;
+            }
+        }
+
+        public static int AddMemberToGroup(int groupId, int userId)
+        {
+            SetConnectionString();
+            return 1;
         }
     }
 }
