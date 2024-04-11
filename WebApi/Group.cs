@@ -134,5 +134,10 @@ namespace WebApi
                 connectionString = builder.GetConnectionString("sqlServerString");
             }
         }
+
+        public static int CreateGroup(Dictionary<string,string> data) 
+        {
+            
+        }
     }
 }
