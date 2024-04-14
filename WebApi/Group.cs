@@ -146,7 +146,21 @@ namespace WebApi
             if (GetGroupId(data["name"]) != -1) return -2;
             try
             {
-                return -1;
+                using (SqlConnection conn = new SqlConnection(connectionString)) 
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "INSERT INTO Groups (OwnerID, GroupName) VALUES (@Owner, @Name)";
+                        cmd.Parameters.AddWithValue("@Owner", Convert.ToInt32(data["ownerId"]));
+                        cmd.Parameters.AddWithValue("@Name", data["name"]);
+                        
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                int id = GetGroupId(data["name"]);
+                AddMemberToGroup(id, Convert.ToInt32(data["ownerId"]));
+                return id;
             }
             catch (Exception ex)
             {
