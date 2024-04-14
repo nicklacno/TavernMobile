@@ -169,7 +169,12 @@ namespace WebApi
                 return -1;
             }
         }
-
+        
+        /**
+         * DuplicateGroupName - checks whether a group has already been created with that name
+         * @param groupName - the name that needs to be checked
+         * @return - whether the group name is in the database
+         */
         private static bool DuplicateGroupName(string groupName)
         {
             SetConnectionString();
@@ -180,10 +185,17 @@ namespace WebApi
                     conn.Open();
                     using(SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "SELECT groupId, ";
+                        cmd.CommandText = "SELECT GroupID FROM Groups WHERE GroupName = @GroupName";
+                        cmd.Parameters.AddWithValue("@GroupName", groupName);
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            return true;
+                        }
+                        return false;
                     }
                 }
-                return false;
             }
             catch(Exception ex)
             {
@@ -191,10 +203,36 @@ namespace WebApi
             }
         }
 
-        public static int AddMemberToGroup(int groupId, int userId)
+        /**
+         * AddMemberToGroup - helper function that allows database manipulation
+         * @param groupId - the group that will be joined
+         * @param userId - the user that will be added to the group
+         * @return - negative number if failed, 0 if success
+         */
+        private static int AddMemberToGroup(int groupId, int userId)
         {
             SetConnectionString();
-            return 1;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using(SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "INSERT INTO MemberGroup(GroupID, UserID) VALUES (@GroupId, @UserId)";
+                        cmd.Parameters.AddWithValue("@GroupId", groupId);
+                        cmd.Parameters.AddWithValue("@UserId", userId);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
         }
     }
 }
