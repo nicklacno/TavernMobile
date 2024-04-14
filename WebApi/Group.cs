@@ -134,10 +134,16 @@ namespace WebApi
                 connectionString = builder.GetConnectionString("sqlServerString");
             }
         }
-
+        
+        /**
+         * CreateGroup - returns the newly created group's id or negative if failed
+         * @param data - the dictionary that holds all the data
+         * @return - the new group id or a negative number
+         */
         public static int CreateGroup(Dictionary<string,string> data) 
         {
             SetConnectionString();
+            if (GetGroupId(data["name"]) != -1) return -2;
             try
             {
                 return -1;
@@ -147,7 +153,12 @@ namespace WebApi
                 return -1;
             }
         }
-
+        
+        /**
+         * GetGroupId - returns the groupid given a specific group name
+         * @param groupName - the name of the group
+         * @return - the groupId or -1 if not found
+         */
         private static int GetGroupId(string groupName)
         {
             SetConnectionString();
@@ -158,8 +169,17 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        
+                        cmd.CommandText = "SELECT GroupID FROM Groups WHERE GroupName = @GroupName";
+                        cmd.Parameters.AddWithValue("@GroupName", groupName);
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            return reader.GetInt32(0);
+                        }
+                        return -1;
                     }
+
                 }
                 return -1;
 
@@ -170,38 +190,6 @@ namespace WebApi
             }
         }
         
-        /**
-         * DuplicateGroupName - checks whether a group has already been created with that name
-         * @param groupName - the name that needs to be checked
-         * @return - whether the group name is in the database
-         */
-        private static bool DuplicateGroupName(string groupName)
-        {
-            SetConnectionString();
-            try
-            {
-                using(SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    conn.Open();
-                    using(SqlCommand cmd = conn.CreateCommand())
-                    {
-                        cmd.CommandText = "SELECT GroupID FROM Groups WHERE GroupName = @GroupName";
-                        cmd.Parameters.AddWithValue("@GroupName", groupName);
-
-                        SqlDataReader reader = cmd.ExecuteReader();
-                        if (reader.Read())
-                        {
-                            return true;
-                        }
-                        return false;
-                    }
-                }
-            }
-            catch(Exception ex)
-            {
-                return true;
-            }
-        }
 
         /**
          * AddMemberToGroup - helper function that allows database manipulation
