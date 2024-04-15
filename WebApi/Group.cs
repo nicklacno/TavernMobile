@@ -236,5 +236,48 @@ namespace WebApi
                 return -1;
             }
         }
+
+        /**
+         * JoinRequest - Creates a new request for joining a group
+         * @param groupId - the id of the group to join
+         * @param userId - the id of the user that wishes to join
+         */
+        public static void JoinRequest(int groupId, int userId)
+        {
+            SetConnectionString();
+            try
+            {
+                using(SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using(SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "INSERT INTO GroupRequests (UserID, GroupID) VALUES (@User, @Group)";
+                        cmd.Parameters.AddWithValue("@User", userId);
+                        cmd.Parameters.AddWithValue("@Group", groupId);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public static int EditGroup(Dictionary<string, string> data)
+        {
+            throw new NotImplementedException();
+        }
+        /**
+         * ModifyRequest - Modifies a request to join the group
+         * @param requestId - The id for the given request
+         * @param isAccepted - whether or not to accept or reject the request
+         */
+        public static int ModifyRequest(int requestId, bool isAccepted)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
