@@ -268,13 +268,76 @@ namespace WebApi
 
         public static int EditGroup(Dictionary<string, string> data)
         {
-            throw new NotImplementedException();
+            if (data["newName"] == null && data["newBio"] == null) return 0;
+            if (DuplicateGroupName(data["newName"])) return -3;
+            try
+            {
+                using(SqlConnection conn = new SqlConnection(connectionString)) 
+                {
+                    conn.Open();
+                    using(SqlCommand cmd = conn.CreateCommand())
+                    {
+                        string command = "UPDATE Groups SET ";
+                        if (data["newName"] != null)
+                        {
+                            command += "GroupName = @UserNameP ";
+                            cmd.Parameters.AddWithValue("@UserNameP", data["newName"]);
+                        }
+                        if (data["newBio"] != null)
+                        {
+                            command += "Bio = @BioP ";
+                            cmd.Parameters.AddWithValue("@BioP", data["newBio"]);
+                        }
+                        command += "WHERE OwnerId = @Owner AND GroupID = @Group;";
+                        cmd.CommandText = command;
+                        cmd.Parameters.AddWithValue("@Owner", Convert.ToInt32(data["ownerId"]));
+                        cmd.Parameters.AddWithValue("@Group", Convert.ToInt32(data["groupId"]));
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
         }
+
+        private static bool DuplicateGroupName(string newName)
+        {
+            SetConnectionString();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT GroupID FROM Groups WHERE GroupName = @GroupP";
+                        cmd.Parameters.AddWithValue("@GroupP", newName);
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        if (reader.Read())
+                        {
+                            return true;
+                        }
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
+        }
+
         /**
-         * ModifyRequest - Modifies a request to join the group
-         * @param requestId - The id for the given request
-         * @param isAccepted - whether or not to accept or reject the request
-         */
+* ModifyRequest - Modifies a request to join the group
+* @param requestId - The id for the given request
+* @param isAccepted - whether or not to accept or reject the request
+*/
         public static int ModifyRequest(int requestId, bool isAccepted)
         {
             throw new NotImplementedException();
