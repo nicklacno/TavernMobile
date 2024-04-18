@@ -47,6 +47,12 @@
                 Text="Forgot Password?"
                 HorizontalOptions="End"
                 />
+            <Button
+                x:Name="btnRegister"
+                Text="Don't Have an account? Register Here"
+                HorizontalOptions="Center"
+                Clicked="Register"
+                />
         </VerticalStackLayout>
     </Grid>
     

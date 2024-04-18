@@ -25,4 +25,9 @@ public partial class LoginPage : ContentPage
 			this.ShowPopup(popup);
         }
     }
+
+	private async void Register(object sender, EventArgs e)
+	{
+		await Navigation.PushAsync(new RegisterPage());
+	}
 }
