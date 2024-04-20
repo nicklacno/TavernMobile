@@ -1,13 +1,6 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
 using System.Diagnostics;
-using System.Linq;
-using System.Net.Http.Json;
 using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Tavern
@@ -17,7 +10,7 @@ namespace Tavern
         private static ProfileSingleton _instance;
         public bool isLoggedIn;
 
-        public delegate void UpdateProfile(); 
+        public delegate void UpdateProfile();
         public delegate void LoginSuccessful();
 
         public UpdateProfile updateProfile; //update profile delegate
@@ -28,7 +21,7 @@ namespace Tavern
         public string ProfileBio { get; set; }
 
         public List<string> Friends { get; set; }
-        public List<Group> Groups {  get; set; }
+        public List<Group> Groups { get; set; }
         public List<string> BlockedUsers { get; set; }
 
         private readonly HttpClient _httpClient = new(); //creates client
@@ -43,7 +36,7 @@ namespace Tavern
             ProfileId = id;//sets the profile id
             _httpClient.BaseAddress = new Uri(BASE_ADDRESS); //sets the base address of the httpclient
             updateProfile = new UpdateProfile(PushToDatabase); //initalizes the delegate object for updateProfile
-            
+
             //set to true for tabbed page, false for login
             isLoggedIn = false; //sets the isLoggedIn to false, will change when retaining data
 
@@ -70,7 +63,7 @@ namespace Tavern
          * @return - returns the singleton object
          */
         public static ProfileSingleton GetInstance(int id = -1)
-        { 
+        {
             if (_instance == null) //if null, create singleton
             {
                 _instance = new ProfileSingleton(id);
@@ -92,7 +85,7 @@ namespace Tavern
                 return null;
             return await _httpClient.GetStringAsync($"Profile/{ProfileId}"); //calls for the profile id
         }
-        
+
         /**
          * GetFriendsList - Calls the Api for the friends list of a given user
          * @return - json of an array of strings
@@ -110,7 +103,7 @@ namespace Tavern
         {
             Debug.WriteLine("Pushed?");
         }
-        
+
         /**
          * Login - Attempting Login to the Database
          * @param username - username of the account
@@ -126,7 +119,7 @@ namespace Tavern
 
             var json = JsonSerializer.Serialize(values); //serializes the dictionary into a json string
             var content = new StringContent(json, Encoding.UTF8, "application/json"); // encodes the dictionary into an application/json
-            
+
             try
             {
                 var response = await _httpClient.PostAsync("Profile/Login", content); //gets the response message
@@ -145,7 +138,7 @@ namespace Tavern
                 Debug.WriteLine(ex);
                 return false;
             }
-            
+
         }
 
         /**
@@ -160,7 +153,7 @@ namespace Tavern
             ConvertToGroupList(await _httpClient.GetStringAsync($"Profile/{ProfileId}/Groups"));
             return Groups;
         }
-        
+
 
         /**
          * ConvertToGroupList - takes a json and converts it into a list of Group Objects
@@ -180,7 +173,7 @@ namespace Tavern
                         groups.Add(ConvertToGroup(groupData));
                     }
                 }
-                
+
 
                 Groups = groups;
             }
@@ -235,5 +228,36 @@ namespace Tavern
 
             return group;
         }
+
+        public async Task<int> Register(string username, string password)
+        {
+            Dictionary<string, string> value = new Dictionary<string, string>()
+            {
+                {"username", username},
+                {"password", password}
+            };
+
+            var json = JsonSerializer.Serialize(value); //serializes the dictionary into a json string
+            var content = new StringContent(json, Encoding.UTF8, "application/json"); // encodes the dictionary into an application/json
+
+            try
+            {
+                var response = await _httpClient.PostAsync("Profile/Register", content); //gets the response message
+                int id = JsonSerializer.Deserialize<int>(response.Content.ReadAsStringAsync().Result); //Deserializes the response to an int and sets a variable
+
+                if (id > 0) // greater than 0 is a valid id
+                {
+                    ProfileId = id; //sets the id for the singleton
+                    isLoggedIn = true; //sets the bool for logged in, later used for the remember me
+                    await SetValues();
+                }
+                return id; //returns id if valid
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
     }
-} 
+}

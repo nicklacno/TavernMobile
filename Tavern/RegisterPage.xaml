@@ -13,6 +13,10 @@
             Placeholder="Username"
             />
         <Entry
+            x:Name="txtEmail"
+            Placeholder="Email"
+            />
+        <Entry
             x:Name="txtPassword"
             Placeholder="Password"
             IsPassword="True"
@@ -26,6 +30,7 @@
             x:Name="btnRegister"
             Text="Register"
             HorizontalOptions="Center"
+            Clicked="RegisterButton"
             />
     </VerticalStackLayout>
 </ContentPage>
