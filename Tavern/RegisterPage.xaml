@@ -3,34 +3,111 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Tavern.RegisterPage"
              Title="Register">
-    <VerticalStackLayout>
-        <Label
+    <ContentPage.Resources>
+        <StyleSheet Source="/Resources/Styles/PageStyles/EditProfilePage.css" />
+    </ContentPage.Resources>
+    <Grid>
+        <Image Source="/Resources/Images/paper_login.jpg" Aspect="AspectFill" />
+        <VerticalStackLayout>
+            <Label
             x:Name="lbHeader"
             Text="Register"
+            HorizontalTextAlignment="Center"
+            HorizontalOptions="Center"
             />
-        <Entry
+            <Entry
             x:Name="txtUsername"
             Placeholder="Username"
             />
-        <Entry
+            <Entry
             x:Name="txtEmail"
             Placeholder="Email"
             />
-        <Entry
+            <Entry
             x:Name="txtPassword"
             Placeholder="Password"
             IsPassword="True"
             />
-        <Entry
+            <Entry
             x:Name="txtConfirmPassword"
             Placeholder="Confirm Password"
             IsPassword="True"
             />
-        <Button
+            <HorizontalStackLayout>
+                <Entry
+                x:Name="txtCity"
+                Placeholder="City"
+                WidthRequest="200"
+                />
+                <Picker x:Name="dropState"
+                        Title="State"
+                        TitleColor="#3f3f3f"
+                        TextColor="#3f3f3f">
+                    <Picker.Items>
+                        <x:String>AL</x:String>
+                        <x:String>AK</x:String>
+                        <x:String>AZ</x:String>
+                        <x:String>AR</x:String>
+                        <x:String>AS</x:String>
+                        <x:String>CA</x:String>
+                        <x:String>CO</x:String>
+                        <x:String>CT</x:String>
+                        <x:String>DE</x:String>
+                        <x:String>DC</x:String>
+                        <x:String>FL</x:String>
+                        <x:String>GA</x:String>
+                        <x:String>GU</x:String>
+                        <x:String>HI</x:String>
+                        <x:String>ID</x:String>
+                        <x:String>IL</x:String>
+                        <x:String>IN</x:String>
+                        <x:String>IA</x:String>
+                        <x:String>KS</x:String>
+                        <x:String>KY</x:String>
+                        <x:String>LA</x:String>
+                        <x:String>ME</x:String>
+                        <x:String>MD</x:String>
+                        <x:String>MA</x:String>
+                        <x:String>MI</x:String>
+                        <x:String>MN</x:String>
+                        <x:String>MS</x:String>
+                        <x:String>MO</x:String>
+                        <x:String>MT</x:String>
+                        <x:String>NE</x:String>
+                        <x:String>NV</x:String>
+                        <x:String>NH</x:String>
+                        <x:String>NJ</x:String>
+                        <x:String>NM</x:String>
+                        <x:String>NY</x:String>
+                        <x:String>NC</x:String>
+                        <x:String>ND</x:String>
+                        <x:String>OH</x:String>
+                        <x:String>OK</x:String>
+                        <x:String>OR</x:String>
+                        <x:String>PA</x:String>
+                        <x:String>PR</x:String>
+                        <x:String>RI</x:String>
+                        <x:String>SC</x:String>
+                        <x:String>SD</x:String>
+                        <x:String>TN</x:String>
+                        <x:String>TX</x:String>
+                        <x:String>UT</x:String>
+                        <x:String>VT</x:String>
+                        <x:String>VA</x:String>
+                        <x:String>VI</x:String>
+                        <x:String>WA</x:String>
+                        <x:String>WV</x:String>
+                        <x:String>WI</x:String>
+                        <x:String>WY</x:String>
+                    </Picker.Items>
+                </Picker>
+            </HorizontalStackLayout>
+            <Button
             x:Name="btnRegister"
             Text="Register"
             HorizontalOptions="Center"
             Clicked="RegisterButton"
             />
-    </VerticalStackLayout>
+        </VerticalStackLayout>
+    </Grid>
 </ContentPage>

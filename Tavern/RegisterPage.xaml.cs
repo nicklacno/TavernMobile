@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Tavern;
 
@@ -7,11 +8,12 @@ public partial class RegisterPage : ContentPage
     public RegisterPage()
     {
         InitializeComponent();
+        dropState.SelectedIndex = 0;
     }
 
-    public async Task RegisterButton(object sender, EventArgs e)
+    public async void RegisterButton(object sender, EventArgs e)
     {
-        if (txtConfirmPassword.Text.Equals(txtPassword.Text))
+        if (!txtConfirmPassword.Text.Equals(txtPassword.Text))
         {
             //error handling here
             Debug.WriteLine("Confirm Password and Password dont match");
@@ -31,7 +33,8 @@ public partial class RegisterPage : ContentPage
             return;
         }
 
-        int id = await ProfileSingleton.GetInstance().Register(txtUsername.Text, txtPassword.Text);
+        int id = await ProfileSingleton.GetInstance().Register(txtUsername.Text, txtPassword.Text, 
+            txtEmail.Text, txtCity.Text, dropState.SelectedItem.ToString());
 
         switch (id)
         {
@@ -58,7 +61,18 @@ public partial class RegisterPage : ContentPage
 
     private bool ValidEmail()
     {
-        return txtEmail.Text.Contains('.') && txtEmail.Text.Contains('.');
+        bool hasAtSign = false, hasDomain = false;
+        foreach(char c in txtEmail.Text)
+        {
+            if (c == '@')
+                hasAtSign = true;
+            else if (hasAtSign && c == '.')
+                hasDomain = true;
+
+            if (hasDomain)
+                return true;
+        }
+        return false;
     }
 
     private bool PasswordVerification()

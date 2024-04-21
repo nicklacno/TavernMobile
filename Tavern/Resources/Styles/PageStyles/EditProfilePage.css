@@ -18,6 +18,11 @@ entry, editor {
     -maui-placeholder-color: #3f3f3f;
 }
 
+picker {
+    margin-botton: 10;
+    font-size: 20;
+}
+
 label 
 {
     color:#3f3f3f;

@@ -25,7 +25,7 @@ namespace Tavern
         public List<string> BlockedUsers { get; set; }
 
         private readonly HttpClient _httpClient = new(); //creates client
-        private const string BASE_ADDRESS = "https://nlk70t0m-5273.usw2.devtunnels.ms"; //base address for persistent dev-tunnel for api
+        private const string BASE_ADDRESS = "https://n588x7k6-5273.usw2.devtunnels.ms"; //base address for persistent dev-tunnel for api
 
         /**
          * ProfileSingleton - private constructor to make the singleton
@@ -229,12 +229,15 @@ namespace Tavern
             return group;
         }
 
-        public async Task<int> Register(string username, string password)
+        public async Task<int> Register(string username, string password, string email, string city, string state)
         {
             Dictionary<string, string> value = new Dictionary<string, string>()
             {
                 {"username", username},
-                {"password", password}
+                {"password", password},
+                {"email", email },
+                {"city", city},
+                {"state", state}
             };
 
             var json = JsonSerializer.Serialize(value); //serializes the dictionary into a json string
