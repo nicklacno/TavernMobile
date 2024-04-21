@@ -18,10 +18,12 @@
             <Entry
             x:Name="txtUsername"
             Placeholder="Username"
+            MaxLength="20"
             />
             <Entry
             x:Name="txtEmail"
             Placeholder="Email"
+            MaxLength="50"
             />
             <Entry
             x:Name="txtPassword"
@@ -38,6 +40,7 @@
                 x:Name="txtCity"
                 Placeholder="City"
                 WidthRequest="200"
+                MaxLength="30"
                 />
                 <Picker x:Name="dropState"
                         Title="State"

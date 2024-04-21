@@ -43,11 +43,6 @@
                 WidthRequest="200"
                 />
             <Button
-                x:Name="btnForgot"
-                Text="Forgot Password?"
-                HorizontalOptions="End"
-                />
-            <Button
                 x:Name="btnRegister"
                 Text="Don't Have an account? Register Here"
                 HorizontalOptions="Center"

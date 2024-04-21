@@ -10,10 +10,10 @@ namespace Tavern
         private static ProfileSingleton _instance;
         public bool isLoggedIn;
 
-        public delegate void UpdateProfile();
         public delegate void LoginSuccessful();
+        public delegate void UpdateProfile();
 
-        public UpdateProfile updateProfile; //update profile delegate
+        public UpdateProfile updateProfile;
         public LoginSuccessful loginSuccessful; //login successful delegate
 
         public int ProfileId { get; set; }
@@ -35,11 +35,10 @@ namespace Tavern
         {
             ProfileId = id;//sets the profile id
             _httpClient.BaseAddress = new Uri(BASE_ADDRESS); //sets the base address of the httpclient
-            updateProfile = new UpdateProfile(PushToDatabase); //initalizes the delegate object for updateProfile
 
             //set to true for tabbed page, false for login
             isLoggedIn = false; //sets the isLoggedIn to false, will change when retaining data
-
+            updateProfile = new UpdateProfile(InvokedUpdate);
         }
 
         private async Task SetValues()
@@ -96,12 +95,10 @@ namespace Tavern
                 return null;
             return await _httpClient.GetStringAsync($"Profile/{ProfileId}/Friends");
         }
-        /**
-         * PushToDatabase - temporary function to be called when the delegate is called, will be changed to post or put call
-         */
-        public void PushToDatabase()
+        
+        public void InvokedUpdate()
         {
-            Debug.WriteLine("Pushed?");
+            Debug.WriteLine("Invoked Update");
         }
 
         /**
@@ -255,6 +252,38 @@ namespace Tavern
                     await SetValues();
                 }
                 return id; //returns id if valid
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+        public async Task<int> EditProfile(string password, string newUsername, string newBio)
+        {
+            string name = newUsername.Equals(ProfileName) ? null : newUsername;
+            string bio = newBio.Equals(ProfileBio) ? null : newBio;
+
+            Dictionary<string, string> values = new Dictionary<string, string>()
+            {
+                {"profileId", ProfileId.ToString() },
+                {"password", password },
+                {"newUsername", name },
+                {"newBio", bio}
+            };
+
+            var json = JsonSerializer.Serialize(values);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            try
+            {
+                var responses = await _httpClient.PostAsync("Profile/EditProfile", content);
+                int code = JsonSerializer.Deserialize<int>(responses.Content.ReadAsStringAsync().Result);
+
+                await GetProfileData();
+                
+                return code;
             }
             catch (Exception ex)
             {

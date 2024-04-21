@@ -75,6 +75,7 @@ namespace WebApi.Controllers
          * @param data -  The data for modifying the profile, including a verification method
          * -1, server problem, should not appear in api code
          * -2, login verification is invalid
+         * -3, duplicate username
          */
         [HttpPost("EditProfile")]
         public int PostEditProfile([FromBody] Dictionary<string, string> data)
