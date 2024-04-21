@@ -192,7 +192,7 @@ namespace Tavern
             {
                 Group group = new Group(id);
                 string json = await _httpClient.GetStringAsync($"Groups/{id}");
-                if (json != null)
+                if (!string.IsNullOrEmpty(json))
                 {
                     JObject data = JObject.Parse(json);
 
@@ -280,9 +280,32 @@ namespace Tavern
             {
                 var responses = await _httpClient.PostAsync("Profile/EditProfile", content);
                 int code = JsonSerializer.Deserialize<int>(responses.Content.ReadAsStringAsync().Result);
-
-                await GetProfileData();
                 
+                return code;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+        public async Task<int> CreateGroup(string groupName, string groupBio)
+        {
+            Dictionary<string, string> values = new Dictionary<string, string>()
+            {
+                { "name", groupName },
+                { "ownerId", ProfileId.ToString()}
+            };
+
+            var json = JsonSerializer.Serialize(values);
+            var content = new StringContent(json, Encoding.UTF8 , "application/json");
+
+            try
+            {
+                var response = await _httpClient.PostAsync("Profile/CreateGroup", content);
+                int code = JsonSerializer.Deserialize<int>(response.Content.ReadAsStringAsync().Result);
+
                 return code;
             }
             catch (Exception ex)

@@ -6,6 +6,7 @@ public partial class HomePage : ContentPage
 	{
 		InitializeComponent();
 		AddGroupsToHomePage();
+
 	}
 
 	public async Task AddGroupsToHomePage()
@@ -22,4 +23,20 @@ public partial class HomePage : ContentPage
     {
 		Navigation.PushAsync(new SwipingFunctionality.SwipingPage());
     }
+
+
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+        layoutGroup.Children.Clear();
+        foreach(Group group in ProfileSingleton.GetInstance().Groups)
+		{
+			layoutGroup.Children.Add(new GroupCard(group));
+		}
+    }
+
+	private void NavigateToCreate(object sender, EventArgs e)
+	{
+		Navigation.PushAsync(new CreateGroupPage());
+	}
 }

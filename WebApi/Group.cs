@@ -37,7 +37,10 @@ namespace WebApi
                         {
                             group.OwnerId = reader.GetInt32(0);
                             group.Name = reader.GetString(1);
-                            group.Bio = reader.GetString(2);
+                            if (reader.GetValue(2) != System.DBNull.Value)
+                            {
+                                group.Bio = reader.GetString(2);
+                            }
 
                             group.Members = GetMembers(id);
                             group.Tags = GetTags(id);

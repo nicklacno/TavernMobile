@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Tavern.CreateGroupPage"
+             Title="Create Group">
+    <ContentPage.Resources>
+        <StyleSheet Source="/Resources/Styles/PageStyles/EditProfilePage.css" />
+    </ContentPage.Resources>
+    <Grid>
+        <Image Source="/Resources/Images/paper_login.jpg" Aspect="AspectFill" />
+        <VerticalStackLayout>
+            <Label
+                x:Name="lbHeader"
+                Text="Register"
+                HorizontalTextAlignment="Center"
+                HorizontalOptions="Center"
+                />
+            <Entry
+                x:Name="txtGroupName"
+                Placeholder="Group Name"
+                MaxLength="25"
+                />
+            <Editor
+                x:Name="txtBio"
+                Placeholder="Group Bio"
+                MaxLength="200"
+                AutoSize="TextChanges"
+                />
+            <Button
+                x:Name="btnCreate"
+                Text="Create Group"
+                Clicked="CreateGroup"
+                />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>
