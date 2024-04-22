@@ -5,7 +5,7 @@ public partial class HomePage : ContentPage
 	public HomePage()
 	{
 		InitializeComponent();
-		AddGroupsToHomePage();
+		//AddGroupsToHomePage();
 
 	}
 
@@ -13,6 +13,7 @@ public partial class HomePage : ContentPage
 	{
 		ProfileSingleton singleton = ProfileSingleton.GetInstance();//temporarily putting 5 for testing
 		await singleton.GetGroupsList();
+		layoutGroup.Children.Clear();
 		foreach (Group group in singleton.Groups)
 		{
 			layoutGroup.Children.Add(new GroupCard(group));
