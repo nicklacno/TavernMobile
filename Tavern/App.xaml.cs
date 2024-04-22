@@ -19,7 +19,7 @@ namespace Tavern
             }
             else
             {
-                MainPage = new LoginPage(); //Sets to login page if not currently logged in
+                MainPage = new NavigationPage(new LoginPage()); //Sets to login page if not currently logged in
                 singleton.loginSuccessful = new ProfileSingleton.LoginSuccessful(MoveToMainPage); //sets delegate for when successful login
             }
         }

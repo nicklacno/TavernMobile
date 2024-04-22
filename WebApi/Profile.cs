@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Net.Http.Headers;
 using System.Diagnostics;
+using System.Security.Cryptography;
 using System.Text.Json;
 
 namespace WebApi
@@ -230,6 +231,206 @@ namespace WebApi
             {
                 IConfigurationRoot builder = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
                 connectionString = builder.GetConnectionString("sqlServerString");
+            }
+        }
+
+        /**
+         * Register - Checks information for data already in table
+         * @param data - The Dictionary of data that has all the data for the account
+         * @return - The profile id or an error code
+         */
+        public static int Register(Dictionary<string, string> data)
+        {
+            if (DuplicateUsername(data["username"]))
+                return -2;
+            if (DuplicateEmail(data["email"]))
+                return -3;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        byte[] salt = GetSalt();
+                        cmd.CommandText = " INSERT INTO Customers(UserName, Bio, SaltedPassword, Salt, UserEmail, UserCity, UserState) " +
+                            "VALUES (@UserName, null, @SaltedPassword, @Salt, @UserEmail, @UserCity, @UserState);";
+                        cmd.Parameters.AddWithValue("@UserName", data["username"]);
+                        cmd.Parameters.AddWithValue("@SaltedPassword", Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                                data["password"],
+                                salt,
+                                KeyDerivationPrf.HMACSHA1,
+                                6,
+                                48)));
+                        cmd.Parameters.AddWithValue("@Salt", Convert.ToBase64String(salt));
+                        cmd.Parameters.AddWithValue("@UserEmail", data["email"]);
+                        cmd.Parameters.AddWithValue("@UserCity", data["city"]);
+                        cmd.Parameters.AddWithValue("@UserState", data["state"]);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                return GetProfileId(data["username"], data["password"]);
+            }
+            catch (Exception ex)
+            { return -1; }
+        }
+
+        static byte[] GetSalt()
+        {
+            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+            byte[] salt = new byte[48];
+            rng.GetNonZeroBytes(salt);
+            return salt;
+        }
+        /**
+         * Checks in the database if the username already exists
+         * @param name - the name of the user trying to be added/modified
+         * @return - whether the name was already in the database or not
+         */
+        static bool DuplicateUsername(string name)
+        {
+            SetConnectionString();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT UserID FROM Customers WHERE UserName = @UserP";
+                        cmd.Parameters.AddWithValue("@UserP", name);
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        if (reader.Read())
+                        {
+                            return true;
+                        }
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
+        }
+        /**
+         * Checks in the database if the email already exists
+         * @param email - the email of the user trying to be added
+         * @return - whether the email was already in the database or not
+         */
+        static bool DuplicateEmail(string email)
+        {
+            SetConnectionString();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT UserID FROM Customers WHERE UserEmail = @EmailP";
+                        cmd.Parameters.AddWithValue("@EmailP", email);
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        if (reader.Read())
+                        {
+                            return true;
+                        }
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
+        }
+
+        /**
+         * EditProfile - Makes proper modifications based on data given
+         * @param data - the dictionary that stores the data to perform the action
+         * @return - correct status code, 0 for modified, anything else will be error
+         */
+        public static int EditProfile(Dictionary<string, string> data) //newBio and/o newUsername should be null if no changes
+        {
+            if (!VerifyCredentials(data["profileId"], data["password"])) return -2;
+            if (data["newUsername"] != null && DuplicateUsername(data["newUsername"])) return -3;
+            if (data["newUsername"] == null && data["newBio"] == null) return 0; //if no data needed to be changed, then it success
+            try
+            {
+                using(SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        string command = "UPDATE Customers SET ";
+                        if (data["newUsername"] != null)
+                        {
+                            command += "UserName = @UserNameP ";
+                            cmd.Parameters.AddWithValue("@UserNameP", data["newUsername"]);
+                        }
+                        if (data["newBio"] != null)
+                        {
+                            command += "Bio = @BioP ";
+                            cmd.Parameters.AddWithValue("@BioP", data["newBio"]);
+                        }
+                        command += "WHERE UserID = @IdP;";
+                        cmd.CommandText = command;
+                        cmd.Parameters.AddWithValue("@IdP", Convert.ToInt32(data["profileId"]));
+                        
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                return 0;
+            }
+            catch (Exception e)
+            {
+                return -1;
+            }
+        }
+
+        /**
+         * Helper function that verifies the cridentials for making modifications to the profile
+         * @param id - the string of the id for the user
+         * @param password - the password for the user
+         * @return - whether they are valid to modify this profile
+         */
+        static bool VerifyCredentials(string id, string password)
+        {
+            SetConnectionString();
+            int profileId = Convert.ToInt32(id);
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT Salt, SaltedPassword FROM Customers WHERE UserId = @UserId";
+                        cmd.Parameters.AddWithValue("@UserId", profileId);
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        
+                        if (reader.Read())
+                        {
+                            string temp = Convert.ToBase64String(HashPassword(password, Convert.FromBase64String(reader["Salt"].ToString())));
+                            if (string.Equals(reader["SaltedPassword"].ToString(), temp))
+                            {
+                                return true;
+                            }
+                            return false;
+                        }
+                        return false;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return false;
             }
         }
     }

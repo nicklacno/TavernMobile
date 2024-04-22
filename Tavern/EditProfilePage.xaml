@@ -13,13 +13,7 @@
                 <Label>Username</Label>
                 <Entry
                     x:Name="entryUsername"
-                    MaxLength="100"
-                    />
-                <Button
-                    x:Name="btnUsername"
-                    Text="Save"
-                    Clicked="Update"
-                    HorizontalOptions="End"
+                    MaxLength="20"
                     />
             </VerticalStackLayout>
             <VerticalStackLayout x:Name="stackBio">
@@ -29,11 +23,17 @@
                     MaxLength="300"
                     AutoSize="TextChanges"
                     />
+            </VerticalStackLayout>
+            <VerticalStackLayout x:Name="stackConfirm">
+                <Entry
+                    x:Name="entryPassword"
+                    Placeholder="Confirm With Password"
+                    IsPassword="True"
+                    />
                 <Button
-                    x:Name="btnBio"
-                    Text="Save"
+                    x:Name="btnConfirm"
+                    Text="Save Changes"
                     Clicked="Update"
-                    HorizontalOptions="End"
                     />
             </VerticalStackLayout>
         </VerticalStackLayout>

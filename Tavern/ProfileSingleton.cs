@@ -1,13 +1,6 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
 using System.Diagnostics;
-using System.Linq;
-using System.Net.Http.Json;
 using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Tavern
@@ -17,10 +10,10 @@ namespace Tavern
         private static ProfileSingleton _instance;
         public bool isLoggedIn;
 
-        public delegate void UpdateProfile(); 
         public delegate void LoginSuccessful();
+        public delegate void UpdateProfile();
 
-        public UpdateProfile updateProfile; //update profile delegate
+        public UpdateProfile updateProfile;
         public LoginSuccessful loginSuccessful; //login successful delegate
 
         public int ProfileId { get; set; }
@@ -28,11 +21,11 @@ namespace Tavern
         public string ProfileBio { get; set; }
 
         public List<string> Friends { get; set; }
-        public List<Group> Groups {  get; set; }
+        public List<Group> Groups { get; set; }
         public List<string> BlockedUsers { get; set; }
 
         private readonly HttpClient _httpClient = new(); //creates client
-        private const string BASE_ADDRESS = "https://nlk70t0m-5273.usw2.devtunnels.ms"; //base address for persistent dev-tunnel for api
+        private const string BASE_ADDRESS = "https://n588x7k6-5273.usw2.devtunnels.ms"; //base address for persistent dev-tunnel for api
 
         /**
          * ProfileSingleton - private constructor to make the singleton
@@ -42,11 +35,10 @@ namespace Tavern
         {
             ProfileId = id;//sets the profile id
             _httpClient.BaseAddress = new Uri(BASE_ADDRESS); //sets the base address of the httpclient
-            updateProfile = new UpdateProfile(PushToDatabase); //initalizes the delegate object for updateProfile
-            
+
             //set to true for tabbed page, false for login
             isLoggedIn = false; //sets the isLoggedIn to false, will change when retaining data
-
+            updateProfile = new UpdateProfile(InvokedUpdate);
         }
 
         private async Task SetValues()
@@ -70,7 +62,7 @@ namespace Tavern
          * @return - returns the singleton object
          */
         public static ProfileSingleton GetInstance(int id = -1)
-        { 
+        {
             if (_instance == null) //if null, create singleton
             {
                 _instance = new ProfileSingleton(id);
@@ -92,7 +84,7 @@ namespace Tavern
                 return null;
             return await _httpClient.GetStringAsync($"Profile/{ProfileId}"); //calls for the profile id
         }
-        
+
         /**
          * GetFriendsList - Calls the Api for the friends list of a given user
          * @return - json of an array of strings
@@ -103,14 +95,12 @@ namespace Tavern
                 return null;
             return await _httpClient.GetStringAsync($"Profile/{ProfileId}/Friends");
         }
-        /**
-         * PushToDatabase - temporary function to be called when the delegate is called, will be changed to post or put call
-         */
-        public void PushToDatabase()
-        {
-            Debug.WriteLine("Pushed?");
-        }
         
+        public void InvokedUpdate()
+        {
+            Debug.WriteLine("Invoked Update");
+        }
+
         /**
          * Login - Attempting Login to the Database
          * @param username - username of the account
@@ -126,7 +116,7 @@ namespace Tavern
 
             var json = JsonSerializer.Serialize(values); //serializes the dictionary into a json string
             var content = new StringContent(json, Encoding.UTF8, "application/json"); // encodes the dictionary into an application/json
-            
+
             try
             {
                 var response = await _httpClient.PostAsync("Profile/Login", content); //gets the response message
@@ -145,7 +135,7 @@ namespace Tavern
                 Debug.WriteLine(ex);
                 return false;
             }
-            
+
         }
 
         /**
@@ -160,7 +150,7 @@ namespace Tavern
             ConvertToGroupList(await _httpClient.GetStringAsync($"Profile/{ProfileId}/Groups"));
             return Groups;
         }
-        
+
 
         /**
          * ConvertToGroupList - takes a json and converts it into a list of Group Objects
@@ -180,7 +170,7 @@ namespace Tavern
                         groups.Add(ConvertToGroup(groupData));
                     }
                 }
-                
+
 
                 Groups = groups;
             }
@@ -202,7 +192,7 @@ namespace Tavern
             {
                 Group group = new Group(id);
                 string json = await _httpClient.GetStringAsync($"Groups/{id}");
-                if (json != null)
+                if (!string.IsNullOrEmpty(json))
                 {
                     JObject data = JObject.Parse(json);
 
@@ -235,5 +225,94 @@ namespace Tavern
 
             return group;
         }
+
+        public async Task<int> Register(string username, string password, string email, string city, string state)
+        {
+            Dictionary<string, string> value = new Dictionary<string, string>()
+            {
+                {"username", username},
+                {"password", password},
+                {"email", email },
+                {"city", city},
+                {"state", state}
+            };
+
+            var json = JsonSerializer.Serialize(value); //serializes the dictionary into a json string
+            var content = new StringContent(json, Encoding.UTF8, "application/json"); // encodes the dictionary into an application/json
+
+            try
+            {
+                var response = await _httpClient.PostAsync("Profile/Register", content); //gets the response message
+                int id = JsonSerializer.Deserialize<int>(response.Content.ReadAsStringAsync().Result); //Deserializes the response to an int and sets a variable
+
+                if (id > 0) // greater than 0 is a valid id
+                {
+                    ProfileId = id; //sets the id for the singleton
+                    isLoggedIn = true; //sets the bool for logged in, later used for the remember me
+                    await SetValues();
+                }
+                return id; //returns id if valid
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+        public async Task<int> EditProfile(string password, string newUsername, string newBio)
+        {
+            string name = newUsername.Equals(ProfileName) ? null : newUsername;
+            string bio = newBio.Equals(ProfileBio) ? null : newBio;
+
+            Dictionary<string, string> values = new Dictionary<string, string>()
+            {
+                {"profileId", ProfileId.ToString() },
+                {"password", password },
+                {"newUsername", name },
+                {"newBio", bio}
+            };
+
+            var json = JsonSerializer.Serialize(values);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            try
+            {
+                var responses = await _httpClient.PostAsync("Profile/EditProfile", content);
+                int code = JsonSerializer.Deserialize<int>(responses.Content.ReadAsStringAsync().Result);
+                
+                return code;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+        public async Task<int> CreateGroup(string groupName, string groupBio)
+        {
+            Dictionary<string, string> values = new Dictionary<string, string>()
+            {
+                { "name", groupName },
+                { "ownerId", ProfileId.ToString()}
+            };
+
+            var json = JsonSerializer.Serialize(values);
+            var content = new StringContent(json, Encoding.UTF8 , "application/json");
+
+            try
+            {
+                var response = await _httpClient.PostAsync("Profile/CreateGroup", content);
+                int code = JsonSerializer.Deserialize<int>(response.Content.ReadAsStringAsync().Result);
+
+                return code;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
     }
-} 
+}

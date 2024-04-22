@@ -16,7 +16,7 @@ public partial class ProfilePage : ContentPage
 		InitializeComponent();
 		UpdateProfile();
 
-		ProfileSingleton.GetInstance().updateProfile += UpdateProfile; //adds to dedlegate
+		ProfileSingleton.GetInstance().updateProfile += UpdateProfile; //adds to delegate
 	}
 	/**
 	 * TryGetData - Attempts to get the data for the profile from the database using the singleton

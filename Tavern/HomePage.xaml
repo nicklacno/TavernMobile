@@ -13,17 +13,22 @@
             Padding="0"
             VerticalScrollBarVisibility="Never"
             >
-            <VerticalStackLayout 
-                x:Name="layoutGroup"
-                HorizontalOptions="Fill" 
-                Padding="10"
-                Spacing="10"
-                >
-
+            <VerticalStackLayout>
+                <VerticalStackLayout 
+                    x:Name="layoutGroup"
+                    HorizontalOptions="Fill" 
+                    Padding="10"
+                    Spacing="10"
+                    />
                 <Button
                     x:Name="btnSwipeNavigate"
                     Text="Find Groups"
                     Clicked="NavigateToSwipe"
+                    />
+                <Button
+                    x:Name="btnCreateNavigate"
+                    Text="Create Group"
+                    Clicked="NavigateToCreate"
                     />
             </VerticalStackLayout>
         </ScrollView>
