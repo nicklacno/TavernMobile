@@ -360,10 +360,11 @@ namespace WebApi
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
                         string query = "SELECT UserName, Message, TimeStamp FROM Messages " +
-                            "JOIN Customers ON UserID = SenderID WHERE GroupChatID = @Group;";
+                            "JOIN Customers ON UserID = SenderID WHERE GroupChatID = @Group";
                         if (data["timestamp"] != null)
                         {
-                            //do someting
+                            query += " AND TimeStamp > @TimeStamp";
+                            cmd.Parameters.AddWithValue("@TimeStamp", Convert.ToDateTime(data["timestamp"]));
                         }
 
                         cmd.CommandText = query;
@@ -391,6 +392,11 @@ namespace WebApi
                 Debug.WriteLine(ex);
                 return null;
             }
+        }
+
+        internal static int SendMessage(int id, Dictionary<string, string> data)
+        {
+            throw new NotImplementedException();
         }
     }
 }

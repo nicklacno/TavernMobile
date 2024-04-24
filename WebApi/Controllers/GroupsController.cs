@@ -35,5 +35,11 @@ namespace WebApi.Controllers
         {
             return Group.Chat(id, data);
         }
+
+        [HttpPost("{id}/SendMessage")]
+        public int PostMessageGroupChat(int id, Dictionary<string, string> data)
+        {
+            return Group.SendMessage(id, data);
+        }
     }
 }
