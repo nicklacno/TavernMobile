@@ -29,5 +29,11 @@ namespace WebApi.Controllers
         {
             return Group.EditGroup(data);
         }
+
+        [HttpGet("{id}/Chat")]
+        public int GetGroupChat(int id, Dictionary<string, string> data)
+        {
+            return Group.Chat(id, data);
+        }
     }
 }

@@ -345,5 +345,10 @@ namespace WebApi
         {
             throw new NotImplementedException();
         }
+
+        internal static int Chat(int id, Dictionary<string, string> data)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
