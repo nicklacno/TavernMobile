@@ -394,9 +394,59 @@ namespace WebApi
             }
         }
 
-        internal static int SendMessage(int id, Dictionary<string, string> data)
+        public static int SendMessage(int id, Dictionary<string, string> data)
         {
-            throw new NotImplementedException();
+            SetConnectionString();
+            if (!IsInGroup(id, Convert.ToInt32(data["senderId"]))) return -2;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using(SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "INSERT INTO Messages(GroupChatID, SenderID, Message, TimeStamp) " +
+                            "VALUES (@groupid, @userid, @message, @time );";
+                        cmd.Parameters.AddWithValue("@groupid", id);
+                        cmd.Parameters.AddWithValue("@userid", Convert.ToInt32(data["senderId"]));
+                        cmd.Parameters.AddWithValue("@message", data["message"]);
+                        cmd.Parameters.AddWithValue("@time", DateTime.UtcNow);
+
+                        cmd.ExecuteNonQuery();
+                        return 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+        private static bool IsInGroup(int group, int user)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT UserID FROM MemberGroup WHERE GroupID = @Group AND UserID = @User";
+                        cmd.Parameters.AddWithValue("@Group", group);
+                        cmd.Parameters.AddWithValue("@User", user);
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        if (reader.Read()) return true;
+                        else return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }
