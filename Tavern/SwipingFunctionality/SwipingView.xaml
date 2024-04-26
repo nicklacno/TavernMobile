@@ -5,17 +5,17 @@
     <SwipeView.LeftItems>
         <SwipeItem
             x:Name="swipeLeft"
-            Text="Skip"
-            BackgroundColor="Red"
-            Invoked="OnSkipGroup"
+            Text="Like"
+            BackgroundColor="Green"
+            Invoked="OnJoinGroup"
             />
     </SwipeView.LeftItems>
     <SwipeView.RightItems>
         <SwipeItem
             x:Name="swipeRight"
-            Text="Request"
-            BackgroundColor="Green"
-            Invoked="OnJoinGroup"
+            Text="Dislike"
+            BackgroundColor="Red"
+            Invoked="OnSkipGroup"
             />
     </SwipeView.RightItems>
     <SwipeView.Resources>

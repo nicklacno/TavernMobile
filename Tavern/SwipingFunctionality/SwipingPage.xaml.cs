@@ -1,8 +1,11 @@
+
+
 namespace Tavern.SwipingFunctionality;
 
 public partial class SwipingPage : ContentPage
 {
 	private Queue<Group> groups = new Queue<Group>(10);
+    string connectionString = null;
 
 	public SwipingPage()
 	{
@@ -12,11 +15,10 @@ public partial class SwipingPage : ContentPage
 
 		PopulateGroupQueue();
 	}
-
-	/**
+    /**
 	 * ShowNextGroup - Shows the next group in the queue, shows nothing if ended
 	 */
-	private void ShowNextGroup()
+    private void ShowNextGroup()
 	{
 		if (groups.Count > 0)
 		{
