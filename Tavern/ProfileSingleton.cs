@@ -339,7 +339,17 @@ namespace Tavern
 
         private async Task<List<Dictionary<string, string>>> ConvertToMessageList(string messages)
         {
-            throw new NotImplementedException();
+            List<Dictionary<string,string>> messageList = new List<Dictionary<string, string>>();
+
+            if (!string.IsNullOrEmpty(messages))
+            {
+                JToken data = JToken.Parse(messages);
+                foreach (JObject messageData in  data.Children())
+                {
+                    messageList.Add(messageData.ToObject<Dictionary<string, string>>());
+                }
+            }
+            return messageList;
         }
     }
 }
