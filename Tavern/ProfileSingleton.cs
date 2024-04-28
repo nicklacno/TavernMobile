@@ -95,7 +95,7 @@ namespace Tavern
                 return null;
             return await _httpClient.GetStringAsync($"Profile/{ProfileId}/Friends");
         }
-        
+
         public void InvokedUpdate()
         {
             Debug.WriteLine("Invoked Update");
@@ -280,7 +280,7 @@ namespace Tavern
             {
                 var responses = await _httpClient.PostAsync("Profile/EditProfile", content);
                 int code = JsonSerializer.Deserialize<int>(responses.Content.ReadAsStringAsync().Result);
-                
+
                 return code;
             }
             catch (Exception ex)
@@ -299,7 +299,7 @@ namespace Tavern
             };
 
             var json = JsonSerializer.Serialize(values);
-            var content = new StringContent(json, Encoding.UTF8 , "application/json");
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             try
             {
@@ -313,6 +313,33 @@ namespace Tavern
                 Debug.WriteLine(ex);
                 return -1;
             }
+        }
+
+        public async Task<List<Dictionary<string, string>>> GetMessages(int groupId, DateTime? timestamp = null)
+        {
+            Dictionary<string, string> value = new Dictionary<string, string>();
+            value["timestamp"] = timestamp == null ? null : timestamp.ToString();
+
+            var json = JsonSerializer.Serialize(value);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            try
+            {
+                var response = await _httpClient.PostAsync($"Groups/{groupId}/Chat", content);
+                string messages = response.Content.ReadAsStringAsync().Result;
+
+                return await ConvertToMessageList(messages);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
+        private async Task<List<Dictionary<string, string>>> ConvertToMessageList(string messages)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -16,6 +16,8 @@ public partial class GroupPage : ContentPage
 		InitializeComponent();
 		GroupData = data;
 		UpdatePage();
+
+		GroupChat.Add(new GroupChatView(GroupData.GroupId));
 	}
 
 	/**

@@ -39,6 +39,7 @@
                     FontSize="24"
                     />
             </VerticalStackLayout>
+            <Grid x:Name="GroupChat" />
         </VerticalStackLayout>
     </Grid>
     
