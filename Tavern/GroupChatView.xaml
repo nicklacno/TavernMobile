@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Tavern.GroupChatView">
     <VerticalStackLayout>
-        <ScrollView  HeightRequest="500">
+        <ScrollView  HeightRequest="500" x:Name="scrollBox">
             <VerticalStackLayout x:Name="messageBox"/>
         </ScrollView>
         <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
@@ -16,6 +16,7 @@
                 x:Name="btnSendMessage"
                 Text="Send"
                 WidthRequest="150"
+                Clicked="SendMessage"
                 />
         </HorizontalStackLayout>
     </VerticalStackLayout>

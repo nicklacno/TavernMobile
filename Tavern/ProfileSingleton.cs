@@ -351,5 +351,30 @@ namespace Tavern
             }
             return messageList;
         }
+
+        public async Task<List<Dictionary<string, string>>> SendMessage(int groupId, string message)
+        {
+            DateTime now = DateTime.UtcNow;
+            
+            Dictionary<string, string> values = new Dictionary<string, string>()
+            {
+                { "senderId", ProfileId.ToString() },
+                { "message", message }
+            };
+
+            var json = JsonSerializer.Serialize(values);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            try
+            {
+                var response = await _httpClient.PostAsync($"Groups/{groupId}/SendMessage", content);
+                string status = response.Content.ReadAsStringAsync().Result;
+            }
+            catch
+            {
+                Debug.WriteLine("Message Failed to Send");
+            }
+            return await GetMessages(groupId, now);
+        }
     }
 }
