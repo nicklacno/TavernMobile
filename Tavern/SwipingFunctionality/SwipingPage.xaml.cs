@@ -39,11 +39,23 @@ public partial class SwipingPage : ContentPage
     {
         ProfileSingleton singleton = ProfileSingleton.GetInstance();
 
-        // Send a request to join the liked group
-        Group.JoinRequest(likedGroup.GroupId, singleton.ProfileId);
+		using (var client = new HttpClient())
+		{
+			var parameters = new Dictionary<string, string>
+			{
+				{ "groupId", likedGroup.GroupId.ToString() },
+				{ "userId", singleton.ProfileId.ToString() }
+			};
+			var content = new FormUrlEncodedContent(parameters);
+			var response = await client.PostAsync(connectionString, content);
+			if (response.IsSuccessStatusCode)
+			{
+				ShowNextGroup();
+			}
+		}
+			//Group.JoinRequest(likedGroup.GroupId, singleton.ProfileId);
 
         // Show the next group after liking
-        ShowNextGroup();
     }
 
     /**
