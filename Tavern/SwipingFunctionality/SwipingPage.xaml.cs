@@ -30,11 +30,26 @@ public partial class SwipingPage : ContentPage
 			Navigation.PopAsync();
 		}	
 	}
+    private async void SwipedRight(Group likedGroup)
+    {
+        await LikeGroup(likedGroup);
+    }
 
-	/**
+    private async Task LikeGroup(Group likedGroup)
+    {
+        ProfileSingleton singleton = ProfileSingleton.GetInstance();
+
+        // Send a request to join the liked group
+        Group.JoinRequest(likedGroup.GroupId, singleton.ProfileId);
+
+        // Show the next group after liking
+        ShowNextGroup();
+    }
+
+    /**
 	 * PopulateGroupQueue - Helper function that populates the queue
 	 */
-	private async void PopulateGroupQueue()
+    private async void PopulateGroupQueue()
 	{
 		ProfileSingleton singleton = ProfileSingleton.GetInstance();
 		groups.Enqueue(await singleton.GetGroup(2));
