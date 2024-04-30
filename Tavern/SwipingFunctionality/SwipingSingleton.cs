@@ -15,34 +15,34 @@ namespace Tavern.SwipingFunctionality
         public Group LikedGroup { get; set; }
         private readonly HttpClient _httpClient = new(); //creates client
         private const string BASE_ADDRESS = "https://cxbg938k-7111.usw2.devtunnels.ms/"; //base address for persistent dev-tunnel for api
-    }
-    
-
-    private async Task LikeGroup(Group likedGroup)
-    {
-        ProfileSingleton singleton = ProfileSingleton.GetInstance();
-
-        using (var client = new HttpClient())
+        
+        private async Task LikeGroup(Group likedGroup)
         {
-            var parameters = new Dictionary<string, string>
+            ProfileSingleton singleton = ProfileSingleton.GetInstance();
+
+            using (var client = new HttpClient())
+            {
+                var parameters = new Dictionary<string, string>
             {
                 { "groupId", likedGroup.GroupId.ToString() },
                 { "userId", singleton.ProfileId.ToString() }
             };
-            var content = new FormUrlEncodedContent(parameters);
-            var response = await client.PostAsync(connectionString, content);
-            if (response.IsSuccessStatusCode)
-            {
-                ShowNextGroup();
+                var content = new FormUrlEncodedContent(parameters);
+                var response = await client.PostAsync(connectionString, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    ShowNextGroup();
+                }
+                else
+                {
+                    var popup = new ErrorPopup("You suck dick");
+                    this.ShowPopup(popup);
+                }
             }
-            else
-            {
-                var popup = new ErrorPopup("You suck dick");
-                this.ShowPopup(popup);
-            }
+            //Group.JoinRequest(likedGroup.GroupId, singleton.ProfileId);
         }
-        //Group.JoinRequest(likedGroup.GroupId, singleton.ProfileId);
-
-        // Show the next group after liking
     }
+    
+
+    
 }
