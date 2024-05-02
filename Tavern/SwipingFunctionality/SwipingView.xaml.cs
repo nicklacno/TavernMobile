@@ -17,7 +17,7 @@ public partial class SwipingView : SwipeView
 	 */
 	async void OnJoinGroup(object sender, EventArgs e)
 	{
-		Debug.WriteLine("Join");
+		bool success = await SwipingSingleton.GetInstance().SwipeRight(groupData);
 		SwipingSingleton.RequestGroup.Invoke();
 	}
 	

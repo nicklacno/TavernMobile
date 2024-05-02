@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+using System.Diagnostics;
+using System.Text;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Tavern.SwipingFunctionality
 {
@@ -19,25 +23,26 @@ namespace Tavern.SwipingFunctionality
         private async Task LikeGroup(Group likedGroup)
         {
             ProfileSingleton singleton = ProfileSingleton.GetInstance();
-
-            using (var client = new HttpClient())
-            {
-                var parameters = new Dictionary<string, string>
+            var parameters = new Dictionary<string, string>
             {
                 { "groupId", likedGroup.GroupId.ToString() },
                 { "userId", singleton.ProfileId.ToString() }
             };
-                var content = new FormUrlEncodedContent(parameters);
-                var response = await client.PostAsync(connectionString, content);
-                if (response.IsSuccessStatusCode)
+            var json = JsonSerializer.Serialize(parameters);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            try
+            {
+                var response = await _httpClient.PostAsync("Groups/LikeGroup", content);
+                int id = JsonSerializer.Deserialize<int>(response.Content.ReadAsStringAsync().Result);
+                if (id == 0)
                 {
-                    ShowNextGroup();
+                    return;
                 }
-                else
-                {
-                    var popup = new ErrorPopup("You suck dick");
-                    this.ShowPopup(popup);
-                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return;
             }
             //Group.JoinRequest(likedGroup.GroupId, singleton.ProfileId);
         }
