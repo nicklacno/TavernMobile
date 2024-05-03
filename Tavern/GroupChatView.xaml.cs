@@ -1,10 +1,14 @@
 
+using System.Collections.ObjectModel;
+
 namespace Tavern;
 
 public partial class GroupChatView : ContentView
 {
     public int groupId;
     public DateTime? latestDate = null;
+
+    public ObservableCollection<Message> Messages { get; set; }
 
     public GroupChatView()
     {
@@ -20,15 +24,7 @@ public partial class GroupChatView : ContentView
 
     private async Task AddMessages(int groupId)
     {
-        List<Dictionary<string, string>> messages = await ProfileSingleton.GetInstance().GetMessages(groupId);
-        if (messages != null)
-        {
-            foreach (var message in messages)
-            {
-                DateTime time = Convert.ToDateTime(message["timestamp"]).ToLocalTime();
-                AddMessage(time, message["sender"], message["message"]);
-            }
-        }
+        Messages = await ProfileSingleton.GetInstance().GetMessages(groupId);
     }
 
     private async void SendMessage(object sender, EventArgs e)

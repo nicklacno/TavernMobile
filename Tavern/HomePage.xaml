@@ -9,12 +9,11 @@
 
     <Grid>
         <Image Source="/Resources/Images/tavern.png" Aspect="AspectFill" />
-        <ScrollView
-            Padding="0"
-            VerticalScrollBarVisibility="Never"
-            >
-            <VerticalStackLayout>
-                <VerticalStackLayout 
+        <VerticalStackLayout>
+            <CollectionView ItemsSource="{Binding Messages}">
+                
+            </CollectionView>
+            <VerticalStackLayout 
                     x:Name="layoutGroup"
                     HorizontalOptions="Fill" 
                     Padding="10"
@@ -31,7 +30,6 @@
                     Clicked="NavigateToCreate"
                     />
             </VerticalStackLayout>
-        </ScrollView>
     </Grid>
     
 </ContentPage>

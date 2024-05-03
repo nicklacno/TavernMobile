@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -315,7 +316,7 @@ namespace Tavern
             }
         }
 
-        public async Task<List<Dictionary<string, string>>> GetMessages(int groupId, DateTime? timestamp = null)
+        public async Task<ObservableCollection<Message>> GetMessages(int groupId, DateTime? timestamp = null)
         {
             Dictionary<string, string> value = new Dictionary<string, string>();
             value["timestamp"] = timestamp == null ? null : timestamp.ToString();
@@ -337,16 +338,18 @@ namespace Tavern
             }
         }
 
-        private async Task<List<Dictionary<string, string>>> ConvertToMessageList(string messages)
+        private async Task<ObservableCollection<Message>> ConvertToMessageList(string messages)
         {
-            List<Dictionary<string,string>> messageList = new List<Dictionary<string, string>>();
+            ObservableCollection<Message> messageList = new ObservableCollection<Message>();
 
             if (!string.IsNullOrEmpty(messages))
             {
                 JToken data = JToken.Parse(messages);
                 foreach (JObject messageData in  data.Children())
                 {
-                    messageList.Add(messageData.ToObject<Dictionary<string, string>>());
+                    var mData = messageData.ToObject<Dictionary<string, string>>();
+                    messageList.Add(new Message() { Sender = mData["sender"], Body= mData["message"], 
+                        TimeSent = Convert.ToDateTime(mData["timestamp"]).ToLocalTime() });
                 }
             }
             return messageList;
