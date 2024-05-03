@@ -6,7 +6,9 @@
         <CollectionView x:Name="messageBox" 
                         IsGrouped="True" 
                         SelectionMode="None"
-                        EmptyView="No message history">
+                        EmptyView="No message history"
+                        MaximumHeightRequest="400"
+                        >
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <HorizontalStackLayout>

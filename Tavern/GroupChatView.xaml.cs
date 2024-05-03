@@ -6,6 +6,7 @@ namespace Tavern;
 public partial class GroupChatView : ContentView
 {
     public int groupId;
+    public int totalMessages;
 
     public List<MessageByDay> Messages { get; set; } = new List<MessageByDay>();
 
@@ -24,8 +25,13 @@ public partial class GroupChatView : ContentView
     private async Task AddMessages(int groupId)
     {
         Messages = await ProfileSingleton.GetInstance().GetMessages(groupId);
+        totalMessages = Messages.Count;
+        foreach(var message in Messages)
+        {
+            totalMessages += message.Count;
+        }
         messageBox.ItemsSource = Messages;
-        messageBox.ScrollTo(Messages.Count);
+        messageBox.ScrollTo(totalMessages);
     }
 
     private async void SendMessage(object sender, EventArgs e)
@@ -35,11 +41,24 @@ public partial class GroupChatView : ContentView
             var messages = await ProfileSingleton.GetInstance().SendMessage(groupId, txtMessage.Text);
             if (messages != null)
             {
-                foreach (var message in messages)
+                if (messages.Count > 0)
                 {
-                    Messages.Add(message);
+                    if (messages.First().DateSent.Equals(Messages.Last().DateSent))
+                    {
+                        foreach(var message in messages.First())
+                        {
+                            Messages.Last().Add(message);
+                            totalMessages++;
+                        }
+                    }
+                    messages.RemoveAt(0);
+                    foreach(var message in messages)
+                    {
+                        Messages.Add(message);
+                        totalMessages += message.Count;
+                    }
                 }
-                messageBox.ScrollTo(Messages.Count);
+                messageBox.ScrollTo(totalMessages);
             }
             txtMessage.Text = "";
         }
