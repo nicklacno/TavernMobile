@@ -3,9 +3,28 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Tavern.GroupChatView">
     <VerticalStackLayout>
-        <ScrollView  HeightRequest="500" x:Name="scrollBox">
-            <VerticalStackLayout x:Name="messageBox"/>
-        </ScrollView>
+        <CollectionView x:Name="messageBox" 
+                        IsGrouped="True" 
+                        SelectionMode="None"
+                        EmptyView="No message history">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <HorizontalStackLayout>
+                        <Label Text="{Binding TimeSent}"/>
+                        <Label Text="{Binding Sender}" Padding="10, 0"/>
+                        <Label Text="{Binding Body}" LineBreakMode="WordWrap"/>
+                    </HorizontalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <Label Text="{Binding DateSent}"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"
+                           />
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>
+        </CollectionView>
         <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
             <Editor 
                 x:Name="txtMessage"

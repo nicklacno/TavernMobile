@@ -316,7 +316,7 @@ namespace Tavern
             }
         }
 
-        public async Task<ObservableCollection<Message>> GetMessages(int groupId, DateTime? timestamp = null)
+        public async Task<List<MessageByDay>> GetMessages(int groupId, DateTime? timestamp = null)
         {
             Dictionary<string, string> value = new Dictionary<string, string>();
             value["timestamp"] = timestamp == null ? null : timestamp.ToString();
@@ -338,9 +338,11 @@ namespace Tavern
             }
         }
 
-        private async Task<ObservableCollection<Message>> ConvertToMessageList(string messages)
+        private async Task<List<MessageByDay>> ConvertToMessageList(string messages)
         {
-            ObservableCollection<Message> messageList = new ObservableCollection<Message>();
+            List<MessageByDay> messageList = new List<MessageByDay>();
+
+            MessageByDay? messageByDay = null;
 
             if (!string.IsNullOrEmpty(messages))
             {
@@ -348,14 +350,27 @@ namespace Tavern
                 foreach (JObject messageData in  data.Children())
                 {
                     var mData = messageData.ToObject<Dictionary<string, string>>();
-                    messageList.Add(new Message() { Sender = mData["sender"], Body= mData["message"], 
-                        TimeSent = Convert.ToDateTime(mData["timestamp"]).ToLocalTime() });
+                    DateTime timestamp = Convert.ToDateTime(mData["timestamp"]).ToLocalTime();
+
+                    if (messageByDay == null)
+                    {
+                        messageByDay = new MessageByDay(timestamp.ToLongDateString(), new List<Message>());
+                    }
+                    else if (!messageByDay.DateSent.Equals(timestamp.ToLongDateString()))
+                    {
+                        messageList.Add(messageByDay);
+                        messageByDay = new MessageByDay(timestamp.ToLongDateString(), new List<Message>());
+                    }
+
+                    messageByDay.Add(new Message() { Sender = mData["sender"], Body= mData["message"], 
+                        TimeSent = timestamp.ToShortTimeString()});
                 }
+                if (messageByDay != null) messageList.Add(messageByDay);
             }
             return messageList;
         }
 
-        public async Task<List<Dictionary<string, string>>> SendMessage(int groupId, string message)
+        public async Task<List<MessageByDay>> SendMessage(int groupId, string message)
         {
             DateTime now = DateTime.UtcNow;
             

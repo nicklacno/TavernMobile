@@ -6,9 +6,8 @@ namespace Tavern;
 public partial class GroupChatView : ContentView
 {
     public int groupId;
-    public DateTime? latestDate = null;
 
-    public ObservableCollection<Message> Messages { get; set; }
+    public List<MessageByDay> Messages { get; set; } = new List<MessageByDay>();
 
     public GroupChatView()
     {
@@ -25,6 +24,8 @@ public partial class GroupChatView : ContentView
     private async Task AddMessages(int groupId)
     {
         Messages = await ProfileSingleton.GetInstance().GetMessages(groupId);
+        messageBox.ItemsSource = Messages;
+        messageBox.ScrollTo(Messages.Count);
     }
 
     private async void SendMessage(object sender, EventArgs e)
@@ -36,43 +37,11 @@ public partial class GroupChatView : ContentView
             {
                 foreach (var message in messages)
                 {
-                    DateTime time = Convert.ToDateTime(message["timestamp"]).ToLocalTime();
-                    AddMessage(time, message["sender"], message["message"]);
+                    Messages.Add(message);
                 }
+                messageBox.ScrollTo(Messages.Count);
             }
             txtMessage.Text = "";
         }
-    }
-
-    private void AddMessage(DateTime time, string sender, string message)
-    {
-        if (latestDate == null || latestDate != time.Date)
-        {
-            latestDate = time.Date;
-            AddDate(latestDate);
-        }
-
-        HorizontalStackLayout stack = new HorizontalStackLayout();
-        var lb = new Label();
-        lb.Text = time.ToShortTimeString();
-        stack.Add(lb);
-        lb = new Label();
-        lb.Text = " " + sender + ":";
-        stack.Add(lb);
-        lb = new Label();
-        lb.LineBreakMode = LineBreakMode.WordWrap;
-        lb.Text = message;
-        stack.Add(lb);
-
-        messageBox.Add(stack);
-    }
-
-    private void AddDate(DateTime? date)
-    {
-        var label = new Label();
-        label.HorizontalTextAlignment = TextAlignment.Center;
-        label.HorizontalOptions = LayoutOptions.Center;
-        label.Text = date?.ToLongDateString();
-        messageBox.Add(label);
     }
 }
