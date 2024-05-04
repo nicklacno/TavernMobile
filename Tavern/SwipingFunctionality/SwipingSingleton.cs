@@ -12,6 +12,7 @@ namespace Tavern.SwipingFunctionality
 {
     public class SwipingSingleton
     {
+        private static SwipingSingleton _instance;
         public static Queue<Group> Groups = new Queue<Group>();
         public delegate void GroupAction();
         public static GroupAction SkipGroup;
@@ -19,8 +20,12 @@ namespace Tavern.SwipingFunctionality
         public Group LikedGroup { get; set; }
         private readonly HttpClient _httpClient = new(); //creates client
         private const string BASE_ADDRESS = "https://cxbg938k-7111.usw2.devtunnels.ms/"; //base address for persistent dev-tunnel for api
-        
-        private async Task LikeGroup(Group likedGroup)
+        public static SwipingSingleton GetInstance()
+        {
+            _instance = new SwipingSingleton();
+            return _instance;
+        }
+        public async Task SwipeRight(Group likedGroup)
         {
             ProfileSingleton singleton = ProfileSingleton.GetInstance();
             var parameters = new Dictionary<string, string>

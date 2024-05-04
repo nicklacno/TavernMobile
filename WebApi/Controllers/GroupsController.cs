@@ -29,6 +29,11 @@ namespace WebApi.Controllers
         {
             return Group.EditGroup(data);
         }
+        [HttpPost("LikeGroup")]
+        public int LikeGroup(Dictionary<string, string> data)
+        {
+            return Group.JoinRequest(data);
+        }
 
         [HttpGet("{id}/Chat")]
         public int GetGroupChat(int id, Dictionary<string, string> data)
