@@ -12,19 +12,19 @@ public partial class SwipingView : SwipeView
 		PopulateData(group);
 	}
 
-	/**
+    /**
 	 * OnJoinGroup - sends request to join group in database
 	 */
-	async void OnJoinGroup(object sender, EventArgs e)
-	{
-		bool success = await SwipingSingleton.GetInstance().SwipeRight(groupData);
-		SwipingSingleton.RequestGroup.Invoke();
-	}
-	
-	/**
+    public async Task OnJoinGroup(object sender, EventArgs e)
+    {
+        await SwipingSingleton.GetInstance().SwipeRight(groupData);
+        SwipingSingleton.RequestGroup.Invoke();
+    }
+
+    /**
 	 * OnSkipGroup - sends request to app to move to the next group in the list
 	 */
-	async void OnSkipGroup(object sender, EventArgs e)
+    public async void OnSkipGroup(object sender, EventArgs e)
 	{
 		Debug.WriteLine("Skip");
 		SwipingSingleton.SkipGroup.Invoke();

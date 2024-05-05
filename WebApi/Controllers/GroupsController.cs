@@ -32,7 +32,9 @@ namespace WebApi.Controllers
         [HttpPost("LikeGroup")]
         public int LikeGroup(Dictionary<string, string> data)
         {
-            return Group.JoinRequest(data);
+            string groupID = data["groupId"];
+            string userID = data["userId"];
+            return Group.JoinRequest(groupID, userID);
         }
 
         [HttpGet("{id}/Chat")]
