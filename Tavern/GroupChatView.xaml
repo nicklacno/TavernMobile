@@ -7,7 +7,9 @@
                         IsGrouped="True" 
                         SelectionMode="None"
                         EmptyView="No message history"
-                        MaximumHeightRequest="400"
+                        HeightRequest="400"
+                        BindingContext="GroupChatView"
+                        ItemsSource="{Binding Messages}"
                         >
             <CollectionView.ItemTemplate>
                 <DataTemplate>

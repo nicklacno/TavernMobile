@@ -316,7 +316,7 @@ namespace Tavern
             }
         }
 
-        public async Task<List<MessageByDay>> GetMessages(int groupId, DateTime? timestamp = null)
+        public async Task<ObservableCollection<MessageByDay>> GetMessages(int groupId, DateTime? timestamp = null)
         {
             Dictionary<string, string> value = new Dictionary<string, string>();
             value["timestamp"] = timestamp == null ? null : timestamp.ToString();
@@ -338,9 +338,9 @@ namespace Tavern
             }
         }
 
-        private async Task<List<MessageByDay>> ConvertToMessageList(string messages)
+        private async Task<ObservableCollection<MessageByDay>> ConvertToMessageList(string messages)
         {
-            List<MessageByDay> messageList = new List<MessageByDay>();
+            ObservableCollection<MessageByDay> messageList = new ObservableCollection<MessageByDay>();
 
             MessageByDay? messageByDay = null;
 
@@ -354,12 +354,12 @@ namespace Tavern
 
                     if (messageByDay == null)
                     {
-                        messageByDay = new MessageByDay(timestamp.ToLongDateString(), new List<Message>());
+                        messageByDay = new MessageByDay(timestamp.ToLongDateString(), new ObservableCollection<Message>());
                     }
                     else if (!messageByDay.DateSent.Equals(timestamp.ToLongDateString()))
                     {
                         messageList.Add(messageByDay);
-                        messageByDay = new MessageByDay(timestamp.ToLongDateString(), new List<Message>());
+                        messageByDay = new MessageByDay(timestamp.ToLongDateString(), new ObservableCollection<Message>());
                     }
 
                     messageByDay.Add(new Message() { Sender = mData["sender"], Body= mData["message"], 
@@ -370,7 +370,7 @@ namespace Tavern
             return messageList;
         }
 
-        public async Task<List<MessageByDay>> SendMessage(int groupId, string message)
+        public async Task<ObservableCollection<MessageByDay>> SendMessage(int groupId, string message)
         {
             DateTime now = DateTime.UtcNow;
             
@@ -388,8 +388,9 @@ namespace Tavern
                 var response = await _httpClient.PostAsync($"Groups/{groupId}/SendMessage", content);
                 string status = response.Content.ReadAsStringAsync().Result;
             }
-            catch
+            catch (Exception ex) 
             {
+                Debug.WriteLine(ex);
                 Debug.WriteLine("Message Failed to Send");
             }
             return await GetMessages(groupId, now);

@@ -8,7 +8,7 @@ public partial class GroupChatView : ContentView
     public int groupId;
     public int totalMessages;
 
-    public List<MessageByDay> Messages { get; set; } = new List<MessageByDay>();
+    public ObservableCollection<MessageByDay> Messages { get; set; } = new ObservableCollection<MessageByDay>();
 
     public GroupChatView()
     {
@@ -50,8 +50,8 @@ public partial class GroupChatView : ContentView
                             Messages.Last().Add(message);
                             totalMessages++;
                         }
+                        messages.RemoveAt(0);
                     }
-                    messages.RemoveAt(0);
                     foreach(var message in messages)
                     {
                         Messages.Add(message);

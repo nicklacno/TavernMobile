@@ -363,7 +363,7 @@ namespace WebApi
                             "JOIN Customers ON UserID = SenderID WHERE GroupChatID = @Group";
                         if (data["timestamp"] != null)
                         {
-                            query += " AND TimeStamp > @TimeStamp";
+                            query += " AND TimeStamp >= @TimeStamp";
                             cmd.Parameters.AddWithValue("@TimeStamp", Convert.ToDateTime(data["timestamp"]));
                         }
 
