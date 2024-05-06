@@ -2,6 +2,9 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Tavern.GroupChatView">
+    <ContentView.Resources>
+        <StyleSheet Source="/Resources/Styles/PageStyles/Chat.css" />
+    </ContentView.Resources>
     <VerticalStackLayout>
         <CollectionView x:Name="messageBox" 
                         IsGrouped="True" 
@@ -14,7 +17,7 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <HorizontalStackLayout>
-                        <Label Text="{Binding TimeSent}"/>
+                        <Label Text="{Binding TimeSent}" WidthRequest="60"/>
                         <Label Text="{Binding Sender}" Padding="10, 0"/>
                         <Label Text="{Binding Body}" LineBreakMode="WordWrap"/>
                     </HorizontalStackLayout>
