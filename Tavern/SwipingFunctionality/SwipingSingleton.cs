@@ -20,6 +20,10 @@ namespace Tavern.SwipingFunctionality
         public Group LikedGroup { get; set; }
         private readonly HttpClient _httpClient = new(); //creates client
         private const string BASE_ADDRESS = "https://cxbg938k-7111.usw2.devtunnels.ms/"; //base address for persistent dev-tunnel for api
+        private SwipingSingleton()
+        {
+            _httpClient.BaseAddress = new Uri(BASE_ADDRESS); 
+        }
         public static SwipingSingleton GetInstance()
         {
             _instance = new SwipingSingleton();
@@ -37,7 +41,7 @@ namespace Tavern.SwipingFunctionality
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             try
             {
-                var response = await _httpClient.PostAsync("Groups/LikeGroup", content);
+                var response = await _httpClient.PostAsync("Groups/LikeGroup", content); //Throws exception
                 int id = JsonSerializer.Deserialize<int>(response.Content.ReadAsStringAsync().Result);
                 if (id == 0)
                 {
