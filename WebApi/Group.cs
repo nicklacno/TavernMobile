@@ -366,6 +366,7 @@ namespace WebApi
                             query += " AND TimeStamp >= @TimeStamp";
                             cmd.Parameters.AddWithValue("@TimeStamp", Convert.ToDateTime(data["timestamp"]));
                         }
+                        query += " ORDER BY TimeStamp ASC";
 
                         cmd.CommandText = query;
                         cmd.Parameters.AddWithValue("@Group", id);
