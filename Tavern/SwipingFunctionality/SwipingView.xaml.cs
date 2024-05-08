@@ -39,12 +39,17 @@ public partial class SwipingView : SwipeView
             lbName.FontFamily = "Algerian";
             lbName.FontAttributes = FontAttributes.Bold;
             lbBio.Text = groupData.Bio;
+            lbBio.FontFamily = "Sedan";
             lbMembers.Text = "Members: " + groupData.Members.Count;
+            lbMembers.FontFamily = "Sedan";
+            lbMembers.FontAttributes = FontAttributes.Bold;
 
             foreach (string tag in groupData.Tags)
             {
                 Label lb = new Label();
                 lb.Text = tag;
+                lb.FontFamily = "Sedan";
+                lb.FontSize = 25;
                 hStackTag.Children.Add(lb);
             }
 
@@ -52,6 +57,8 @@ public partial class SwipingView : SwipeView
             {
                 Label lb = new Label();
                 lb.Text = "None";
+                lb.FontSize = 20;
+                lb.FontFamily = "Sedan";
                 hStackTag.Children.Add(lb);
             }
         }
