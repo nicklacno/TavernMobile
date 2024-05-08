@@ -27,8 +27,12 @@
             <Label
                 x:Name="lbName"
                 Text="Test Group"
-                HorizontalOptions="Center"
-                HorizontalTextAlignment="Center"
+                />
+            <Label
+                x:Name="lbAboutUs"
+                Text="About us:"
+                FontSize="28"
+                FontAttributes="Italic, Bold"
                 />
             <Label
                 x:Name="lbBio"
@@ -37,9 +41,7 @@
             <Label
                 x:Name="lbTagHead"
                 Text="Tags:"
-                FontSize="24"
-                HorizontalOptions="Center"
-                HorizontalTextAlignment="Center"
+                FontSize="28"
                 />
             <FlexLayout x:Name="hStackTag" JustifyContent="SpaceEvenly" HorizontalOptions="CenterAndExpand" ></FlexLayout>
             <Label x:Name="lbMembers" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>

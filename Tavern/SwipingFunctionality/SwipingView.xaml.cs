@@ -30,29 +30,30 @@ public partial class SwipingView : SwipeView
 		SwipingSingleton.SkipGroup.Invoke();
 	}
 
-	void PopulateData(Group group)
-	{
-		groupData = group;
-		if (groupData != null)
-		{
-			lbName.Text = groupData.Name;
-			lbBio.Text = groupData.Bio;
-			lbMembers.Text = "Members: " + groupData.Members.Count;
+    void PopulateData(Group group)
+    {
+        groupData = group;
+        if (groupData != null)
+        {
+            lbName.Text = groupData.Name;
+            lbName.FontAttributes = FontAttributes.Bold;
+            lbBio.Text = groupData.Bio;
+            lbMembers.Text = "Members: " + groupData.Members.Count;
 
-			foreach (string tag in groupData.Tags)
-			{
-				Label lb = new Label();
-				lb.Text = tag;
-				hStackTag.Children.Add(lb);
-			}
+            foreach (string tag in groupData.Tags)
+            {
+                Label lb = new Label();
+                lb.Text = tag;
+                hStackTag.Children.Add(lb);
+            }
 
-			if (hStackTag.Children.Count == 0)
-			{
-				Label lb = new Label();
-				lb.Text = "None";
-				hStackTag.Children.Add(lb);
-			}
-		}
-		
-	}
+            if (hStackTag.Children.Count == 0)
+            {
+                Label lb = new Label();
+                lb.Text = "None";
+                hStackTag.Children.Add(lb);
+            }
+        }
+    }
+
 }
