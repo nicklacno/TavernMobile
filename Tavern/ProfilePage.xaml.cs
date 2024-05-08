@@ -61,7 +61,9 @@ public partial class ProfilePage : ContentPage
 	{
         ProfileSingleton singleton = ProfileSingleton.GetInstance();
         Name.Text = singleton.ProfileName;//sets profile name
+		Name.FontFamily = "Algerian";
         Bio.Text = singleton.ProfileBio;//sets profile bio
+		Bio.FontFamily = "Sedan";
 
 		await AddGroup();
 
@@ -78,6 +80,7 @@ public partial class ProfilePage : ContentPage
 		{
 			Label label = new Label();
 			label.Text = group.Name;
+			label.FontFamily = "Sedan";
 
 			GroupList.Children.Add(label);
 		}

@@ -36,6 +36,7 @@ public partial class SwipingView : SwipeView
         if (groupData != null)
         {
             lbName.Text = groupData.Name;
+            lbName.FontFamily = "Algerian";
             lbName.FontAttributes = FontAttributes.Bold;
             lbBio.Text = groupData.Bio;
             lbMembers.Text = "Members: " + groupData.Members.Count;
