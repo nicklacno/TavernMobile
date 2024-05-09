@@ -41,5 +41,11 @@ namespace WebApi.Controllers
         {
             return Group.SendMessage(id, data);
         }
+
+        [HttpGet("Tags")]
+        public List<Tag> GetTags()
+        {
+            return Group.GetTags();
+        }
     }
 }

@@ -94,6 +94,16 @@ namespace WebApi.Controllers
             return Group.CreateGroup(data);
         }
 
-        
+        [HttpGet("Tags")]
+        public List<Tag> GetTags()
+        {
+            return Profile.GetTags();
+        }
+
+        [HttpGet("{id}/Tags")]
+        public List<Tag> GetProfileTags(int id)
+        {
+            return Profile.GetProfileTags(id);
+        }
     }
 }
