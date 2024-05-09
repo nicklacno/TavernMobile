@@ -112,5 +112,10 @@ namespace WebApi.Controllers
             return Profile.AddTag(data);
         }
 
+        [HttpPost("RemoveTag")]
+        public int PostRemoveTag(Dictionary<string, int> data)
+        {
+            return Profile.RemoveTag(data);
+        }
     }
 }

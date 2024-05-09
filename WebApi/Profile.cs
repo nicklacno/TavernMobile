@@ -517,11 +517,13 @@ namespace WebApi
             }
         }
 
+        //If already in table, does nothing but still returns 0
         public static int AddTag(Dictionary<string, int> data)
         {
             SetConnectionString();
             if (!Exists(data["userId"])) return -10;
             if (!IsValidTag(data["tagId"])) return -9;
+            if (AlreadyInTable(data["userId"], data["tagId"])) return 0;
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -564,6 +566,57 @@ namespace WebApi
             {
                 Debug.WriteLine(ex);
                 return false;
+            }
+        }
+
+        private static bool AlreadyInTable(int user, int tag)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT TagID FROM PlayerTags WHERE TagID = @tag AND PlayerID = @player";
+                        cmd.Parameters.AddWithValue("@tag", tag);
+                        cmd.Parameters.AddWithValue("@player", user);
+                        return cmd.ExecuteReader().HasRows;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return true;
+            }
+        }
+
+        //If not in table, does nothing, but returns positive error code
+        public static int RemoveTag(Dictionary<string, int> data)
+        {
+            SetConnectionString();
+            if (!AlreadyInTable(data["userId"], data["tagId"])) return 0;
+            try
+            {
+                using(SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "DELETE FROM PlayerTags WHERE PlayerID = @player AND TagID = @tag";
+                        cmd.Parameters.AddWithValue("@player", data["userId"]);
+                        cmd.Parameters.AddWithValue("@tag", data["tagId"]);
+
+                        cmd.ExecuteNonQuery();
+                        return 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
             }
         }
     }
