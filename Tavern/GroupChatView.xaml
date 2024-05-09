@@ -9,7 +9,6 @@
         <CollectionView x:Name="messageBox" 
                         IsGrouped="True" 
                         SelectionMode="None"
-                        EmptyView="No message history"
                         HeightRequest="400"
                         BindingContext="GroupChatView"
                         ItemsSource="{Binding Messages}"
@@ -31,6 +30,9 @@
                            />
                 </DataTemplate>
             </CollectionView.GroupHeaderTemplate>
+            <CollectionView.EmptyView>
+                <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center">No message History</Label>
+            </CollectionView.EmptyView>
         </CollectionView>
         <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
             <Editor 
