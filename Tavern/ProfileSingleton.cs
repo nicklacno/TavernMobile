@@ -11,11 +11,11 @@ namespace Tavern
         private static ProfileSingleton _instance;
         public bool isLoggedIn;
 
-        public delegate void LoginSuccessful();
+        public delegate void BasePageEvent(Page page);
         public delegate void UpdateProfile();
 
         public UpdateProfile updateProfile;
-        public LoginSuccessful loginSuccessful; //login successful delegate
+        public BasePageEvent switchMainPage; //login successful delegate
 
         public int ProfileId { get; set; }
         public string ProfileName { get; set; }
@@ -395,6 +395,22 @@ namespace Tavern
                 Debug.WriteLine("Message Failed to Send");
             }
             return await GetMessages(groupId, now);
+        }
+
+        public async Task<int> DeleteGroup(int groupId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Logout()
+        {
+            ProfileId = -1;
+            ProfileName = "";
+            ProfileBio = "";
+            Groups.Clear();
+            Groups = null;
+            Friends = null;
+            switchMainPage.Invoke(new LoginPage());
         }
     }
 }

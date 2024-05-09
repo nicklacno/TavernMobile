@@ -51,7 +51,7 @@ public partial class RegisterPage : ContentPage
                 Debug.WriteLine("Duplicate Email");
                 break;
             default:
-                ProfileSingleton.GetInstance().loginSuccessful.Invoke();
+                ProfileSingleton.GetInstance().switchMainPage(new NavigationPage(new TabbedMainPage()));
                 break;
         }
 

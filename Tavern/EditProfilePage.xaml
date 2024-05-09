@@ -36,6 +36,11 @@
                     Clicked="Update"
                     />
             </VerticalStackLayout>
+            <Button
+                x:Name="btnLogOut"
+                Text="Log Out"
+                Clicked="Logout"
+                />
         </VerticalStackLayout>
     </Grid>
    

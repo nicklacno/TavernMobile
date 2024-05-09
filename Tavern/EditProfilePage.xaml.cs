@@ -19,7 +19,7 @@ public partial class EditProfilePage : ContentPage
 
 	public async void Update(object sender, EventArgs e)
 	{
-         int val = await ProfileSingleton.GetInstance().EditProfile(entryPassword.Text, entryUsername.Text, entryBio.Text);
+        int val = await ProfileSingleton.GetInstance().EditProfile(entryPassword.Text, entryUsername.Text, entryBio.Text);
 		if (val == -1)
 		{
 			//error handle
@@ -40,5 +40,9 @@ public partial class EditProfilePage : ContentPage
 			ProfileSingleton.GetInstance().updateProfile.Invoke();
 			await Navigation.PopAsync();
 		}
+	}
+	public void Logout(object sender, EventArgs e)
+	{
+		ProfileSingleton.GetInstance().Logout();
 	}
 }
