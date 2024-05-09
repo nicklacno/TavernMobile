@@ -22,7 +22,7 @@ namespace Tavern
         public string ProfileBio { get; set; }
 
         public List<string> Friends { get; set; }
-        public List<Group> Groups { get; set; }
+        public ObservableCollection<Group> Groups { get; set; }
         public List<string> BlockedUsers { get; set; }
 
         private readonly HttpClient _httpClient = new(); //creates client
@@ -143,7 +143,7 @@ namespace Tavern
          * GetGroupsList - Returns a list of group names using the stored id
          * @return - List of group names
          */
-        public async Task<List<Group>> GetGroupsList()
+        public async Task<ObservableCollection<Group>> GetGroupsList()
         {
             if (ProfileId < 0)
                 return null;
@@ -161,7 +161,7 @@ namespace Tavern
         {
             try
             {
-                List<Group> groups = new List<Group>();
+                ObservableCollection<Group> groups = new ObservableCollection<Group>();
 
                 if (json != null)
                 {
@@ -296,7 +296,8 @@ namespace Tavern
             Dictionary<string, string> values = new Dictionary<string, string>()
             {
                 { "name", groupName },
-                { "ownerId", ProfileId.ToString()}
+                { "ownerId", ProfileId.ToString()},
+                { "bio", groupBio }
             };
 
             var json = JsonSerializer.Serialize(values);

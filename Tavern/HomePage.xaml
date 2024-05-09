@@ -14,12 +14,49 @@
                 VerticalScrollBarVisibility="Never"
                 >
             <VerticalStackLayout>
-                <VerticalStackLayout 
+                <!--<VerticalStackLayout 
                     x:Name="layoutGroup"
                     HorizontalOptions="Fill" 
                     Padding="10"
                     Spacing="10"
-                    />
+                    />-->
+                <CollectionView
+                    x:Name="groupList"
+                    ItemsLayout="VerticalGrid, 2"
+                    SelectionChanged="GroupSelected"
+                    SelectionMode="Single"
+                    >
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="5">
+                                <Image Source="/Resources/Images/paper_login.png" Aspect="Fill"/>
+                                <VerticalStackLayout VerticalOptions="StartAndExpand" Padding="10" Spacing="10" HorizontalOptions="FillAndExpand">
+                                    <Label x:Name="lbName" HorizontalTextAlignment="Center" HorizontalOptions="Center" Text="{Binding Name}"/>
+                                    <Label x:Name="lbBio" MaxLines="2" Text="{Binding Bio}"/>
+                                    <CollectionView ItemsSource="{Binding Tags}" 
+                                                    ItemsLayout="VerticalGrid 3" 
+                                                    MaximumHeightRequest="40" 
+                                                    MinimumHeightRequest="0">
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Label Text="{Binding .}"/>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+                                    <Label x:Name="lbMembers" HorizontalOptions="Center" HorizontalTextAlignment="Center" 
+                                        Text="{Binding Members.Count, StringFormat='Members: {0:D}'}"/>
+                                    <!--<Button 
+                                        x:Name="btnViewGroup"
+                                        Text="View Group"
+                                        Clicked="ViewGroup"
+                                        VerticalOptions="End"
+                                        HorizontalOptions="Fill"
+                                        />-->
+                                </VerticalStackLayout>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
                 <Button
                     x:Name="btnSwipeNavigate"
                     Text="Find Groups"

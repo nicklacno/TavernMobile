@@ -29,7 +29,13 @@
             <VerticalStackLayout x:Name="GroupList">
                 <Label HorizontalTextAlignment="Center">Groups</Label>
                 <Rectangle HorizontalOptions="Fill" HeightRequest="4" Opacity="0"/>
-                <Label StyleClass="group">Test Group</Label>
+                <CollectionView x:Name="groupList" ItemsLayout="Vertical" MaximumHeightRequest="140" VerticalScrollBarVisibility="Always">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Label Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
             </VerticalStackLayout>
 
             <VerticalStackLayout x:Name="FriendsList">

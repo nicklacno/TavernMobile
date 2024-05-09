@@ -155,7 +155,16 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "INSERT INTO Groups (OwnerID, GroupName) VALUES (@Owner, @Name)";
+                        if (data.ContainsKey("bio") && data["bio"] != null) 
+                        {
+                            cmd.CommandText = "INSERT INTO Groups (OwnerID, GroupName, GroupBio) VALUES (@Owner, @Name, @Bio)";
+                            cmd.Parameters.AddWithValue("@Bio", data["bio"]);
+                        }
+                        else
+                        {
+                            cmd.CommandText = "INSERT INTO Groups (OwnerID, GroupName) VALUES (@Owner, @Name)";
+                        }
+                        
                         cmd.Parameters.AddWithValue("@Owner", Convert.ToInt32(data["ownerId"]));
                         cmd.Parameters.AddWithValue("@Name", data["name"]);
                         
