@@ -30,10 +30,16 @@ namespace WebApi.Controllers
             return Group.EditGroup(data);
         }
 
-        [HttpGet("{id}/Chat")]
-        public int GetGroupChat(int id, Dictionary<string, string> data)
+        [HttpPost("{id}/Chat")]
+        public List<Dictionary<string, string>> GetGroupChat(int id, Dictionary<string, string> data)
         {
             return Group.Chat(id, data);
+        }
+
+        [HttpPost("{id}/SendMessage")]
+        public int PostMessageGroupChat(int id, Dictionary<string, string> data)
+        {
+            return Group.SendMessage(id, data);
         }
     }
 }

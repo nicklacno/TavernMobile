@@ -17,6 +17,7 @@ public partial class ProfilePage : ContentPage
 		UpdateProfile();
 
 		ProfileSingleton.GetInstance().updateProfile += UpdateProfile; //adds to delegate
+		groupList.ItemsSource = ProfileSingleton.GetInstance().Groups;
 	}
 	/**
 	 * TryGetData - Attempts to get the data for the profile from the database using the singleton
@@ -63,39 +64,6 @@ public partial class ProfilePage : ContentPage
         Name.Text = singleton.ProfileName;//sets profile name
         Bio.Text = singleton.ProfileBio;//sets profile bio
 
-		await AddGroup();
-
 		//Need to add updating friends and groups !!!
     }
-
-	public async Task AddGroup()
-	{
-		GroupList.Children.Clear();
-		AddHeader("Groups", GroupList);
-		ProfileSingleton singleton = ProfileSingleton.GetInstance();
-
-		foreach (Group group in singleton.Groups)
-		{
-			Label label = new Label();
-			label.Text = group.Name;
-
-			GroupList.Children.Add(label);
-		}
-		
-	}
-
-	public void AddHeader(string title, VerticalStackLayout layout)
-	{
-		Label label = new Label();
-		label.Text = title;
-		label.HorizontalTextAlignment = TextAlignment.Center;
-		label.FontSize = 25;
-		layout.Children.Add(label);
-
-		Rectangle rect = new Rectangle();
-		rect.HorizontalOptions = LayoutOptions.Fill;
-		rect.HeightRequest = 4;
-		rect.Opacity = 0;
-		layout.Children.Add(rect);
-	}
 }
