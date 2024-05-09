@@ -20,7 +20,11 @@ namespace Tavern
         public MessageByDay(string DateSent, ObservableCollection<Message> messages) : base(messages)
         {
             this.DateSent = DateSent;
-        }
-        
+        } 
+    }
+    public class Tag
+    {
+        public required int Id { set; get; }
+        public required string Name { set; get; }
     }
 }

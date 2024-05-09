@@ -3,6 +3,8 @@ using System.Diagnostics;
 
 namespace WebApi
 {
+    //Universal Error codes for groups
+    //-10, group no longer exists
     public class Group
     {
         private static string? connectionString = null;
@@ -11,8 +13,8 @@ namespace WebApi
         public string? Name { get; set; }
         public string? Bio { get; set; }
         public int OwnerId { get; set; }
-        public List<string>? Members {  get; set; }
-        public List<string>? Tags { get; set; }
+        public List<string>? Members { get; set; }
+        public List<Tag>? Tags { get; set; }
 
         /**
          * GetGroup - Returns the group given the specific id
@@ -98,18 +100,18 @@ namespace WebApi
          * @param id - Group Id the members are apart of
          * @return - the list of names of the group members, null if error
          */
-        private static List<string>? GetTags(int id)
+        private static List<Tag>? GetTags(int id)
         {
             SetConnectionString();
             try
             {
-                List<string> tags = new List<string>();
+                List<Tag> tags = new List<Tag>();
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "SELECT Name FROM GroupTags " +
+                        cmd.CommandText = "SELECT GroupTags.TagID, Name FROM GroupTags " +
                                             "JOIN Tags ON Tags.TagID = GroupTags.TagID " +
                                             "WHERE GroupID = @GroupP;";
                         cmd.Parameters.AddWithValue("@GroupP", id);
@@ -117,7 +119,7 @@ namespace WebApi
                         SqlDataReader reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
-                            tags.Add(reader.GetString(0));
+                            tags.Add(new Tag { TagId = reader.GetInt32(0), TagName = reader.GetString(1) });
                         }
                     }
                 }
@@ -138,24 +140,24 @@ namespace WebApi
                 connectionString = builder.GetConnectionString("sqlServerString");
             }
         }
-        
+
         /**
          * CreateGroup - returns the newly created group's id or negative if failed
          * @param data - the dictionary that holds all the data
          * @return - the new group id or a negative number
          */
-        public static int CreateGroup(Dictionary<string,string> data) 
+        public static int CreateGroup(Dictionary<string, string> data)
         {
             SetConnectionString();
             if (GetGroupId(data["name"]) != -1) return -2;
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString)) 
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        if (data.ContainsKey("bio") && data["bio"] != null) 
+                        if (data.ContainsKey("bio") && data["bio"] != null)
                         {
                             cmd.CommandText = "INSERT INTO Groups (OwnerID, GroupName, GroupBio) VALUES (@Owner, @Name, @Bio)";
                             cmd.Parameters.AddWithValue("@Bio", data["bio"]);
@@ -164,10 +166,10 @@ namespace WebApi
                         {
                             cmd.CommandText = "INSERT INTO Groups (OwnerID, GroupName) VALUES (@Owner, @Name)";
                         }
-                        
+
                         cmd.Parameters.AddWithValue("@Owner", Convert.ToInt32(data["ownerId"]));
                         cmd.Parameters.AddWithValue("@Name", data["name"]);
-                        
+
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -180,7 +182,7 @@ namespace WebApi
                 return -1;
             }
         }
-        
+
         /**
          * GetGroupId - returns the groupid given a specific group name
          * @param groupName - the name of the group
@@ -208,7 +210,6 @@ namespace WebApi
                     }
 
                 }
-                return -1;
 
             }
             catch (Exception ex)
@@ -216,7 +217,7 @@ namespace WebApi
                 return -1;
             }
         }
-        
+
 
         /**
          * AddMemberToGroup - helper function that allows database manipulation
@@ -232,7 +233,7 @@ namespace WebApi
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    using(SqlCommand cmd = conn.CreateCommand())
+                    using (SqlCommand cmd = conn.CreateCommand())
                     {
                         cmd.CommandText = "INSERT INTO MemberGroup(GroupID, UserID) VALUES (@GroupId, @UserId)";
                         cmd.Parameters.AddWithValue("@GroupId", groupId);
@@ -260,10 +261,10 @@ namespace WebApi
             SetConnectionString();
             try
             {
-                using(SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    using(SqlCommand cmd = conn.CreateCommand())
+                    using (SqlCommand cmd = conn.CreateCommand())
                     {
                         cmd.CommandText = "INSERT INTO GroupRequests (UserID, GroupID) VALUES (@User, @Group)";
                         cmd.Parameters.AddWithValue("@User", userId);
@@ -281,14 +282,15 @@ namespace WebApi
 
         public static int EditGroup(Dictionary<string, string> data)
         {
+            if (!Exists(Convert.ToInt32(data["groupId"]))) return -10;
             if (data["newName"] == null && data["newBio"] == null) return 0;
             if (DuplicateGroupName(data["newName"])) return -3;
             try
             {
-                using(SqlConnection conn = new SqlConnection(connectionString)) 
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    using(SqlCommand cmd = conn.CreateCommand())
+                    using (SqlCommand cmd = conn.CreateCommand())
                     {
                         string command = "UPDATE Groups SET ";
                         if (data["newName"] != null)
@@ -356,21 +358,22 @@ namespace WebApi
             throw new NotImplementedException();
         }
 
-        public static List<Dictionary<string,string>> Chat(int id, Dictionary<string, string> data)
+        public static List<Dictionary<string, string>> Chat(int id, Dictionary<string, string> data)
         {
             SetConnectionString();
-            List<Dictionary<string,string>> log = new List<Dictionary<string,string>>();
+            if (!Exists(id)) return null;
+            List<Dictionary<string, string>> log = new List<Dictionary<string, string>>();
 
             try
             {
-                using(SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
                         string query = "SELECT UserName, Message, TimeStamp FROM Messages " +
                             "JOIN Customers ON UserID = SenderID WHERE GroupChatID = @Group";
-                        if (data["timestamp"] != null)
+                        if (data.ContainsKey("timestamp") && data["timestamp"] != null)
                         {
                             query += " AND TimeStamp >= @TimeStamp";
                             cmd.Parameters.AddWithValue("@TimeStamp", Convert.ToDateTime(data["timestamp"]));
@@ -388,9 +391,9 @@ namespace WebApi
                                 {"sender", reader.GetString(0) },
                                 {"message", reader.GetString(1) }
                             };
-                            
+
                             message["timestamp"] = reader.IsDBNull(2) ? null : reader.GetDateTime(2).ToString();
-                            
+
                             log.Add(message);
                         }
                     }
@@ -407,13 +410,14 @@ namespace WebApi
         public static int SendMessage(int id, Dictionary<string, string> data)
         {
             SetConnectionString();
+            if (!Exists(id)) return -10;
             if (!IsInGroup(id, Convert.ToInt32(data["senderId"]))) return -2;
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    using(SqlCommand cmd = conn.CreateCommand())
+                    using (SqlCommand cmd = conn.CreateCommand())
                     {
                         cmd.CommandText = "INSERT INTO Messages(GroupChatID, SenderID, Message, TimeStamp) " +
                             "VALUES (@groupid, @userid, @message, @time );";
@@ -450,6 +454,57 @@ namespace WebApi
                         SqlDataReader reader = cmd.ExecuteReader();
                         if (reader.Read()) return true;
                         else return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public static List<Tag> GetTags()
+        {
+            SetConnectionString();
+            try
+            {
+                List<Tag> tags = new List<Tag>();
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT TagID, Name FROM Tags WHERE ForGroup = 1;";
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            tags.Add(new Tag { TagId = reader.GetInt32(0), TagName = reader.GetString(1) });
+                        }
+                        return tags;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return null;
+            }
+        }
+
+        //Assumes connection string already initialized
+        private static bool Exists(int groupid)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT GroupID FROM Groups WHERE GroupID = @id";
+                        cmd.Parameters.AddWithValue("@id", groupid);
+                        SqlDataReader r = cmd.ExecuteReader();
+                        return r.HasRows;
                     }
                 }
             }
