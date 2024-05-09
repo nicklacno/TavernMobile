@@ -47,5 +47,17 @@ namespace WebApi.Controllers
         {
             return Group.GetTags();
         }
+
+        [HttpPost("AddTag")]
+        public int PostAddTag(Dictionary<string, int> data)
+        {
+            return Group.AddTag(data);
+        }
+
+        [HttpPost("RemoveTag")]
+        public int PostRemoveTag(Dictionary<string, int> data)
+        {
+            return Group.RemoveTag(data);
+        }
     }
 }

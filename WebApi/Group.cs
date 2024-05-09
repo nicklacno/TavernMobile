@@ -513,5 +513,106 @@ namespace WebApi
                 return false;
             }
         }
+
+        public static int AddTag(Dictionary<string, int> data)
+        {
+            SetConnectionString();
+            if (!Exists(data["groupId"])) return -10;
+            if (!IsValidTag(data["tagId"])) return -9;
+            if (AlreadyInTable(data["groupId"], data["tagId"])) return 0;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "INSERT INTO GroupTags (TagID, GroupID) VALUES (@tag, @group);";
+                        cmd.Parameters.AddWithValue("@tag", data["tagId"]);
+                        cmd.Parameters.AddWithValue("@group", data["groupId"]);
+                        cmd.ExecuteNonQuery();
+
+                        return 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+        public static int RemoveTag(Dictionary<string, int> data)
+        {
+            SetConnectionString();
+            if (!AlreadyInTable(data["groupId"], data["tagId"])) return 0;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "DELETE FROM GroupTags WHERE GroupID = @group AND TagID = @tag";
+                        cmd.Parameters.AddWithValue("@group", data["groupId"]);
+                        cmd.Parameters.AddWithValue("@tag", data["tagId"]);
+
+                        cmd.ExecuteNonQuery();
+                        return 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+        private static bool IsValidTag(int id)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT TagID FROM Tags WHERE TagID = @id AND ForGroup = 1";
+                        cmd.Parameters.AddWithValue("@id", id);
+                        return cmd.ExecuteReader().HasRows;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return false;
+            }
+        }
+
+        private static bool AlreadyInTable(int group, int tag)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT TagID FROM GroupTags WHERE TagID = @tag AND GroupID = @group";
+                        cmd.Parameters.AddWithValue("@tag", tag);
+                        cmd.Parameters.AddWithValue("@group", group);
+                        return cmd.ExecuteReader().HasRows;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return true;
+            }
+        }
     }
 }
