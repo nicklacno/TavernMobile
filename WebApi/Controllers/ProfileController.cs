@@ -105,5 +105,12 @@ namespace WebApi.Controllers
         {
             return Profile.GetProfileTags(id);
         }
+
+        [HttpPost("AddTag")]
+        public int PostAddTag(Dictionary<string, int> data)
+        {
+            return Profile.AddTag(data);
+        }
+
     }
 }

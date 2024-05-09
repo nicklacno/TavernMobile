@@ -516,5 +516,55 @@ namespace WebApi
                 return false;
             }
         }
+
+        public static int AddTag(Dictionary<string, int> data)
+        {
+            SetConnectionString();
+            if (!Exists(data["userId"])) return -10;
+            if (!IsValidTag(data["tagId"])) return -9;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "INSERT INTO PlayerTags (TagID, PlayerID) VALUES (@tag, @player);";
+                        cmd.Parameters.AddWithValue("@tag", data["tagId"]);
+                        cmd.Parameters.AddWithValue("@player", data["userId"]);
+                        cmd.ExecuteNonQuery();
+
+                        return 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+        private static bool IsValidTag(int id)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT TagID FROM Tags WHERE TagID = @id AND ForPlayer = 1";
+                        cmd.Parameters.AddWithValue("@id", id);
+                        return cmd.ExecuteReader().HasRows;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return false;
+            }
+        }
     }
 }
