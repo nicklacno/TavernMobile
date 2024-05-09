@@ -7,6 +7,8 @@ public partial class GroupChatView : ContentView
 {
     public int groupId;
     public int totalMessages;
+    public DateTime latestRetrieval;
+    public bool isRetrievingMessages;
 
     public ObservableCollection<MessageByDay> Messages { get; set; } = new ObservableCollection<MessageByDay>();
 
@@ -19,7 +21,11 @@ public partial class GroupChatView : ContentView
     {
         InitializeComponent();
         this.groupId = groupId;
+        latestRetrieval= DateTime.UtcNow;
+        isRetrievingMessages = true;
         AddMessages(groupId);
+
+        Task.Run(RetrieveNewMessages);
     }
 
     private async Task AddMessages(int groupId)
@@ -38,29 +44,36 @@ public partial class GroupChatView : ContentView
     {
         if (!string.IsNullOrEmpty(txtMessage.Text))
         {
-            var messages = await ProfileSingleton.GetInstance().SendMessage(groupId, txtMessage.Text);
-            if (messages != null)
+            await ProfileSingleton.GetInstance().SendMessage(groupId, txtMessage.Text);
+            txtMessage.Text = "";
+        }
+    }
+
+    public async Task RetrieveNewMessages()
+    {
+        while (isRetrievingMessages)
+        {
+            var newMessages = await ProfileSingleton.GetInstance().GetMessages(groupId, latestRetrieval);
+            latestRetrieval = DateTime.UtcNow;
+            if (newMessages != null && newMessages.Count > 0)
             {
-                if (messages.Count > 0)
+                if (newMessages.First().DateSent == Messages.Last().DateSent)
                 {
-                    if (messages.First().DateSent.Equals(Messages.Last().DateSent))
+                    foreach (var message in newMessages.First())
                     {
-                        foreach(var message in messages.First())
-                        {
-                            Messages.Last().Add(message);
-                            totalMessages++;
-                        }
-                        messages.RemoveAt(0);
+                        Messages.Last().Add(message);
+                        totalMessages++;
                     }
-                    foreach(var message in messages)
-                    {
-                        Messages.Add(message);
-                        totalMessages += message.Count;
-                    }
+                    newMessages.RemoveAt(0);
+                }
+                foreach (var message in newMessages)
+                {
+                    totalMessages += message.Count;
+                    Messages.Add(message);
                 }
                 messageBox.ScrollTo(totalMessages);
             }
-            txtMessage.Text = "";
+            Thread.Sleep(3000);
         }
     }
 }

@@ -371,9 +371,9 @@ namespace Tavern
             return messageList;
         }
 
-        public async Task<ObservableCollection<MessageByDay>> SendMessage(int groupId, string message)
+        public async Task<int> SendMessage(int groupId, string message)
         {
-            DateTime now = DateTime.UtcNow;
+            //DateTime now = DateTime.UtcNow;
             
             Dictionary<string, string> values = new Dictionary<string, string>()
             {
@@ -387,14 +387,15 @@ namespace Tavern
             try
             {
                 var response = await _httpClient.PostAsync($"Groups/{groupId}/SendMessage", content);
-                string status = response.Content.ReadAsStringAsync().Result;
+                int status = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
+                return status;
             }
             catch (Exception ex) 
             {
                 Debug.WriteLine(ex);
                 Debug.WriteLine("Message Failed to Send");
+                return -1;
             }
-            return await GetMessages(groupId, now);
         }
 
         public async Task<int> DeleteGroup(int groupId)

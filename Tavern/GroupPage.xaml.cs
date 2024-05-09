@@ -5,6 +5,7 @@ namespace Tavern;
 public partial class GroupPage : ContentPage
 {
 	public Group GroupData { get; set; }
+	GroupChatView ChatView { get; set; }
 
 	public GroupPage(int id)
 	{
@@ -18,7 +19,8 @@ public partial class GroupPage : ContentPage
 		GroupData = data;
 		UpdatePage();
 
-		GroupChat.Add(new GroupChatView(GroupData.GroupId));
+		ChatView = new GroupChatView(GroupData.GroupId);
+		GroupChat.Add(ChatView);
 	}
 
 	/**
@@ -81,5 +83,10 @@ public partial class GroupPage : ContentPage
     private async void PushGroupPage(object sender, EventArgs e)
     {
 		//await Navigation.PushAsync();
+    }
+    protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
+    {
+        base.OnNavigatedFrom(args);
+		ChatView.isRetrievingMessages = false;
     }
 }
