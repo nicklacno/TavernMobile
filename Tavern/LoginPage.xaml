@@ -13,6 +13,7 @@
             <Label 
                 x:Name="lblTitle"
                 Text="Tavern"
+                FontFamily="Algerian"
                 VerticalOptions="Center" 
                 HorizontalOptions="Center" />
             <Entry
@@ -32,12 +33,17 @@
                     />
                 <Label
                     Text="Remember Me"
+                    FontFamily="Sedan"
+                    FontAttributes="Bold"
                     VerticalOptions="Center"
                     />
             </HorizontalStackLayout>
             <Button
                 x:Name="btnLogin"
                 Text="Login"
+                FontFamily="Sedan"
+                FontSize="30"
+                FontAttributes="Bold"
                 Clicked="AttemptLogin"
                 HorizontalOptions="Center"
                 WidthRequest="200"
@@ -45,6 +51,7 @@
             <Button
                 x:Name="btnRegister"
                 Text="Don't Have an account? Register Here"
+                FontFamily="Sedan"
                 HorizontalOptions="Center"
                 Clicked="Register"
                 />
