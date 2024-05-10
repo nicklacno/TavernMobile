@@ -14,22 +14,31 @@
             VerticalScrollBarVisibility="Never"
             >
             <VerticalStackLayout>
+                <Button
+                    x:Name="btnSwipeNavigate"
+                    Text="Find Groups"
+                    FontFamily="Sedan"
+                    TextColor="Black"
+                    BackgroundColor="BurlyWood"
+                    FontSize="30"
+                    Clicked="NavigateToSwipe"
+                />
+                <Button
+                    x:Name="btnCreateNavigate"
+                    FontFamily="Sedan"
+                    FontSize="30"
+                    TextColor="Black"
+                    BackgroundColor="BurlyWood"
+                    Text="Create Group"
+                 Clicked="NavigateToCreate"
+                />
                 <VerticalStackLayout 
                     x:Name="layoutGroup"
                     HorizontalOptions="Fill" 
                     Padding="10"
                     Spacing="10"
-                    />
-                <Button
-                    x:Name="btnSwipeNavigate"
-                    Text="Find Groups"
-                    Clicked="NavigateToSwipe"
-                    />
-                <Button
-                    x:Name="btnCreateNavigate"
-                    Text="Create Group"
-                    Clicked="NavigateToCreate"
-                    />
+                />
+                
             </VerticalStackLayout>
         </ScrollView>
     </Grid>
