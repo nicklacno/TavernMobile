@@ -9,6 +9,7 @@ public partial class GroupChatView : ContentView
     public int totalMessages;
     public DateTime latestRetrieval;
     public bool isRetrievingMessages;
+    private GroupPage parentPage;
 
     public ObservableCollection<MessageByDay> Messages { get; set; } = new ObservableCollection<MessageByDay>();
 
@@ -17,13 +18,14 @@ public partial class GroupChatView : ContentView
         InitializeComponent();
     }
 
-    public GroupChatView(int groupId)
+    public GroupChatView(int groupId, GroupPage parent)
     {
         InitializeComponent();
         this.groupId = groupId;
         latestRetrieval= DateTime.UtcNow;
         isRetrievingMessages = true;
         AddMessages(groupId);
+        parentPage = parent;
 
         Task.Run(RetrieveNewMessages);
     }
@@ -44,7 +46,11 @@ public partial class GroupChatView : ContentView
     {
         if (!string.IsNullOrEmpty(txtMessage.Text))
         {
-            await ProfileSingleton.GetInstance().SendMessage(groupId, txtMessage.Text);
+            int i = await ProfileSingleton.GetInstance().SendMessage(groupId, txtMessage.Text);
+            if (i < 0)
+            {
+                parentPage.ShowErrorMessage("Failed to send Message");
+            }
             txtMessage.Text = "";
         }
     }
@@ -76,4 +82,5 @@ public partial class GroupChatView : ContentView
             Thread.Sleep(3000);
         }
     }
+
 }

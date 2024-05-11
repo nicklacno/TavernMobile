@@ -12,9 +12,6 @@ namespace Tavern
         public bool isLoggedIn;
 
         public delegate void BasePageEvent(Page page);
-        public delegate void UpdateProfile();
-
-        public UpdateProfile updateProfile;
         public BasePageEvent switchMainPage; //login successful delegate
 
         public int ProfileId { get; set; }
@@ -39,12 +36,11 @@ namespace Tavern
 
             //set to true for tabbed page, false for login
             isLoggedIn = false; //sets the isLoggedIn to false, will change when retaining data
-            updateProfile = new UpdateProfile(InvokedUpdate);
         }
 
         private async Task SetValues()
         {
-            string profileData = await this.GetProfileData();
+            string profileData = await GetProfileData();
             if (profileData != null)
             {
                 JObject profile = JObject.Parse(profileData); //parses the json
@@ -97,11 +93,6 @@ namespace Tavern
             return await _httpClient.GetStringAsync($"Profile/{ProfileId}/Friends");
         }
 
-        public void InvokedUpdate()
-        {
-            Debug.WriteLine("Invoked Update");
-        }
-
         /**
          * Login - Attempting Login to the Database
          * @param username - username of the account
@@ -128,6 +119,7 @@ namespace Tavern
                     ProfileId = id; //sets the id for the singleton
                     isLoggedIn = true; //sets the bool for logged in, later used for the remember me
                     await SetValues();
+                    StartBackgroundUpdates();
                 }
                 return isLoggedIn; //returns true if updated, else false
             }
@@ -222,7 +214,7 @@ namespace Tavern
             group.Bio = (string)data["bio"];
             group.OwnerId = (int)data["ownerId"];
             group.Members = data["members"].Values<string>().ToList();
-            group.Tags = data["tags"].Values<string>().ToList();
+            group.Tags = ConvertToTagList(data["tags"].ToString());
 
             return group;
         }
@@ -412,6 +404,68 @@ namespace Tavern
             Groups = null;
             Friends = null;
             switchMainPage.Invoke(new LoginPage());
+        }
+
+        public async Task<ObservableCollection<Tag>> GetPlayerTags()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("Profile/Tags");
+                string list = response.Content.ReadAsStringAsync().Result;
+                return ConvertToTagList(list);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
+        private ObservableCollection<Tag> ConvertToTagList(string list)
+        {
+            ObservableCollection<Tag> tags = new ObservableCollection<Tag>();
+            if (!string.IsNullOrEmpty(list))
+            {
+                JToken data = JToken.Parse(list);
+                foreach(JObject tag in data.Children())
+                {
+                    string name = (string)tag["tagName"];
+                    int id = (int)tag["tagId"];
+
+                    tags.Add(new Tag { Name = name, Id = id });
+                }
+            }
+
+
+            return tags;
+        }
+
+        public void StartBackgroundUpdates()
+        {
+            Task.Run(UpdateInBackground);
+        }
+
+        private async Task UpdateInBackground()
+        {
+            while (isLoggedIn)
+            {
+                SetValues().RunSynchronously();
+                Thread.Sleep(2000);
+            }
+            
+        }
+
+        public bool CanAccessGroup(int groupId)
+        {
+            if (Groups == null) return false;
+            foreach (var group in Groups)
+            {
+                if (group.GroupId == groupId)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

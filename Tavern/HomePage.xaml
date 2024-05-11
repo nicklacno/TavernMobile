@@ -39,7 +39,7 @@
                                                     MinimumHeightRequest="0">
                                         <CollectionView.ItemTemplate>
                                             <DataTemplate>
-                                                <Label Text="{Binding .}"/>
+                                                <Label Text="{Binding Name}"/>
                                             </DataTemplate>
                                         </CollectionView.ItemTemplate>
                                     </CollectionView>

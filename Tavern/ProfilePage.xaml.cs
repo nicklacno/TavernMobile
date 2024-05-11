@@ -16,8 +16,10 @@ public partial class ProfilePage : ContentPage
 		InitializeComponent();
 		UpdateProfile();
 
-		ProfileSingleton.GetInstance().updateProfile += UpdateProfile; //adds to delegate
-		groupList.ItemsSource = ProfileSingleton.GetInstance().Groups;
+		ProfileSingleton singleton = ProfileSingleton.GetInstance();
+		groupList.ItemsSource = singleton.Groups;
+
+		Task.Run(BackgroundStuff);
 	}
 	/**
 	 * TryGetData - Attempts to get the data for the profile from the database using the singleton
@@ -58,7 +60,7 @@ public partial class ProfilePage : ContentPage
 	/**
 	 * UpdateProfile - Method that updates changes to the profile
 	 */
-	public async void UpdateProfile()
+	public void UpdateProfile()
 	{
         ProfileSingleton singleton = ProfileSingleton.GetInstance();
         Name.Text = singleton.ProfileName;//sets profile name
@@ -66,4 +68,14 @@ public partial class ProfilePage : ContentPage
 
 		//Need to add updating friends and groups !!!
     }
+
+	private async Task BackgroundStuff()
+	{
+		ProfileSingleton singleton = ProfileSingleton.GetInstance();
+		while(singleton.isLoggedIn)
+		{
+			UpdateProfile();
+			Thread.Sleep(2000);
+		}
+	}
 }

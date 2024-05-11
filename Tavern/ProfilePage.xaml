@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Tavern.ProfilePage"
              Title="ProfilePage"
+             xmlns:n="clr-namespace:Tavern"
              Shell.NavBarIsVisible="False">
     <ContentPage.Resources>
         <StyleSheet Source="/Resources/Styles/PageStyles/ProfilePage.css" />

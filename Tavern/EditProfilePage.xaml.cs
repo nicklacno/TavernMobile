@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Views;
 using System.Diagnostics;
 
 namespace Tavern;
@@ -8,6 +9,7 @@ public partial class EditProfilePage : ContentPage
 	{
 		InitializeComponent();
 		PopulateEntryFields();
+        //tagList.ItemsSource = ProfileSingleton.GetInstance().GetPlayerTags().Result;
 	}
 
 	public void PopulateEntryFields()
@@ -19,30 +21,38 @@ public partial class EditProfilePage : ContentPage
 
 	public async void Update(object sender, EventArgs e)
 	{
-        int val = await ProfileSingleton.GetInstance().EditProfile(entryPassword.Text, entryUsername.Text, entryBio.Text);
+		ProfileSingleton singleton = ProfileSingleton.GetInstance();
+        int val = await singleton.EditProfile(entryPassword.Text, entryUsername.Text, entryBio.Text);
 		if (val == -1)
 		{
 			//error handle
-			Debug.WriteLine("Failed to connect to server");
+			ShowErrorMessage("Failed to connect to server");
 		}
 		else if (val == -2)
 		{
 			//error handling
-			Debug.WriteLine("Incorrect Password");
+			ShowErrorMessage("Incorrect Password");
 		}
 		else if (val == -3)
 		{ 
 			//error handling
-			Debug.WriteLine("Duplicate username");
+			ShowErrorMessage("Duplicate username");
 		}
 		else
 		{
-			ProfileSingleton.GetInstance().updateProfile.Invoke();
-			await Navigation.PopAsync();
+			singleton.ProfileName = entryUsername.Text;
+			singleton.ProfileBio = entryBio.Text;
+			//await Navigation.PopAsync();
 		}
 	}
+
 	public void Logout(object sender, EventArgs e)
 	{
 		ProfileSingleton.GetInstance().Logout();
 	}
+    private void ShowErrorMessage(string message)
+    {
+        var popup = new ErrorPopup(message);
+        this.ShowPopup(popup);
+    }
 }

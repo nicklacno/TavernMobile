@@ -36,6 +36,26 @@
                     Clicked="Update"
                     />
             </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Label
+                    Text="Tags"
+                    />
+                <CollectionView x:Name="tagList">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <HorizontalStackLayout>
+                                <CheckBox x:Name="checkbox"/>
+                                <Label
+                                    Text="{Binding Name}"
+                                    />
+                            </HorizontalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Button
+                    Text="Update Tags"
+                    />
+            </VerticalStackLayout>
             <Button
                 x:Name="btnLogOut"
                 Text="Log Out"

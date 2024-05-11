@@ -1,5 +1,7 @@
 
 
+using CommunityToolkit.Maui.Views;
+
 namespace Tavern;
 
 public partial class GroupPage : ContentPage
@@ -10,7 +12,7 @@ public partial class GroupPage : ContentPage
 	public GroupPage(int id)
 	{
 		InitializeComponent();
-		UpdatePage(id);
+		UpdatePage(id).RunSynchronously();
 	}
 
 	public GroupPage(Group data)
@@ -19,7 +21,7 @@ public partial class GroupPage : ContentPage
 		GroupData = data;
 		UpdatePage();
 
-		ChatView = new GroupChatView(GroupData.GroupId);
+		ChatView = new GroupChatView(GroupData.GroupId, this);
 		GroupChat.Add(ChatView);
 	}
 
@@ -40,10 +42,10 @@ public partial class GroupPage : ContentPage
 
 			Label lb;
 
-			foreach (string tag in GroupData.Tags) 
+			foreach (Tag tag in GroupData.Tags) 
 			{
 				lb = new Label();
-				lb.Text = tag;
+				lb.Text = tag.Name;
 				layoutTags.Add(lb);
 			}
 
@@ -74,13 +76,13 @@ public partial class GroupPage : ContentPage
 		{
 			Button btn = new Button();
 			btn.Text = "Edit Group";
-			btn.Clicked += PushGroupPage;
+			btn.Clicked += PushEditGroupPage;
 
 			stackInfo.Insert(4, btn);
 		}
 	}
 
-    private async void PushGroupPage(object sender, EventArgs e)
+    private async void PushEditGroupPage(object sender, EventArgs e)
     {
 		//await Navigation.PushAsync();
     }
@@ -88,5 +90,10 @@ public partial class GroupPage : ContentPage
     {
         base.OnNavigatedFrom(args);
 		ChatView.isRetrievingMessages = false;
+    }
+    public void ShowErrorMessage(string message)
+    {
+        var popup = new ErrorPopup(message);
+        this.ShowPopup(popup);
     }
 }

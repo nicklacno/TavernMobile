@@ -39,10 +39,10 @@ public partial class SwipingView : SwipeView
 			lbBio.Text = groupData.Bio;
 			lbMembers.Text = "Members: " + groupData.Members.Count;
 
-			foreach (string tag in groupData.Tags)
+			foreach (Tag tag in groupData.Tags)
 			{
 				Label lb = new Label();
-				lb.Text = tag;
+				lb.Text = tag.Name;
 				hStackTag.Children.Add(lb);
 			}
 

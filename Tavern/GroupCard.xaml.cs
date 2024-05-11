@@ -17,10 +17,10 @@ public partial class GroupCard : ContentView
 
 			if (group.Tags.Count > 0)
 			{
-				foreach (string tag in group.Tags)
+				foreach (Tag tag in group.Tags)
 				{
 					Label lb = new Label();
-					lb.Text = tag;
+					lb.Text = tag.Name;
 					hStackTag.Children.Add(lb);
 				}
 			}

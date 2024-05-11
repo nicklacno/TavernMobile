@@ -11,7 +11,7 @@ namespace Tavern
         {
             InitializeComponent(); //Initializes the xaml elements
 
-            MainPage = new LoginPage();
+            MainPage = new NavigationPage(new LoginPage());
             ProfileSingleton singleton = ProfileSingleton.GetInstance(); //gets singleton
             if (singleton.isLoggedIn) //checks login, storage will hold temporary data
             {
