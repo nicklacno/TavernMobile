@@ -1,0 +1,13 @@
+﻿button {
+    background-color: rgba(0,0,0,0.4);
+    color: white;
+}
+editor {
+    color: #3f3f3f;
+    margin-botton: 10;
+    -maui-placeholder-color: #3f3f3f;
+}
+label {
+    color: #3f3f3f;
+    margin-bottom: 5;
+}

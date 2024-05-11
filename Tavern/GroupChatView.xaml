@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Tavern.GroupChatView">
+    <ContentView.Resources>
+        <StyleSheet Source="/Resources/Styles/PageStyles/Chat.css" />
+    </ContentView.Resources>
+    <VerticalStackLayout>
+        <CollectionView x:Name="messageBox" 
+                        IsGrouped="True" 
+                        SelectionMode="None"
+                        HeightRequest="400"
+                        BindingContext="GroupChatView"
+                        ItemsSource="{Binding Messages}"
+                        >
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <HorizontalStackLayout>
+                        <Label Text="{Binding TimeSent}" WidthRequest="60"/>
+                        <Label Text="{Binding Sender}" Padding="10, 0"/>
+                        <Label Text="{Binding Body}" LineBreakMode="WordWrap"/>
+                    </HorizontalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <Label Text="{Binding DateSent}"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"
+                           />
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>
+            <CollectionView.EmptyView>
+                <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center">No message History</Label>
+            </CollectionView.EmptyView>
+        </CollectionView>
+        <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
+            <Editor 
+                x:Name="txtMessage"
+                MaxLength="200"
+                WidthRequest="250"
+                />
+            <Button 
+                x:Name="btnSendMessage"
+                Text="Send"
+                WidthRequest="150"
+                Clicked="SendMessage"
+                />
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</ContentView>

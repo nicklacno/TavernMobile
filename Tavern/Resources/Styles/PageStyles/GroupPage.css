@@ -25,3 +25,9 @@ layoutMembers>label
     margin: 20;
 }
 
+button 
+{
+    background-color: rgba(0,0,0,0.4);
+    color: white;
+}
+

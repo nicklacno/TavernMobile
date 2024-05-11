@@ -8,7 +8,7 @@
     </ContentPage.Resources>
     <Grid>
         <Image Source="/Resources/Images/paper_login.png" Aspect="Fill"/>
-        <VerticalStackLayout Padding="10">
+        <VerticalStackLayout Padding="10" x:Name="stackInfo">
             <Label 
                 x:Name="lbGroupName"
                 Text="Group Name"
@@ -39,6 +39,7 @@
                     FontSize="24"
                     />
             </VerticalStackLayout>
+            <Grid x:Name="GroupChat" />
         </VerticalStackLayout>
     </Grid>
     

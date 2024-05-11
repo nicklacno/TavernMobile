@@ -17,6 +17,7 @@ public partial class ProfilePage : ContentPage
 		UpdateProfile();
 
 		ProfileSingleton.GetInstance().updateProfile += UpdateProfile; //adds to delegate
+		groupList.ItemsSource = ProfileSingleton.GetInstance().Groups;
 	}
 	/**
 	 * TryGetData - Attempts to get the data for the profile from the database using the singleton
@@ -64,8 +65,6 @@ public partial class ProfilePage : ContentPage
 		Name.FontFamily = "Algerian";
         Bio.Text = singleton.ProfileBio;//sets profile bio
 		Bio.FontFamily = "Sedan";
-
-		await AddGroup();
 
 		//Need to add updating friends and groups !!!
     }

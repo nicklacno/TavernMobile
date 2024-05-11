@@ -1,4 +1,5 @@
 
+
 namespace Tavern;
 
 public partial class GroupPage : ContentPage
@@ -16,6 +17,8 @@ public partial class GroupPage : ContentPage
 		InitializeComponent();
 		GroupData = data;
 		UpdatePage();
+
+		GroupChat.Add(new GroupChatView(GroupData.GroupId));
 	}
 
 	/**
@@ -54,6 +57,29 @@ public partial class GroupPage : ContentPage
 				lb.Text = GroupData.Members[i];
 				layoutMembers.Add(lb);
 			}
+
+			ShowEditGroup();
 		}
+    }
+
+	/**
+	 * Show Exit Button - Shows the edit group button if it is the ownner of the group
+	 */
+	private void ShowEditGroup()
+	{
+		int id = ProfileSingleton.GetInstance().ProfileId;
+		if (id > 0 && id == GroupData.OwnerId)
+		{
+			Button btn = new Button();
+			btn.Text = "Edit Group";
+			btn.Clicked += PushGroupPage;
+
+			stackInfo.Insert(4, btn);
+		}
+	}
+
+    private async void PushGroupPage(object sender, EventArgs e)
+    {
+		//await Navigation.PushAsync();
     }
 }

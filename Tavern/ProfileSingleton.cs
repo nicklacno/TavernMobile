@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -21,7 +22,7 @@ namespace Tavern
         public string ProfileBio { get; set; }
 
         public List<string> Friends { get; set; }
-        public List<Group> Groups { get; set; }
+        public ObservableCollection<Group> Groups { get; set; }
         public List<string> BlockedUsers { get; set; }
 
         private readonly HttpClient _httpClient = new(); //creates client
@@ -95,7 +96,7 @@ namespace Tavern
                 return null;
             return await _httpClient.GetStringAsync($"Profile/{ProfileId}/Friends");
         }
-        
+
         public void InvokedUpdate()
         {
             Debug.WriteLine("Invoked Update");
@@ -142,7 +143,7 @@ namespace Tavern
          * GetGroupsList - Returns a list of group names using the stored id
          * @return - List of group names
          */
-        public async Task<List<Group>> GetGroupsList()
+        public async Task<ObservableCollection<Group>> GetGroupsList()
         {
             if (ProfileId < 0)
                 return null;
@@ -160,7 +161,7 @@ namespace Tavern
         {
             try
             {
-                List<Group> groups = new List<Group>();
+                ObservableCollection<Group> groups = new ObservableCollection<Group>();
 
                 if (json != null)
                 {
@@ -280,7 +281,7 @@ namespace Tavern
             {
                 var responses = await _httpClient.PostAsync("Profile/EditProfile", content);
                 int code = JsonSerializer.Deserialize<int>(responses.Content.ReadAsStringAsync().Result);
-                
+
                 return code;
             }
             catch (Exception ex)
@@ -295,11 +296,12 @@ namespace Tavern
             Dictionary<string, string> values = new Dictionary<string, string>()
             {
                 { "name", groupName },
-                { "ownerId", ProfileId.ToString()}
+                { "ownerId", ProfileId.ToString()},
+                { "bio", groupBio }
             };
 
             var json = JsonSerializer.Serialize(values);
-            var content = new StringContent(json, Encoding.UTF8 , "application/json");
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             try
             {
@@ -313,6 +315,86 @@ namespace Tavern
                 Debug.WriteLine(ex);
                 return -1;
             }
+        }
+
+        public async Task<ObservableCollection<MessageByDay>> GetMessages(int groupId, DateTime? timestamp = null)
+        {
+            Dictionary<string, string> value = new Dictionary<string, string>();
+            value["timestamp"] = timestamp == null ? null : timestamp.ToString();
+
+            var json = JsonSerializer.Serialize(value);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            try
+            {
+                var response = await _httpClient.PostAsync($"Groups/{groupId}/Chat", content);
+                string messages = response.Content.ReadAsStringAsync().Result;
+
+                return await ConvertToMessageList(messages);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
+        private async Task<ObservableCollection<MessageByDay>> ConvertToMessageList(string messages)
+        {
+            ObservableCollection<MessageByDay> messageList = new ObservableCollection<MessageByDay>();
+
+            MessageByDay? messageByDay = null;
+
+            if (!string.IsNullOrEmpty(messages))
+            {
+                JToken data = JToken.Parse(messages);
+                foreach (JObject messageData in  data.Children())
+                {
+                    var mData = messageData.ToObject<Dictionary<string, string>>();
+                    DateTime timestamp = Convert.ToDateTime(mData["timestamp"]).ToLocalTime();
+
+                    if (messageByDay == null)
+                    {
+                        messageByDay = new MessageByDay(timestamp.ToLongDateString(), new ObservableCollection<Message>());
+                    }
+                    else if (!messageByDay.DateSent.Equals(timestamp.ToLongDateString()))
+                    {
+                        messageList.Add(messageByDay);
+                        messageByDay = new MessageByDay(timestamp.ToLongDateString(), new ObservableCollection<Message>());
+                    }
+
+                    messageByDay.Add(new Message() { Sender = mData["sender"], Body= mData["message"], 
+                        TimeSent = timestamp.ToShortTimeString()});
+                }
+                if (messageByDay != null) messageList.Add(messageByDay);
+            }
+            return messageList;
+        }
+
+        public async Task<ObservableCollection<MessageByDay>> SendMessage(int groupId, string message)
+        {
+            DateTime now = DateTime.UtcNow;
+            
+            Dictionary<string, string> values = new Dictionary<string, string>()
+            {
+                { "senderId", ProfileId.ToString() },
+                { "message", message }
+            };
+
+            var json = JsonSerializer.Serialize(values);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            try
+            {
+                var response = await _httpClient.PostAsync($"Groups/{groupId}/SendMessage", content);
+                string status = response.Content.ReadAsStringAsync().Result;
+            }
+            catch (Exception ex) 
+            {
+                Debug.WriteLine(ex);
+                Debug.WriteLine("Message Failed to Send");
+            }
+            return await GetMessages(groupId, now);
         }
     }
 }

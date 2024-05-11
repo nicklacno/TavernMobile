@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using System.Diagnostics;
 
 namespace WebApi
 {
@@ -154,7 +155,16 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "INSERT INTO Groups (OwnerID, GroupName) VALUES (@Owner, @Name)";
+                        if (data.ContainsKey("bio") && data["bio"] != null) 
+                        {
+                            cmd.CommandText = "INSERT INTO Groups (OwnerID, GroupName, GroupBio) VALUES (@Owner, @Name, @Bio)";
+                            cmd.Parameters.AddWithValue("@Bio", data["bio"]);
+                        }
+                        else
+                        {
+                            cmd.CommandText = "INSERT INTO Groups (OwnerID, GroupName) VALUES (@Owner, @Name)";
+                        }
+                        
                         cmd.Parameters.AddWithValue("@Owner", Convert.ToInt32(data["ownerId"]));
                         cmd.Parameters.AddWithValue("@Name", data["name"]);
                         
@@ -339,18 +349,116 @@ namespace WebApi
         }
 
         /**
-* ModifyRequest - Modifies a request to join the group
-* @param requestId - The id for the given request
-* @param isAccepted - whether or not to accept or reject the request
-*/
+        * ModifyRequest - Modifies a request to join the group
+        * @param requestId - The id for the given request
+        * @param isAccepted - whether or not to accept or reject the request
+        */
         public static int ModifyRequest(int requestId, bool isAccepted)
         {
             throw new NotImplementedException();
         }
 
-        internal static int Chat(int id, Dictionary<string, string> data)
+        public static List<Dictionary<string,string>> Chat(int id, Dictionary<string, string> data)
         {
-            throw new NotImplementedException();
+            SetConnectionString();
+            List<Dictionary<string,string>> log = new List<Dictionary<string,string>>();
+
+            try
+            {
+                using(SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        string query = "SELECT UserName, Message, TimeStamp FROM Messages " +
+                            "JOIN Customers ON UserID = SenderID WHERE GroupChatID = @Group";
+                        if (data["timestamp"] != null)
+                        {
+                            query += " AND TimeStamp >= @TimeStamp";
+                            cmd.Parameters.AddWithValue("@TimeStamp", Convert.ToDateTime(data["timestamp"]));
+                        }
+                        query += " ORDER BY TimeStamp ASC";
+
+                        cmd.CommandText = query;
+                        cmd.Parameters.AddWithValue("@Group", id);
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            Dictionary<string, string> message = new Dictionary<string, string>()
+                            {
+                                {"sender", reader.GetString(0) },
+                                {"message", reader.GetString(1) }
+                            };
+                            
+                            message["timestamp"] = reader.IsDBNull(2) ? null : reader.GetDateTime(2).ToString();
+                            
+                            log.Add(message);
+                        }
+                    }
+                }
+                return log;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
+        public static int SendMessage(int id, Dictionary<string, string> data)
+        {
+            SetConnectionString();
+            if (!IsInGroup(id, Convert.ToInt32(data["senderId"]))) return -2;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using(SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "INSERT INTO Messages(GroupChatID, SenderID, Message, TimeStamp) " +
+                            "VALUES (@groupid, @userid, @message, @time );";
+                        cmd.Parameters.AddWithValue("@groupid", id);
+                        cmd.Parameters.AddWithValue("@userid", Convert.ToInt32(data["senderId"]));
+                        cmd.Parameters.AddWithValue("@message", data["message"]);
+                        cmd.Parameters.AddWithValue("@time", DateTime.UtcNow);
+
+                        cmd.ExecuteNonQuery();
+                        return 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+        private static bool IsInGroup(int group, int user)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT UserID FROM MemberGroup WHERE GroupID = @Group AND UserID = @User";
+                        cmd.Parameters.AddWithValue("@Group", group);
+                        cmd.Parameters.AddWithValue("@User", user);
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        if (reader.Read()) return true;
+                        else return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }
