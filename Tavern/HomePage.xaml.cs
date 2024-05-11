@@ -19,7 +19,16 @@ public partial class HomePage : ContentPage
 		//layoutGroup.Children.Clear();
 		foreach (Group group in singleton.Groups)
 		{
-			//layoutGroup.Children.Add(new GroupCard(group));
+			GroupCard groupCard = new GroupCard(group);
+			foreach (var child in groupCard.Children)
+			{
+				if (child is Label label)
+				{
+					label.FontFamily = "Sedan";
+				}
+			}
+			layoutGroup.Children.Add(groupCard);
+			//layoutGroup.Children.Add(new GroupCard(group))
 		}
 	}
 
