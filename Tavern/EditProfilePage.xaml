@@ -59,6 +59,7 @@
                 </CollectionView>
                 <Button
                     Text="Update Tags"
+                    Clicked="UpdateTags"
                     />
             </VerticalStackLayout>
             <Button

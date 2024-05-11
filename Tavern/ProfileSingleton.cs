@@ -20,6 +20,7 @@ namespace Tavern
 
         public List<string> Friends { get; set; }
         public ObservableCollection<Group> Groups { get; set; }
+        public ObservableCollection<Tag> Tags { get; set; }
         public List<string> BlockedUsers { get; set; }
 
         private readonly HttpClient _httpClient = new(); //creates client
@@ -47,10 +48,27 @@ namespace Tavern
                 ProfileName = (string)profile["name"]; //gets the name of the profile
                 ProfileBio = (string)profile["bio"]; //gets the bio for the profile
 
-                await this.GetGroupsList();
+                await GetGroupsList();
+                await GetTags();
             }
 
 
+        }
+
+        private async Task GetTags()
+        {
+            if (ProfileId < 0)
+                return;
+            try
+            {
+                string response = await _httpClient.GetStringAsync($"Profile/{ProfileId}/Tags");
+                Tags = ConvertToTagList(response);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                Tags = new ObservableCollection<Tag>();
+            }
         }
 
         /**
@@ -340,7 +358,7 @@ namespace Tavern
             if (!string.IsNullOrEmpty(messages))
             {
                 JToken data = JToken.Parse(messages);
-                foreach (JObject messageData in  data.Children())
+                foreach (JObject messageData in data.Children())
                 {
                     var mData = messageData.ToObject<Dictionary<string, string>>();
                     DateTime timestamp = Convert.ToDateTime(mData["timestamp"]).ToLocalTime();
@@ -355,8 +373,12 @@ namespace Tavern
                         messageByDay = new MessageByDay(timestamp.ToLongDateString(), new ObservableCollection<Message>());
                     }
 
-                    messageByDay.Add(new Message() { Sender = mData["sender"], Body= mData["message"], 
-                        TimeSent = timestamp.ToShortTimeString()});
+                    messageByDay.Add(new Message()
+                    {
+                        Sender = mData["sender"],
+                        Body = mData["message"],
+                        TimeSent = timestamp.ToShortTimeString()
+                    });
                 }
                 if (messageByDay != null) messageList.Add(messageByDay);
             }
@@ -366,7 +388,7 @@ namespace Tavern
         public async Task<int> SendMessage(int groupId, string message)
         {
             //DateTime now = DateTime.UtcNow;
-            
+
             Dictionary<string, string> values = new Dictionary<string, string>()
             {
                 { "senderId", ProfileId.ToString() },
@@ -382,7 +404,7 @@ namespace Tavern
                 int status = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
                 return status;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 Debug.WriteLine(ex);
                 Debug.WriteLine("Message Failed to Send");
@@ -427,7 +449,7 @@ namespace Tavern
             if (!string.IsNullOrEmpty(list))
             {
                 JToken data = JToken.Parse(list);
-                foreach(JObject tag in data.Children())
+                foreach (JObject tag in data.Children())
                 {
                     string name = (string)tag["tagName"];
                     int id = (int)tag["tagId"];
@@ -452,7 +474,7 @@ namespace Tavern
                 SetValues().RunSynchronously();
                 Thread.Sleep(2000);
             }
-            
+
         }
 
         public bool CanAccessGroup(int groupId)
@@ -466,6 +488,45 @@ namespace Tavern
                 }
             }
             return false;
+        }
+
+        public async Task<int> UpdateProfile(Dictionary<int, bool> tagUpdate)
+        {
+            var allTags = await GetPlayerTags();
+            try
+            {
+                foreach (var tag in allTags)
+                {
+                    Dictionary<string, int> values = new Dictionary<string, int>()
+                    {
+                        { "userId", ProfileId },
+                        { "tagId", tag.Id }
+                    };
+                    var json = JsonSerializer.Serialize(values);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+                    if (tagUpdate.ContainsKey(tag.Id) && tagUpdate[tag.Id])
+                    {
+                        var response = await _httpClient.PostAsync($"Profile/AddTag", content);
+                        int status = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
+                        if (status == -10) return -10;
+                        else if (status == -9) return -9;
+                    }
+                    else
+                    {
+                        var response = await _httpClient.PostAsync($"Profile/RemoveTag", content);
+                        int status = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
+                        if (status == -10) return -10;
+                        else if (status == -9) return -9;
+                    }
+                }
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+
         }
     }
 }

@@ -18,6 +18,7 @@ public partial class ProfilePage : ContentPage
 
 		ProfileSingleton singleton = ProfileSingleton.GetInstance();
 		groupList.ItemsSource = singleton.Groups;
+		tagList.ItemsSource = singleton.Tags;
 
 		Task.Run(BackgroundStuff);
 	}

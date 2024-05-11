@@ -7,7 +7,8 @@ namespace Tavern;
 public partial class EditProfilePage : ContentPage
 {
 	public ObservableCollection<Tag> tagsList { set; get; } = new ObservableCollection<Tag>();
-	public EditProfilePage()
+	
+    public EditProfilePage()
 	{
 		InitializeComponent();
 		PopulateEntryFields();
@@ -20,6 +21,7 @@ public partial class EditProfilePage : ContentPage
 		tagList.ItemsSource = tagsList;
 		entryUsername.Text = singleton.ProfileName;
 		entryBio.Text = singleton.ProfileBio;
+
 	}
 
 	public async void Update(object sender, EventArgs e)
@@ -59,4 +61,16 @@ public partial class EditProfilePage : ContentPage
         var popup = new ErrorPopup(message);
         this.ShowPopup(popup);
     }
+
+	public async void UpdateTags(object sender, EventArgs e)
+	{
+		var singleton = ProfileSingleton.GetInstance();
+		Dictionary<int, bool> updatedStatus = new Dictionary<int, bool>();
+		foreach (var tag in tagsList)
+		{
+			updatedStatus.Add(tag.Id, tagList.SelectedItems.Contains(tag));
+		}
+
+		await singleton.UpdateProfile(updatedStatus);
+	}
 }

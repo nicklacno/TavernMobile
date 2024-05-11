@@ -33,7 +33,7 @@ label
     padding: 10;
 }
 
-#FriendsList, #GroupList, #BlockedUsersList
+#FriendsList, #GroupList, #BlockedUsersList, #TagsList
 {
     border: 10;
     margin-top: 20;
