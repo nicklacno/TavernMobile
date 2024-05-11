@@ -1,20 +1,23 @@
 using CommunityToolkit.Maui.Views;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 namespace Tavern;
 
 public partial class EditProfilePage : ContentPage
 {
+	public ObservableCollection<Tag> tagsList { set; get; } = new ObservableCollection<Tag>();
 	public EditProfilePage()
 	{
 		InitializeComponent();
 		PopulateEntryFields();
-        //tagList.ItemsSource = ProfileSingleton.GetInstance().GetPlayerTags().Result;
 	}
 
-	public void PopulateEntryFields()
+	public async void PopulateEntryFields()
 	{
 		ProfileSingleton singleton = ProfileSingleton.GetInstance();
+		tagsList = await singleton.GetPlayerTags();
+		tagList.ItemsSource = tagsList;
 		entryUsername.Text = singleton.ProfileName;
 		entryBio.Text = singleton.ProfileBio;
 	}
@@ -42,6 +45,7 @@ public partial class EditProfilePage : ContentPage
 		{
 			singleton.ProfileName = entryUsername.Text;
 			singleton.ProfileBio = entryBio.Text;
+			entryPassword.Text = "";
 			//await Navigation.PopAsync();
 		}
 	}

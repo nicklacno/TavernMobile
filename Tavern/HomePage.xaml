@@ -34,9 +34,10 @@
                                     <Label x:Name="lbName" HorizontalTextAlignment="Center" HorizontalOptions="Center" Text="{Binding Name}"/>
                                     <Label x:Name="lbBio" MaxLines="2" Text="{Binding Bio}"/>
                                     <CollectionView ItemsSource="{Binding Tags}" 
-                                                    ItemsLayout="VerticalGrid 3" 
+                                                    ItemsLayout="VerticalGrid 2" 
                                                     MaximumHeightRequest="40" 
-                                                    MinimumHeightRequest="0">
+                                                    MinimumHeightRequest="0"
+                                                    HorizontalOptions="CenterAndExpand">
                                         <CollectionView.ItemTemplate>
                                             <DataTemplate>
                                                 <Label Text="{Binding Name}"/>

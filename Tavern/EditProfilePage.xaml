@@ -40,17 +40,22 @@
                 <Label
                     Text="Tags"
                     />
-                <CollectionView x:Name="tagList">
+                <CollectionView x:Name="tagList"
+                                HeightRequest="200"
+                                SelectionMode="Multiple"
+                                ItemsLayout="VerticalGrid 2"
+                                ItemsSource="{Binding tagList}"
+                                >
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <HorizontalStackLayout>
-                                <CheckBox x:Name="checkbox"/>
-                                <Label
-                                    Text="{Binding Name}"
-                                    />
-                            </HorizontalStackLayout>
+                            <Label Text="{Binding Name}"
+                                   HorizontalOptions="Center"
+                                   HorizontalTextAlignment="Center" />
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
+                    <CollectionView.EmptyView>
+                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center">No Tags Available</Label>
+                    </CollectionView.EmptyView>
                 </CollectionView>
                 <Button
                     Text="Update Tags"
