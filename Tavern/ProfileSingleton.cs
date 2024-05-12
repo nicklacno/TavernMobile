@@ -14,17 +14,21 @@ namespace Tavern
         public delegate void BasePageEvent(Page page);
         public BasePageEvent switchMainPage; //login successful delegate
 
-        public int ProfileId { get; set; }
+        public int ProfileId { get; private set; }
         public string ProfileName { get; set; }
         public string ProfileBio { get; set; }
 
         public List<string> Friends { get; set; }
-        public ObservableCollection<Group> Groups { get; set; }
-        public ObservableCollection<Tag> Tags { get; set; }
+        public ObservableCollection<Group> Groups { get; private set; }
+        public ObservableCollection<Tag> Tags { get; private set; } = new ObservableCollection<Tag>();
+
         public List<string> BlockedUsers { get; set; }
 
         private readonly HttpClient _httpClient = new(); //creates client
         private const string BASE_ADDRESS = "https://n588x7k6-5273.usw2.devtunnels.ms"; //base address for persistent dev-tunnel for api
+
+        private ObservableCollection<Tag> ProfileTags = null;
+        private ObservableCollection<Tag> GroupTags = null;
 
         /**
          * ProfileSingleton - private constructor to make the singleton
@@ -62,7 +66,24 @@ namespace Tavern
             try
             {
                 string response = await _httpClient.GetStringAsync($"Profile/{ProfileId}/Tags");
-                Tags = ConvertToTagList(response);
+                var curr = ConvertToTagList(response);
+
+                await GetProfileTags();
+                Tags.Clear();
+
+                Dictionary<int, string> dict = new Dictionary<int, string>();
+                foreach (var tag in curr)
+                {
+                    dict.Add(tag.Id, tag.Name);
+                }
+
+                foreach (var tag in ProfileTags)
+                {
+                    if (dict.ContainsKey(tag.Id) && dict[tag.Id].Equals(tag.Name))
+                    {
+                        Tags.Add(tag);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -78,10 +99,12 @@ namespace Tavern
          */
         public static ProfileSingleton GetInstance(int id = -1)
         {
+
             if (_instance == null) //if null, create singleton
             {
                 _instance = new ProfileSingleton(id);
             }
+
             return _instance;
         }
 
@@ -427,13 +450,17 @@ namespace Tavern
             switchMainPage.Invoke(new NavigationPage(new LoginPage()));
         }
 
-        public async Task<ObservableCollection<Tag>> GetPlayerTags()
+        public async Task<ObservableCollection<Tag>> GetProfileTags()
         {
+            if (ProfileTags != null) return ProfileTags;
+
             try
             {
                 var response = await _httpClient.GetAsync("Profile/Tags");
                 string list = response.Content.ReadAsStringAsync().Result;
-                return ConvertToTagList(list);
+                
+                ProfileTags = ConvertToTagList(list);
+                return ProfileTags;
             }
             catch (Exception ex)
             {
@@ -476,7 +503,7 @@ namespace Tavern
 
         public async Task<int> UpdateProfile(Dictionary<int, bool> tagUpdate)
         {
-            var allTags = await GetPlayerTags();
+            var allTags = await GetProfileTags();
             try
             {
                 foreach (var tag in allTags)

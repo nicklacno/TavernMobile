@@ -14,9 +14,11 @@ public partial class ProfilePage : ContentPage
 	public ProfilePage()
 	{
 		InitializeComponent();
-		UpdateProfile();
 
 		ProfileSingleton singleton = ProfileSingleton.GetInstance();
+
+		Name.Text = singleton.ProfileName;
+		Bio.Text = singleton.ProfileBio;
 		groupList.ItemsSource = singleton.Groups;
 		tagList.ItemsSource = singleton.Tags;
 
@@ -61,10 +63,10 @@ public partial class ProfilePage : ContentPage
 	/**
 	 * UpdateProfile - Method that updates changes to the profile
 	 */
-	public void UpdateProfile()
+	public async Task UpdateProfile()
 	{
         ProfileSingleton singleton = ProfileSingleton.GetInstance();
-		singleton.SetValues().RunSynchronously();
+		await singleton.SetValues();
         Name.Text = singleton.ProfileName;//sets profile name
         Bio.Text = singleton.ProfileBio;//sets profile bio
 
@@ -78,8 +80,8 @@ public partial class ProfilePage : ContentPage
 		ProfileSingleton singleton = ProfileSingleton.GetInstance();
 		while(singleton.isLoggedIn)
 		{
-			UpdateProfile();
-			Thread.Sleep(2000);
+			Thread.Sleep(5000);
+			await UpdateProfile();
 		}
 	}
 }

@@ -619,5 +619,10 @@ namespace WebApi
                 return -1;
             }
         }
+
+        public static int DeleteGroup(Dictionary<string, string> data)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

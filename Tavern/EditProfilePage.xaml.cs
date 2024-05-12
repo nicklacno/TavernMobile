@@ -17,11 +17,15 @@ public partial class EditProfilePage : ContentPage
 	public async void PopulateEntryFields()
 	{
 		ProfileSingleton singleton = ProfileSingleton.GetInstance();
-		tagsList = await singleton.GetPlayerTags();
+		tagsList = await singleton.GetProfileTags();
 		tagList.ItemsSource = tagsList;
 		entryUsername.Text = singleton.ProfileName;
 		entryBio.Text = singleton.ProfileBio;
 
+		foreach (Tag tag in singleton.Tags)
+		{
+			tagList.SelectedItems.Add(tag);
+		}
 	}
 
 	public async void Update(object sender, EventArgs e)
@@ -70,7 +74,7 @@ public partial class EditProfilePage : ContentPage
 		{
 			updatedStatus.Add(tag.Id, tagList.SelectedItems.Contains(tag));
 		}
-		tagList.SelectedItems.Clear();
+		//tagList.SelectedItems.Clear();
 		await singleton.UpdateProfile(updatedStatus);
 	}
 }

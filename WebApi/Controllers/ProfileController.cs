@@ -117,5 +117,11 @@ namespace WebApi.Controllers
         {
             return Profile.RemoveTag(data);
         }
+
+        [HttpPost("DeleteGroup")]
+        public int DeleteGroup(Dictionary<string,string> data)
+        {
+            return Profile.DeleteGroup(data);
+        }
     }
 }
