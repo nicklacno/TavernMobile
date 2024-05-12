@@ -39,7 +39,7 @@ namespace Tavern
             isLoggedIn = false; //sets the isLoggedIn to false, will change when retaining data
         }
 
-        private async Task SetValues()
+        public async Task SetValues()
         {
             string profileData = await GetProfileData();
             if (profileData != null)
@@ -137,7 +137,6 @@ namespace Tavern
                     ProfileId = id; //sets the id for the singleton
                     isLoggedIn = true; //sets the bool for logged in, later used for the remember me
                     await SetValues();
-                    StartBackgroundUpdates();
                 }
                 return isLoggedIn; //returns true if updated, else false
             }
@@ -460,21 +459,6 @@ namespace Tavern
 
 
             return tags;
-        }
-
-        public void StartBackgroundUpdates()
-        {
-            Task.Run(UpdateInBackground);
-        }
-
-        private async Task UpdateInBackground()
-        {
-            while (isLoggedIn)
-            {
-                SetValues().RunSynchronously();
-                Thread.Sleep(2000);
-            }
-
         }
 
         public bool CanAccessGroup(int groupId)

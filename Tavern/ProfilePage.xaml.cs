@@ -64,6 +64,7 @@ public partial class ProfilePage : ContentPage
 	public void UpdateProfile()
 	{
         ProfileSingleton singleton = ProfileSingleton.GetInstance();
+		singleton.SetValues().RunSynchronously();
         Name.Text = singleton.ProfileName;//sets profile name
         Bio.Text = singleton.ProfileBio;//sets profile bio
 
