@@ -70,7 +70,7 @@ public partial class EditProfilePage : ContentPage
 		{
 			updatedStatus.Add(tag.Id, tagList.SelectedItems.Contains(tag));
 		}
-
+		tagList.SelectedItems.Clear();
 		await singleton.UpdateProfile(updatedStatus);
 	}
 }

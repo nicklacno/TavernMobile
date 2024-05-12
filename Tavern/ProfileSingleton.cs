@@ -425,7 +425,7 @@ namespace Tavern
             Groups.Clear();
             Groups = null;
             Friends = null;
-            switchMainPage.Invoke(new LoginPage());
+            switchMainPage.Invoke(new NavigationPage(new LoginPage()));
         }
 
         public async Task<ObservableCollection<Tag>> GetPlayerTags()

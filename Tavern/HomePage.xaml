@@ -31,16 +31,19 @@
                             <Grid Padding="5">
                                 <Image Source="/Resources/Images/paper_login.png" Aspect="Fill"/>
                                 <VerticalStackLayout VerticalOptions="StartAndExpand" Padding="10" Spacing="10" HorizontalOptions="FillAndExpand">
-                                    <Label x:Name="lbName" HorizontalTextAlignment="Center" HorizontalOptions="Center" Text="{Binding Name}"/>
+                                    <Label x:Name="lbName" HorizontalTextAlignment="Center" HorizontalOptions="Center" 
+                                           Text="{Binding Name}" FontSize="25"/>
                                     <Label x:Name="lbBio" MaxLines="2" Text="{Binding Bio}"/>
                                     <CollectionView ItemsSource="{Binding Tags}" 
-                                                    ItemsLayout="VerticalGrid 2" 
+                                                    ItemsLayout="VerticalGrid, 2" 
                                                     MaximumHeightRequest="40" 
                                                     MinimumHeightRequest="0"
                                                     HorizontalOptions="CenterAndExpand">
                                         <CollectionView.ItemTemplate>
                                             <DataTemplate>
-                                                <Label Text="{Binding Name}"/>
+                                                <Grid>
+                                                    <Label Text="{Binding Name}"/>
+                                                </Grid>
                                             </DataTemplate>
                                         </CollectionView.ItemTemplate>
                                     </CollectionView>

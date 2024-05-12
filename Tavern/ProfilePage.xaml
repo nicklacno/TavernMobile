@@ -26,12 +26,14 @@
                 MaxLines="10"
                 />
             <Button x:Name="ProfileEdit" HorizontalOptions="End" Text="Edit Profile" Clicked="EditProfile"/>
-            <VerticalStackLayout x:Name="TagsList">
+            <VerticalStackLayout x:Name="TagsList" Padding="10, 0">
                 <Label HorizontalTextAlignment="Center">Tags</Label>
-                <CollectionView x:Name="tagList" ItemsLayout="VerticalGrid 2" MaximumHeightRequest="80" HorizontalOptions="CenterAndExpand">
+                <CollectionView x:Name="tagList" ItemsLayout="VerticalGrid, 2" MaximumHeightRequest="80" HorizontalOptions="CenterAndExpand">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Label Text="{Binding Name}"/>
+                            <Grid>
+                                <Label Text="{Binding Name}" HorizontalTextAlignment="Center"/>
+                            </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
@@ -42,7 +44,7 @@
                 <CollectionView x:Name="groupList" ItemsLayout="Vertical" MaximumHeightRequest="140" VerticalScrollBarVisibility="Always">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Label Text="{Binding Name}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center"/>
+                            <Label Text="{Binding Name}" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

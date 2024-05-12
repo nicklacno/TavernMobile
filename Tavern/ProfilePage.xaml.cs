@@ -68,6 +68,8 @@ public partial class ProfilePage : ContentPage
         Bio.Text = singleton.ProfileBio;//sets profile bio
 
 		//Need to add updating friends and groups !!!
+		groupList.ItemsSource = singleton.Groups;
+		tagList.ItemsSource = singleton.Tags;
     }
 
 	private async Task BackgroundStuff()
