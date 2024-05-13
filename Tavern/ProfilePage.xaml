@@ -47,6 +47,9 @@
                             <Label Text="{Binding Name}" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
+                    <CollectionView.EmptyView>
+                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center">You are apart of no groups</Label>
+                    </CollectionView.EmptyView>
                 </CollectionView>
             </VerticalStackLayout>
 

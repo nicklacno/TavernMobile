@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Tavern.EditGroupPage"
+             Title="Edit Group">
+    <ContentPage.Resources>
+        <StyleSheet Source="/Resources/Styles/PageStyles/EditProfilePage.css" />
+    </ContentPage.Resources>
+    <Grid>
+        <Image Source="/Resources/Images/paper_login.jpg" Aspect="AspectFill" />
+        <ScrollView>
+            <VerticalStackLayout>
+                <CollectionView x:Name="requestStack" SelectionMode="Multiple">
+                    <CollectionView.Header>
+                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="25">Requests (Select User(s) then Accept/Reject), </Label>
+                    </CollectionView.Header>
+                    <CollectionView.EmptyView>
+                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center">No message History</Label>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Label Text="{Binding ProfileName}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="20"/>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <CollectionView.Footer>
+                        <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
+                            <Button Text="Accept" WidthRequest="100" HorizontalOptions="Start"/>
+                            <Button Text="Decline" WidthRequest="100" HorizontalOptions="End"/>
+                        </HorizontalStackLayout>
+                    </CollectionView.Footer>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

@@ -22,4 +22,12 @@ namespace Tavern
         public int Id { set; get; }
         public string Name { set; get; }
     }
+
+    public class Request
+    {
+        public int RequestId { get; set; }
+        public int GroupId { get; set; }
+        public int ProfileId { get; set; }
+        public string? ProfileName { get; set; }
+    }
 }

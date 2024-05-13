@@ -614,5 +614,42 @@ namespace WebApi
                 return true;
             }
         }
+
+        public static List<Request> Requests(int id)
+        {
+            SetConnectionString();
+            try
+            {
+                List<Request> requests = new List<Request>();
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT RequestID, GroupID, c.UserID, UserName FROM GroupRequests r " +
+                            "JOIN Customers c ON r.UserID = c.UserID WHERE GroupID = @id";
+                        cmd.Parameters.AddWithValue("@id", id);
+                        
+                        var reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            requests.Add(new Request
+                            {
+                                RequestId = reader.GetInt32(0),
+                                GroupId = reader.GetInt32(1),
+                                ProfileId = reader.GetInt32(2),
+                                ProfileName = reader.GetString(3)
+                            });
+                        }
+                        return requests;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
     }
 }

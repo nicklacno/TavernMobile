@@ -458,7 +458,7 @@ namespace Tavern
             {
                 var response = await _httpClient.GetAsync("Profile/Tags");
                 string list = response.Content.ReadAsStringAsync().Result;
-                
+
                 ProfileTags = ConvertToTagList(list);
                 return ProfileTags;
             }
@@ -538,6 +538,41 @@ namespace Tavern
                 return -1;
             }
 
+        }
+
+        public async Task<ObservableCollection<Request>> GetGroupRequests(int id)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"Groups/{id}/Requests");
+                string stuff = response.Content.ReadAsStringAsync().Result;
+
+                return ConvertToGroupRequests(stuff);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
+        private ObservableCollection<Request> ConvertToGroupRequests(string json)
+        {
+            ObservableCollection<Request> requests = new ObservableCollection<Request>();
+            if (!string.IsNullOrEmpty(json))
+            {
+                JToken data = JToken.Parse(json);
+                foreach (JObject req in data)
+                {
+                    requests.Add(new Request
+                    {
+                        RequestId = (int)req["requestId"],
+                        GroupId = (int)req["groupId"],
+                        ProfileId = (int)req["profileId"],
+                        ProfileName = (string)req["profileName"]
+                    });
+                }
+            }
+            return requests;
         }
     }
 }

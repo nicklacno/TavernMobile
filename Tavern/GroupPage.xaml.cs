@@ -84,7 +84,7 @@ public partial class GroupPage : ContentPage
 
     private async void PushEditGroupPage(object sender, EventArgs e)
     {
-		//await Navigation.PushAsync();
+		await Navigation.PushAsync(new EditGroupPage(GroupData.GroupId));
     }
     protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
     {

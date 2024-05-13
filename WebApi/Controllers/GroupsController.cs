@@ -59,5 +59,11 @@ namespace WebApi.Controllers
         {
             return Group.RemoveTag(data);
         }
+
+        [HttpGet("{id}/Requests")]
+        public List<Request> GetRequests(int id)
+        {
+            return Group.Requests(id);
+        }
     }
 }
