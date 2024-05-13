@@ -12,30 +12,36 @@
             <Label 
                 x:Name="lbGroupName"
                 Text="Group Name"
+                FontFamily="Algerian"
+                FontSize="60"
                 HorizontalOptions="Center" 
                 HorizontalTextAlignment="Center"
                 />
             <Label
                 x:Name="lbGroupBio"
                 Text="Insert Group Bio Here"
+                FontFamily="Sedan"
+                FontSize="30"
                 HorizontalOptions="Center"
                 HorizontalTextAlignment="Start"
                 />
             <Label
                 x:Name="lbTagHead"
                 Text="Tags:"
+                FontFamily="Sedan"
                 FontSize="24"
                 />
             <FlexLayout 
                 x:Name="layoutTags" 
                 Wrap="Wrap"
                 JustifyContent="SpaceEvenly"
-                HorizontalOptions="Center"
+                VerticalOptions="Center"
                 />
             <VerticalStackLayout x:Name="layoutMembers">
                 <Label 
                     x:Name="lbMemberHead"
                     Text="Members: "
+                    FontFamily="Sedan"
                     FontSize="24"
                     />
             </VerticalStackLayout>
