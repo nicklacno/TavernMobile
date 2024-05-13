@@ -63,7 +63,7 @@ public partial class GroupPage : ContentPage
     }
 
 	/**
-	 * Show Edit Button - Shows the edit group button if it is the ownner of the group
+	 * Show Exit Button - Shows the edit group button if it is the ownner of the group
 	 */
 	private void ShowEditGroup()
 	{
