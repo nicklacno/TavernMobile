@@ -72,8 +72,6 @@ public partial class GroupPage : ContentPage
 		{
 			Button btn = new Button();
 			btn.Text = "Edit Group";
-			btn.FontFamily = "Sedan";
-			btn.FontSize = 35;
 			btn.Clicked += PushGroupPage;
 
 			stackInfo.Insert(4, btn);

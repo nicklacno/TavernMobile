@@ -20,24 +20,6 @@
                     Padding="10"
                     Spacing="10"
                     />-->
-                <Button
-    x:Name="btnSwipeNavigate"
-    Text="Find Groups"
-    FontFamily="Sedan"
-    TextColor="Black"
-    BackgroundColor="BurlyWood"
-    FontSize="30"
-    Clicked="NavigateToSwipe"
-/>
-                <Button
-    x:Name="btnCreateNavigate"
-    FontFamily="Sedan"
-    FontSize="30"
-    TextColor="Black"
-    BackgroundColor="BurlyWood"
-    Text="Create Group"
- Clicked="NavigateToCreate"
-/>
                 <CollectionView
                     x:Name="groupList"
                     ItemsLayout="VerticalGrid, 2"
@@ -49,9 +31,9 @@
                             <Grid Padding="5">
                                 <Image Source="/Resources/Images/paper_login.png" Aspect="Fill"/>
                                 <VerticalStackLayout VerticalOptions="StartAndExpand" Padding="10" Spacing="10" HorizontalOptions="FillAndExpand">
-                                    <Label x:Name="lbName" HorizontalTextAlignment="Center" HorizontalOptions="Center" FontFamily="Algerian" FontSize="25" Text="{Binding Name}"/>
-                                    <Label x:Name="lbBio" MaxLines="2" FontFamily="Sedan" FontSize="20" Text="{Binding Bio}"/>
-                                    <CollectionView ItemsSource="{Binding Tags}"
+                                    <Label x:Name="lbName" HorizontalTextAlignment="Center" HorizontalOptions="Center" Text="{Binding Name}"/>
+                                    <Label x:Name="lbBio" MaxLines="2" Text="{Binding Bio}"/>
+                                    <CollectionView ItemsSource="{Binding Tags}" 
                                                     ItemsLayout="VerticalGrid 3" 
                                                     MaximumHeightRequest="40" 
                                                     MinimumHeightRequest="0">
@@ -61,7 +43,7 @@
                                             </DataTemplate>
                                         </CollectionView.ItemTemplate>
                                     </CollectionView>
-                                    <Label x:Name="lbMembers" HorizontalOptions="Center" FontFamily="Sedan" FontSize="20" HorizontalTextAlignment="Center" 
+                                    <Label x:Name="lbMembers" HorizontalOptions="Center" HorizontalTextAlignment="Center" 
                                         Text="{Binding Members.Count, StringFormat='Members: {0:D}'}"/>
                                     <!--<Button 
                                         x:Name="btnViewGroup"
@@ -75,7 +57,24 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                
+                <Button
+                    x:Name="btnSwipeNavigate"
+                    Text="Find Groups"
+                    FontFamily="Sedan"
+                    TextColor="Black"
+                    BackgroundColor="BurlyWood"
+                    FontSize="30"
+                    Clicked="NavigateToSwipe"
+                />
+                <Button
+                    x:Name="btnCreateNavigate"
+                    FontFamily="Sedan"
+                    FontSize="30"
+                    TextColor="Black"
+                    BackgroundColor="BurlyWood"
+                    Text="Create Group"
+                 Clicked="NavigateToCreate"
+                />
                 <VerticalStackLayout 
                     x:Name="layoutGroup"
                     HorizontalOptions="Fill" 
