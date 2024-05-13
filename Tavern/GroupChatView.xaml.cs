@@ -22,7 +22,7 @@ public partial class GroupChatView : ContentView
     {
         InitializeComponent();
         this.groupId = groupId;
-        latestRetrieval= DateTime.UtcNow;
+        latestRetrieval = DateTime.UtcNow;
         isRetrievingMessages = true;
         AddMessages(groupId);
         parentPage = parent;
@@ -33,8 +33,9 @@ public partial class GroupChatView : ContentView
     private async Task AddMessages(int groupId)
     {
         Messages = await ProfileSingleton.GetInstance().GetMessages(groupId);
+        if (Messages == null) Messages = new ObservableCollection<MessageByDay>();
         totalMessages = Messages.Count;
-        foreach(var message in Messages)
+        foreach (var message in Messages)
         {
             totalMessages += message.Count;
         }
@@ -57,29 +58,25 @@ public partial class GroupChatView : ContentView
 
     public async Task RetrieveNewMessages()
     {
-        while (isRetrievingMessages)
+        var newMessages = await ProfileSingleton.GetInstance().GetMessages(groupId, latestRetrieval);
+        latestRetrieval = DateTime.UtcNow;
+        if (newMessages != null && newMessages.Count > 0)
         {
-            var newMessages = await ProfileSingleton.GetInstance().GetMessages(groupId, latestRetrieval);
-            latestRetrieval = DateTime.UtcNow;
-            if (newMessages != null && newMessages.Count > 0)
+            if (Messages.Count > 0 && newMessages.First().DateSent == Messages.Last().DateSent)
             {
-                if (newMessages.First().DateSent == Messages.Last().DateSent)
+                foreach (var message in newMessages.First())
                 {
-                    foreach (var message in newMessages.First())
-                    {
-                        Messages.Last().Add(message);
-                        totalMessages++;
-                    }
-                    newMessages.RemoveAt(0);
+                    Messages.Last().Add(message);
+                    totalMessages++;
                 }
-                foreach (var message in newMessages)
-                {
-                    totalMessages += message.Count;
-                    Messages.Add(message);
-                }
-                messageBox.ScrollTo(totalMessages);
+                newMessages.RemoveAt(0);
             }
-            Thread.Sleep(3000);
+            foreach (var message in newMessages)
+            {
+                totalMessages += message.Count;
+                Messages.Add(message);
+            }
+            messageBox.ScrollTo(totalMessages);
         }
     }
 

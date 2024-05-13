@@ -24,7 +24,7 @@
                     </CollectionView.ItemTemplate>
                     <CollectionView.Footer>
                         <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
-                            <Button Text="Accept" WidthRequest="200" HorizontalOptions="Start"/>
+                            <Button Text="Accept" WidthRequest="200" HorizontalOptions="Start" Clicked="AcceptUsers"/>
                             <Button Text="Decline" WidthRequest="200" HorizontalOptions="End"/>
                         </HorizontalStackLayout>
                     </CollectionView.Footer>

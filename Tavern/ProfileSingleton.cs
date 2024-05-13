@@ -574,5 +574,69 @@ namespace Tavern
             }
             return requests;
         }
+
+        public async Task<int> AcceptMembers(IList<object> selectedItems)
+        {
+            foreach (object user in selectedItems)
+            {
+                if (user is Request r)
+                {
+                    Dictionary<string, int> values = new Dictionary<string, int>()
+                    {
+                        { "requestId", r.RequestId },
+                        { "isAccepted", 1 }
+                    };
+
+                    var json = JsonSerializer.Serialize(values);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    try
+                    {
+                        var response = await _httpClient.PostAsync("/Groups/ModifyRequest", content);
+                        int status = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
+
+                        if (status != 0) return selectedItems.IndexOf(user) + 1;
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex);
+                        return -1;
+                    }
+                }
+            }
+            return 0;
+        }
+
+        public async Task<int> RejectMembers(IList<object> selectedItems)
+        {
+            foreach (object user in selectedItems)
+            {
+                if (user is Request r)
+                {
+                    Dictionary<string, int> values = new Dictionary<string, int>()
+                    {
+                        { "requestId", r.RequestId },
+                        { "isAccepted", 0 }
+                    };
+
+                    var json = JsonSerializer.Serialize(values);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    try
+                    {
+                        var response = await _httpClient.PostAsync("/Groups/ModifyRequest", content);
+                        int status = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
+
+                        if (status != 0) return selectedItems.IndexOf(user) + 1;
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex);
+                        return -1;
+                    }
+                }
+            }
+            return 0;
+        }
     }
 }
