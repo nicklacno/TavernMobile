@@ -355,7 +355,80 @@ namespace WebApi
         */
         public static int ModifyRequest(int requestId, bool isAccepted)
         {
-            throw new NotImplementedException();
+            SetConnectionString();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using(SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT GroupID, UserID FROM GroupRequests WHERE RequestID = @req";
+                        cmd.Parameters.AddWithValue("@req", requestId);
+
+                        var reader = cmd.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            DeleteFromTable(reader.GetInt32(0), reader.GetInt32(1));
+                            return ProcessModification(reader.GetInt32(0), reader.GetInt32(1), isAccepted);
+                        }
+                        return -1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+        private static void DeleteFromTable(int groupId, int userId)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "DELETE FROM GroupRequests WHERE GroupID = @group AND UserID = @user";
+                        cmd.Parameters.AddWithValue("@group", groupId);
+                        cmd.Parameters.AddWithValue("@user", userId);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+        }
+
+        private static int ProcessModification(int groupId, int userId, bool isAccepted)
+        {
+            if (!isAccepted) return 0;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using(SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "INSERT INTO MemberGroup (GroupID, UserID) VALUES (@group, @user);";
+                        cmd.Parameters.AddWithValue("@group", groupId);
+                        cmd.Parameters.AddWithValue("@user", userId);
+
+                        cmd.ExecuteNonQuery ();
+                        return 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
         }
 
         public static List<Dictionary<string, string>> Chat(int id, Dictionary<string, string> data)

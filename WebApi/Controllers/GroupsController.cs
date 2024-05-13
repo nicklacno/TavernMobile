@@ -65,5 +65,12 @@ namespace WebApi.Controllers
         {
             return Group.Requests(id);
         }
+
+        [HttpPost("ModifyRequest")]
+        public int PostModifyRequest(Dictionary<string, int> data)
+        {
+            if (!data.ContainsKey("requestId") || !data.ContainsKey("isAccepted")) return -1;
+            return Group.ModifyRequest(data["requestId"], data["isAccepted"] != 0);
+        }
     }
 }
