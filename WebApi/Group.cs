@@ -512,6 +512,45 @@ namespace WebApi
                 return -1;
             }
         }
+        public static List<Group> GetRandomGroupsForUser(int userId)
+        {
+            SetConnectionString();
+            List<Group> randomGroups = new List<Group>();
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT TOP 100 GroupID FROM Groups g " +
+                                          "WHERE (SELECT COUNT(GroupID) FROM MemberGroup " +
+                                          "WHERE GroupID = g.GroupID " +
+                                          "AND UserID = @UserID) = 0 " +
+                                          "ORDER BY NEWID()";
+                        cmd.Parameters.AddWithValue("@UserID", userId);
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            Group? group = GetGroup(reader.GetInt32(0));
+                            if (group != null)
+                            {
+                                randomGroups.Add(group);
+                            }
+                        }
+                    }
+                }
+                return randomGroups;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
 
         private static bool IsInGroup(int group, int user)
         {

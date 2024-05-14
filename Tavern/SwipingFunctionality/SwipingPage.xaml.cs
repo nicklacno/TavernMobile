@@ -6,7 +6,6 @@ namespace Tavern.SwipingFunctionality;
 
 public partial class SwipingPage : ContentPage
 {
-	private Queue<Group> groups = new Queue<Group>(10);
     string connectionString = null;
 	
 
@@ -23,28 +22,27 @@ public partial class SwipingPage : ContentPage
 	 */
     private void ShowNextGroup()
 	{
-		if (groups.Count > 0)
+		if (SwipingSingleton.Groups.Count > 0)
 		{
 			GridGroup.Children.Clear();
-			GridGroup.Children.Add(new SwipingView(groups.Dequeue()));
+			GridGroup.Children.Add(new SwipingView(SwipingSingleton.Groups.Dequeue()));
 		}
 		else
 		{
 			Navigation.PopAsync();
 		}	
 	}
-    
+
 
     /**
 	 * PopulateGroupQueue - Helper function that populates the queue
 	 */
     private async void PopulateGroupQueue()
-	{
-		ProfileSingleton singleton = ProfileSingleton.GetInstance();
-		groups.Enqueue(await singleton.GetGroup(2));
-		groups.Enqueue(await singleton.GetGroup(3));
-		groups.Enqueue(await singleton.GetGroup(4));
+    {
+		SwipingSingleton swipingSingleton = SwipingSingleton.GetInstance();
+        await swipingSingleton.PopulateGroups();  
+        ShowNextGroup();
+    }
 
-		ShowNextGroup();
-	}
+
 }

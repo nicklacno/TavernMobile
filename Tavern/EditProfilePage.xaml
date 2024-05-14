@@ -10,14 +10,14 @@
         <Image Source="/Resources/Images/paper_login.jpg" Aspect="AspectFill" />
         <VerticalStackLayout>
             <VerticalStackLayout x:Name="stackUsername">
-                <Label>Username</Label>
+                <Label FontFamily="Sedan">Username </Label>
                 <Entry
                     x:Name="entryUsername"
                     MaxLength="20"
                     />
             </VerticalStackLayout>
             <VerticalStackLayout x:Name="stackBio">
-                <Label>Bio</Label>
+                <Label FontFamily="Sedan">Bio</Label>
                 <Editor
                     x:Name="entryBio"
                     MaxLength="300"
