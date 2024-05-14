@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Text;
 using JsonSerializer = System.Text.Json.JsonSerializer;
+using System.Collections.ObjectModel;
 
 namespace Tavern.SwipingFunctionality
 {
@@ -29,6 +30,16 @@ namespace Tavern.SwipingFunctionality
             _instance = new SwipingSingleton();
             return _instance;
         }
+        public async Task PopulateGroups()
+        {
+            ProfileSingleton instance = ProfileSingleton.GetInstance();
+            string userID = instance.ProfileId.ToString();
+            var json = JsonSerializer.Serialize(userID);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync("Groups/PopulateGroups", content);
+            return;
+        }
+        
         public async Task SwipeRight(Group likedGroup)
         {
             ProfileSingleton singleton = ProfileSingleton.GetInstance();

@@ -33,18 +33,17 @@ public partial class SwipingPage : ContentPage
 			Navigation.PopAsync();
 		}	
 	}
-    
+
 
     /**
 	 * PopulateGroupQueue - Helper function that populates the queue
 	 */
     private async void PopulateGroupQueue()
-	{
-		ProfileSingleton singleton = ProfileSingleton.GetInstance();
-		groups.Enqueue(await singleton.GetGroup(2));
-		groups.Enqueue(await singleton.GetGroup(3));
-		groups.Enqueue(await singleton.GetGroup(4));
+    {
+		SwipingSingleton swipingSingleton = SwipingSingleton.GetInstance();
+        await swipingSingleton.PopulateGroups();  
+        ShowNextGroup();
+    }
 
-		ShowNextGroup();
-	}
+
 }
