@@ -27,19 +27,60 @@ namespace Tavern.SwipingFunctionality
         }
         public static SwipingSingleton GetInstance()
         {
-            _instance = new SwipingSingleton();
+            if (_instance == null)
+            {
+                _instance = new SwipingSingleton();
+            }
             return _instance;
         }
         public async Task PopulateGroups()
         {
             ProfileSingleton instance = ProfileSingleton.GetInstance();
-            string userID = instance.ProfileId.ToString();
-            var json = JsonSerializer.Serialize(userID);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("Groups/PopulateGroups", content);
+
+            string groups = await _httpClient.GetStringAsync($"Groups/{instance.ProfileId}/PopulateGroups");
+            
+            Groups = ConvertToGroupList(groups);
             return;
         }
-        
+
+        private Queue<Group> ConvertToGroupList(string json)
+        {
+            try
+            {
+                Queue<Group> groups = new Queue<Group>();
+
+                if (json != null)
+                {
+                    JToken data = JToken.Parse(json);
+                    foreach (JObject groupData in data.Children())
+                    {
+                        groups.Enqueue(ConvertToGroup(groupData));
+                    }
+                }
+                return groups;
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
+        private Group ConvertToGroup(JObject data)
+        {
+            int id = (int)data["groupId"];
+            Group group = new Group(id);
+
+            group.Name = (string)data["name"];
+            group.Bio = (string)data["bio"];
+            group.OwnerId = (int)data["ownerId"];
+            group.Members = data["members"].Values<string>().ToList();
+            group.Tags = data["tags"].Values<string>().ToList();
+
+            return group;
+        }
+
         public async Task SwipeRight(Group likedGroup)
         {
             ProfileSingleton singleton = ProfileSingleton.GetInstance();

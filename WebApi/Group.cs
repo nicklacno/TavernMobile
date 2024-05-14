@@ -447,7 +447,7 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "SELECT TOP 10 GroupID, GroupName, GroupBio FROM Groups g " +
+                        cmd.CommandText = "SELECT TOP 10 GroupID FROM Groups g " +
                                           "WHERE (SELECT COUNT(GroupID) FROM MemberGroup " +
                                           "WHERE GroupID = g.GroupID " +
                                           "AND UserID = @UserID) = 0 " +
@@ -457,13 +457,11 @@ namespace WebApi
                         SqlDataReader reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
-                            Group group = new Group
+                            Group? group = GetGroup(reader.GetInt32(0));
+                            if (group != null)
                             {
-                                GroupId = reader.GetInt32(0),
-                                Name = reader.GetString(1),
-                                Bio = reader.IsDBNull(2) ? null : reader.GetString(2)
-                            };
-                            randomGroups.Add(group);
+                                randomGroups.Add(group);
+                            }
                         }
                     }
                 }

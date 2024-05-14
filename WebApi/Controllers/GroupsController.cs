@@ -36,10 +36,9 @@ namespace WebApi.Controllers
             string userID = data["userId"];
             return Group.JoinRequest(groupID, userID);
         }
-        [HttpPost("PopulateGroups")]
-        public List<Group> PopulateGroups(string userID)
+        [HttpGet("{UserID}/PopulateGroups")]
+        public List<Group> PopulateGroups(int UserID)
         {
-            int.TryParse(userID, out int UserID);
             return Group.GetRandomGroupsForUser(UserID);
         }
 
