@@ -25,7 +25,7 @@ namespace Tavern
         public List<string> BlockedUsers { get; set; }
 
         private readonly HttpClient _httpClient = new(); //creates client
-        private const string BASE_ADDRESS = "https://n588x7k6-5273.usw2.devtunnels.ms"; //base address for persistent dev-tunnel for api
+        private const string BASE_ADDRESS = "https://cxbg938k-7111.usw2.devtunnels.ms/"; //base address for persistent dev-tunnel for api
 
         private ObservableCollection<Tag> ProfileTags = null;
         private ObservableCollection<Tag> GroupTags = null;

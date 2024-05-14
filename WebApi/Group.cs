@@ -256,7 +256,7 @@ namespace WebApi
          * @param groupId - the id of the group to join
          * @param userId - the id of the user that wishes to join
          */
-        public static void JoinRequest(int groupId, int userId)
+        public static int JoinRequest(string groupId, string userId)
         {
             SetConnectionString();
             try
@@ -273,9 +273,11 @@ namespace WebApi
                         cmd.ExecuteNonQuery();
                     }
                 }
+                return 1;
             }
             catch (Exception ex)
             {
+                return 0;
                 Console.WriteLine(ex.Message);
             }
         }

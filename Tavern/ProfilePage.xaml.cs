@@ -68,7 +68,9 @@ public partial class ProfilePage : ContentPage
         ProfileSingleton singleton = ProfileSingleton.GetInstance();
 		await singleton.SetValues();
         Name.Text = singleton.ProfileName;//sets profile name
+		Name.FontFamily = "Algerian";
         Bio.Text = singleton.ProfileBio;//sets profile bio
+		Bio.FontFamily = "Sedan";
 
 		//Need to add updating friends and groups !!!
 		groupList.ItemsSource = singleton.Groups;
@@ -83,5 +85,6 @@ public partial class ProfilePage : ContentPage
 			Thread.Sleep(5000);
 			await UpdateProfile();
 		}
+
 	}
 }

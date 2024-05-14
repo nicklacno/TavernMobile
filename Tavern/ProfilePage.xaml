@@ -11,17 +11,17 @@
     <Grid Padding="15">
         <Image Source="/Resources/Images/paper_login.jpg" Aspect="AspectFill" />
         <VerticalStackLayout VerticalOptions="Start">
+            <Button x:Name="ProfileEdit" HorizontalOptions="End" Text="Edit Profile" Clicked="EditProfile"/>
             <Label 
                 x:Name="Name"
                 Text=""
                 VerticalOptions="Center" 
                 HorizontalOptions="Fill" 
-                HorizontalTextAlignment="Center"
                 />
             <Label
                 x:Name="Bio"
                 Text=""
-                VerticalOptions="Center"
+                FontSize="25"
                 HorizontalOptions="Fill" 
                 MaxLines="10"
                 />
@@ -38,8 +38,11 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </VerticalStackLayout>
+
             <VerticalStackLayout x:Name="GroupList">
-                <Label HorizontalTextAlignment="Center">Groups</Label>
+                <Label
+                       Text="Groups"
+                       FontFamily="Sedan"></Label>
                 <Rectangle HorizontalOptions="Fill" HeightRequest="4" Opacity="0"/>
                 <CollectionView x:Name="groupList" ItemsLayout="Vertical" MaximumHeightRequest="140" VerticalScrollBarVisibility="Always">
                     <CollectionView.ItemTemplate>
@@ -54,7 +57,9 @@
             </VerticalStackLayout>
 
             <VerticalStackLayout x:Name="FriendsList">
-                <Label HorizontalTextAlignment="Center">Friends</Label>
+                <Label
+                       Text="Friends"
+                       FontFamily="Sedan"></Label>
                 <Rectangle HorizontalOptions="Fill" HeightRequest="4" Opacity="0"/>
             </VerticalStackLayout>
 

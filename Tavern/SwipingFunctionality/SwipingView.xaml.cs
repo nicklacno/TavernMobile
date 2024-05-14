@@ -12,47 +12,56 @@ public partial class SwipingView : SwipeView
 		PopulateData(group);
 	}
 
-	/**
+    /**
 	 * OnJoinGroup - sends request to join group in database
 	 */
-	async void OnJoinGroup(object sender, EventArgs e)
-	{
-		Debug.WriteLine("Join");
-		SwipingSingleton.RequestGroup.Invoke();
-	}
-	
-	/**
+    public async void OnJoinGroup(object sender, EventArgs e)
+    {
+        await SwipingSingleton.GetInstance().SwipeRight(groupData);
+        SwipingSingleton.RequestGroup.Invoke();
+    }
+
+    /**
 	 * OnSkipGroup - sends request to app to move to the next group in the list
 	 */
-	async void OnSkipGroup(object sender, EventArgs e)
+    public async void OnSkipGroup(object sender, EventArgs e)
 	{
 		Debug.WriteLine("Skip");
 		SwipingSingleton.SkipGroup.Invoke();
 	}
 
-	void PopulateData(Group group)
-	{
-		groupData = group;
-		if (groupData != null)
-		{
-			lbName.Text = groupData.Name;
-			lbBio.Text = groupData.Bio;
-			lbMembers.Text = "Members: " + groupData.Members.Count;
 
-			foreach (Tag tag in groupData.Tags)
-			{
-				Label lb = new Label();
-				lb.Text = tag.Name;
-				hStackTag.Children.Add(lb);
-			}
+    void PopulateData(Group group)
+    {
+        groupData = group;
+        if (groupData != null)
+        {
+            lbName.Text = groupData.Name;
+            lbName.FontFamily = "Algerian";
+            lbName.FontAttributes = FontAttributes.Bold;
+            lbBio.Text = groupData.Bio;
+            lbBio.FontFamily = "Sedan";
+            lbMembers.Text = "Members: " + groupData.Members.Count;
+            lbMembers.FontFamily = "Sedan";
+            lbMembers.FontAttributes = FontAttributes.Bold;
 
-			if (hStackTag.Children.Count == 0)
-			{
-				Label lb = new Label();
-				lb.Text = "None";
-				hStackTag.Children.Add(lb);
-			}
-		}
-		
-	}
+            foreach (string tag in groupData.Tags)
+            {
+                Label lb = new Label();
+                lb.Text = tag;
+                lb.FontFamily = "Sedan";
+                lb.FontSize = 25;
+                hStackTag.Children.Add(lb);
+            }
+
+            if (hStackTag.Children.Count == 0)
+            {
+                Label lb = new Label();
+                lb.Text = "None";
+                lb.FontSize = 20;
+                lb.FontFamily = "Sedan";
+                hStackTag.Children.Add(lb);
+            }
+        }
+    }
 }
