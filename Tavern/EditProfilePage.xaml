@@ -36,6 +36,37 @@
                     Clicked="Update"
                     />
             </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Label
+                    Text="Tags"
+                    />
+                <CollectionView x:Name="tagList"
+                                HeightRequest="200"
+                                SelectionMode="Multiple"
+                                ItemsLayout="VerticalGrid 2"
+                                ItemsSource="{Binding tagList}"
+                                >
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Label Text="{Binding Name}"
+                                   HorizontalOptions="Center"
+                                   HorizontalTextAlignment="Center" />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <CollectionView.EmptyView>
+                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center">No Tags Available</Label>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+                <Button
+                    Text="Update Tags"
+                    Clicked="UpdateTags"
+                    />
+            </VerticalStackLayout>
+            <Button
+                x:Name="btnLogOut"
+                Text="Log Out"
+                Clicked="Logout"
+                />
         </VerticalStackLayout>
     </Grid>
    

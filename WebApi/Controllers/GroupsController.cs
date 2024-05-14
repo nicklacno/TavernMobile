@@ -48,5 +48,36 @@ namespace WebApi.Controllers
         {
             return Group.SendMessage(id, data);
         }
+
+        [HttpGet("Tags")]
+        public List<Tag> GetTags()
+        {
+            return Group.GetTags();
+        }
+
+        [HttpPost("AddTag")]
+        public int PostAddTag(Dictionary<string, int> data)
+        {
+            return Group.AddTag(data);
+        }
+
+        [HttpPost("RemoveTag")]
+        public int PostRemoveTag(Dictionary<string, int> data)
+        {
+            return Group.RemoveTag(data);
+        }
+
+        [HttpGet("{id}/Requests")]
+        public List<Request> GetRequests(int id)
+        {
+            return Group.Requests(id);
+        }
+
+        [HttpPost("ModifyRequest")]
+        public int PostModifyRequest(Dictionary<string, int> data)
+        {
+            if (!data.ContainsKey("requestId") || !data.ContainsKey("isAccepted")) return -1;
+            return Group.ModifyRequest(data["requestId"], data["isAccepted"] != 0);
+        }
     }
 }

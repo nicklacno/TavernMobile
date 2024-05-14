@@ -7,6 +7,9 @@ public partial class GroupChatView : ContentView
 {
     public int groupId;
     public int totalMessages;
+    public DateTime latestRetrieval;
+    public bool isRetrievingMessages;
+    private GroupPage parentPage;
 
     public ObservableCollection<MessageByDay> Messages { get; set; } = new ObservableCollection<MessageByDay>();
 
@@ -15,18 +18,24 @@ public partial class GroupChatView : ContentView
         InitializeComponent();
     }
 
-    public GroupChatView(int groupId)
+    public GroupChatView(int groupId, GroupPage parent)
     {
         InitializeComponent();
         this.groupId = groupId;
+        latestRetrieval = DateTime.UtcNow;
+        isRetrievingMessages = true;
         AddMessages(groupId);
+        parentPage = parent;
+
+        Task.Run(RetrieveNewMessages);
     }
 
     private async Task AddMessages(int groupId)
     {
         Messages = await ProfileSingleton.GetInstance().GetMessages(groupId);
+        if (Messages == null) Messages = new ObservableCollection<MessageByDay>();
         totalMessages = Messages.Count;
-        foreach(var message in Messages)
+        foreach (var message in Messages)
         {
             totalMessages += message.Count;
         }
@@ -38,29 +47,37 @@ public partial class GroupChatView : ContentView
     {
         if (!string.IsNullOrEmpty(txtMessage.Text))
         {
-            var messages = await ProfileSingleton.GetInstance().SendMessage(groupId, txtMessage.Text);
-            if (messages != null)
+            int i = await ProfileSingleton.GetInstance().SendMessage(groupId, txtMessage.Text);
+            if (i < 0)
             {
-                if (messages.Count > 0)
-                {
-                    if (messages.First().DateSent.Equals(Messages.Last().DateSent))
-                    {
-                        foreach(var message in messages.First())
-                        {
-                            Messages.Last().Add(message);
-                            totalMessages++;
-                        }
-                        messages.RemoveAt(0);
-                    }
-                    foreach(var message in messages)
-                    {
-                        Messages.Add(message);
-                        totalMessages += message.Count;
-                    }
-                }
-                messageBox.ScrollTo(totalMessages);
+                parentPage.ShowErrorMessage("Failed to send Message");
             }
             txtMessage.Text = "";
         }
     }
+
+    public async Task RetrieveNewMessages()
+    {
+        var newMessages = await ProfileSingleton.GetInstance().GetMessages(groupId, latestRetrieval);
+        latestRetrieval = DateTime.UtcNow;
+        if (newMessages != null && newMessages.Count > 0)
+        {
+            if (Messages.Count > 0 && newMessages.First().DateSent == Messages.Last().DateSent)
+            {
+                foreach (var message in newMessages.First())
+                {
+                    Messages.Last().Add(message);
+                    totalMessages++;
+                }
+                newMessages.RemoveAt(0);
+            }
+            foreach (var message in newMessages)
+            {
+                totalMessages += message.Count;
+                Messages.Add(message);
+            }
+            messageBox.ScrollTo(totalMessages);
+        }
+    }
+
 }

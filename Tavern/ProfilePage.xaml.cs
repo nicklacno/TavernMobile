@@ -14,10 +14,15 @@ public partial class ProfilePage : ContentPage
 	public ProfilePage()
 	{
 		InitializeComponent();
-		UpdateProfile();
 
-		ProfileSingleton.GetInstance().updateProfile += UpdateProfile; //adds to delegate
-		groupList.ItemsSource = ProfileSingleton.GetInstance().Groups;
+		ProfileSingleton singleton = ProfileSingleton.GetInstance();
+
+		Name.Text = singleton.ProfileName;
+		Bio.Text = singleton.ProfileBio;
+		groupList.ItemsSource = singleton.Groups;
+		tagList.ItemsSource = singleton.Tags;
+
+		Task.Run(BackgroundStuff);
 	}
 	/**
 	 * TryGetData - Attempts to get the data for the profile from the database using the singleton
@@ -58,46 +63,28 @@ public partial class ProfilePage : ContentPage
 	/**
 	 * UpdateProfile - Method that updates changes to the profile
 	 */
-	public async void UpdateProfile()
+	public async Task UpdateProfile()
 	{
         ProfileSingleton singleton = ProfileSingleton.GetInstance();
+		await singleton.SetValues();
         Name.Text = singleton.ProfileName;//sets profile name
 		Name.FontFamily = "Algerian";
         Bio.Text = singleton.ProfileBio;//sets profile bio
 		Bio.FontFamily = "Sedan";
 
 		//Need to add updating friends and groups !!!
+		groupList.ItemsSource = singleton.Groups;
+		tagList.ItemsSource = singleton.Tags;
     }
 
-	public async Task AddGroup()
+	private async Task BackgroundStuff()
 	{
-		GroupList.Children.Clear();
-		AddHeader("Groups", GroupList);
 		ProfileSingleton singleton = ProfileSingleton.GetInstance();
-
-		foreach (Group group in singleton.Groups)
+		while(singleton.isLoggedIn)
 		{
-			Label label = new Label();
-			label.Text = group.Name;
-			label.FontFamily = "Sedan";
-
-			GroupList.Children.Add(label);
+			Thread.Sleep(5000);
+			await UpdateProfile();
 		}
-		
-	}
 
-	public void AddHeader(string title, VerticalStackLayout layout)
-	{
-		Label label = new Label();
-		label.Text = title;
-		label.HorizontalTextAlignment = TextAlignment.Center;
-		label.FontSize = 25;
-		layout.Children.Add(label);
-
-		Rectangle rect = new Rectangle();
-		rect.HorizontalOptions = LayoutOptions.Fill;
-		rect.HeightRequest = 4;
-		rect.Opacity = 0;
-		layout.Children.Add(rect);
 	}
 }

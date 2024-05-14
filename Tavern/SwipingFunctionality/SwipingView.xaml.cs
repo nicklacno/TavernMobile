@@ -30,6 +30,7 @@ public partial class SwipingView : SwipeView
 		SwipingSingleton.SkipGroup.Invoke();
 	}
 
+
     void PopulateData(Group group)
     {
         groupData = group;
@@ -63,5 +64,4 @@ public partial class SwipingView : SwipeView
             }
         }
     }
-
 }

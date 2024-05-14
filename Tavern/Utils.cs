@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 
 namespace Tavern
 {
@@ -11,7 +6,7 @@ namespace Tavern
     {
         public string Sender { get; set; }
         public string Body { get; set; }
-        public string TimeSent { get; set; }  
+        public string TimeSent { get; set; }
     }
 
     public class MessageByDay : ObservableCollection<Message>
@@ -21,6 +16,18 @@ namespace Tavern
         {
             this.DateSent = DateSent;
         }
-        
+    }
+    public class Tag
+    {
+        public int Id { set; get; }
+        public string Name { set; get; }
+    }
+
+    public class Request
+    {
+        public int RequestId { get; set; }
+        public int GroupId { get; set; }
+        public int ProfileId { get; set; }
+        public string? ProfileName { get; set; }
     }
 }

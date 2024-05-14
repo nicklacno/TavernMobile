@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Tavern.ProfilePage"
              Title="ProfilePage"
+             xmlns:n="clr-namespace:Tavern"
              Shell.NavBarIsVisible="False">
     <ContentPage.Resources>
         <StyleSheet Source="/Resources/Styles/PageStyles/ProfilePage.css" />
@@ -24,7 +25,19 @@
                 HorizontalOptions="Fill" 
                 MaxLines="10"
                 />
-            
+            <Button x:Name="ProfileEdit" HorizontalOptions="End" Text="Edit Profile" Clicked="EditProfile"/>
+            <VerticalStackLayout x:Name="TagsList" Padding="10, 0">
+                <Label HorizontalTextAlignment="Center">Tags</Label>
+                <CollectionView x:Name="tagList" ItemsLayout="VerticalGrid, 2" MaximumHeightRequest="80" HorizontalOptions="CenterAndExpand">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Label Text="{Binding Name}" HorizontalTextAlignment="Center"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
 
             <VerticalStackLayout x:Name="GroupList">
                 <Label
@@ -34,9 +47,12 @@
                 <CollectionView x:Name="groupList" ItemsLayout="Vertical" MaximumHeightRequest="140" VerticalScrollBarVisibility="Always">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Label Text="{Binding Name}"/>
+                            <Label Text="{Binding Name}" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
+                    <CollectionView.EmptyView>
+                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center">You are apart of no groups</Label>
+                    </CollectionView.EmptyView>
                 </CollectionView>
             </VerticalStackLayout>
 

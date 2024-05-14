@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace Tavern
         public string? Bio { get; set; }
         public int OwnerId { get; set; }
         public List<string> Members { get; set; }
-        public List<string> Tags { get; set; }
+        public ObservableCollection<Tag> Tags { get; set; }
 
 
         public Group(int id, string name="", string bio="")

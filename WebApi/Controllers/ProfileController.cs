@@ -94,6 +94,34 @@ namespace WebApi.Controllers
             return Group.CreateGroup(data);
         }
 
-        
+        [HttpGet("Tags")]
+        public List<Tag> GetTags()
+        {
+            return Profile.GetTags();
+        }
+
+        [HttpGet("{id}/Tags")]
+        public List<Tag> GetProfileTags(int id)
+        {
+            return Profile.GetProfileTags(id);
+        }
+
+        [HttpPost("AddTag")]
+        public int PostAddTag(Dictionary<string, int> data)
+        {
+            return Profile.AddTag(data);
+        }
+
+        [HttpPost("RemoveTag")]
+        public int PostRemoveTag(Dictionary<string, int> data)
+        {
+            return Profile.RemoveTag(data);
+        }
+
+        [HttpPost("DeleteGroup")]
+        public int DeleteGroup(Dictionary<string,string> data)
+        {
+            return Profile.DeleteGroup(data);
+        }
     }
 }

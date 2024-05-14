@@ -22,11 +22,11 @@ namespace WebApi
          * @param name - Profile Username
          * @param bio - Profile Bio
          */
-        public Profile (int id=-1, string name="", string bio = "") 
+        public Profile(int id = -1, string name = "", string bio = "")
         {
-            Id= id;
-            Name= name;
-            Bio= bio;
+            Id = id;
+            Name = name;
+            Bio = bio;
         }
         //Basic setters and getters
         public int Id { get; private set; }
@@ -88,7 +88,7 @@ namespace WebApi
             {
                 List<string> friends = new List<string>(); //List that stores the friend username(s)
                 List<int> ids = new List<int>(); //List that stores the friend's ID's
-                using (SqlConnection  conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open(); //Opens connection to database
                     using (SqlCommand cmd = conn.CreateCommand())
@@ -121,7 +121,7 @@ namespace WebApi
                         }
                         conn.Close(); //close connection
                     }
-                    
+
                 }
                 return JsonSerializer.Serialize(friends); //returns the json of the friends names
 
@@ -182,7 +182,7 @@ namespace WebApi
         {
             return KeyDerivation.Pbkdf2(password, salt, KeyDerivationPrf.HMACSHA1, 6, 48);
         }
-        
+
         /**
          * GetGroups - calls the database and returns a json of a list of group names
          * @param id - the id of the user
@@ -207,8 +207,8 @@ namespace WebApi
                         while (reader.Read()) //add to list of groups if has rows
                         {
                             Group? g = Group.GetGroup(reader.GetInt32(0));
-                            if (g != null) 
-                            { 
+                            if (g != null)
+                            {
                                 groups.Add(g);
                             }
                         }
@@ -220,7 +220,7 @@ namespace WebApi
             }
             catch (Exception ex)
             {
-                Debug.WriteLine (ex.Message);
+                Debug.WriteLine(ex.Message);
                 return null; //returns null if empty
             }
         }
@@ -362,7 +362,7 @@ namespace WebApi
             if (data["newUsername"] == null && data["newBio"] == null) return 0; //if no data needed to be changed, then it success
             try
             {
-                using(SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
@@ -381,7 +381,7 @@ namespace WebApi
                         command += "WHERE UserID = @IdP;";
                         cmd.CommandText = command;
                         cmd.Parameters.AddWithValue("@IdP", Convert.ToInt32(data["profileId"]));
-                        
+
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -414,7 +414,7 @@ namespace WebApi
                         cmd.Parameters.AddWithValue("@UserId", profileId);
 
                         SqlDataReader reader = cmd.ExecuteReader();
-                        
+
                         if (reader.Read())
                         {
                             string temp = Convert.ToBase64String(HashPassword(password, Convert.FromBase64String(reader["Salt"].ToString())));
@@ -432,6 +432,197 @@ namespace WebApi
             {
                 return false;
             }
+        }
+
+        public static List<Tag> GetTags()
+        {
+            SetConnectionString();
+            try
+            {
+                List<Tag> tags = new List<Tag>();
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT TagID, Name FROM Tags WHERE ForPlayer = 1;";
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            tags.Add(new Tag { TagId = reader.GetInt32(0), TagName = reader.GetString(1) });
+                        }
+                        return tags;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return null;
+            }
+        }
+
+        public static List<Tag> GetProfileTags(int id)
+        {
+            SetConnectionString();
+            try
+            {
+                List<Tag> tags = new List<Tag>();
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT Tags.TagID, Name FROM PlayerTags " +
+                                          "JOIN Tags ON Tags.TagID = PlayerTags.TagID " +
+                                          "WHERE PlayerID = @id";
+                        cmd.Parameters.AddWithValue("@id", id);
+
+                        SqlDataReader r = cmd.ExecuteReader();
+                        while (r.Read())
+                        {
+                            tags.Add(new Tag { TagId = r.GetInt32(0), TagName = r.GetString(1) });
+                        }
+                    }
+                    return tags;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
+        //Assumes connection string already initialized
+        private static bool Exists(int userId)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT UserID FROM Customers WHERE UserID = @id";
+                        cmd.Parameters.AddWithValue("@id", userId);
+                        SqlDataReader r = cmd.ExecuteReader();
+                        return r.HasRows;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        //If already in table, does nothing but still returns 0
+        public static int AddTag(Dictionary<string, int> data)
+        {
+            SetConnectionString();
+            if (!Exists(data["userId"])) return -10;
+            if (!IsValidTag(data["tagId"])) return -9;
+            if (AlreadyInTable(data["userId"], data["tagId"])) return 0;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "INSERT INTO PlayerTags (TagID, PlayerID) VALUES (@tag, @player);";
+                        cmd.Parameters.AddWithValue("@tag", data["tagId"]);
+                        cmd.Parameters.AddWithValue("@player", data["userId"]);
+                        cmd.ExecuteNonQuery();
+
+                        return 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+        private static bool IsValidTag(int id)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT TagID FROM Tags WHERE TagID = @id AND ForPlayer = 1";
+                        cmd.Parameters.AddWithValue("@id", id);
+                        return cmd.ExecuteReader().HasRows;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return false;
+            }
+        }
+
+        private static bool AlreadyInTable(int user, int tag)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT TagID FROM PlayerTags WHERE TagID = @tag AND PlayerID = @player";
+                        cmd.Parameters.AddWithValue("@tag", tag);
+                        cmd.Parameters.AddWithValue("@player", user);
+                        return cmd.ExecuteReader().HasRows;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return true;
+            }
+        }
+
+        //If not in table, does nothing, but returns positive error code
+        public static int RemoveTag(Dictionary<string, int> data)
+        {
+            SetConnectionString();
+            if (!AlreadyInTable(data["userId"], data["tagId"])) return 0;
+            try
+            {
+                using(SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "DELETE FROM PlayerTags WHERE PlayerID = @player AND TagID = @tag";
+                        cmd.Parameters.AddWithValue("@player", data["userId"]);
+                        cmd.Parameters.AddWithValue("@tag", data["tagId"]);
+
+                        cmd.ExecuteNonQuery();
+                        return 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+        public static int DeleteGroup(Dictionary<string, string> data)
+        {
+            throw new NotImplementedException();
         }
     }
 }

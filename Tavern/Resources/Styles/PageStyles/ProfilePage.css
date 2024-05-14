@@ -33,14 +33,14 @@ label
     padding: 10;
 }
 
-#FriendsList, #GroupList, #BlockedUsersList
+#FriendsList, #GroupList, #BlockedUsersList, #TagsList
 {
     border: 10;
     margin-top: 20;
     padding: 10;
 }
 
-#FriendsList label, #GroupList label, #BlockedUsersList label
+#FriendsList>label, #GroupList>label, #BlockedUsersList>label, #TagsList>label
 {
     font-size: 20;
 }

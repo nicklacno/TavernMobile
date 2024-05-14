@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Views;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
@@ -16,20 +17,21 @@ public partial class RegisterPage : ContentPage
         if (!txtConfirmPassword.Text.Equals(txtPassword.Text))
         {
             //error handling here
-            Debug.WriteLine("Confirm Password and Password dont match");
+            ShowErrorMessage("Confirm Password and Password dont match");
             return;
         }
 
         if (!ValidEmail())
         {
             //error handling here
-            Debug.WriteLine("Invalid Email");
+            ShowErrorMessage("Invalid Email");
+            return;
         }    
 
         if (!PasswordVerification())
         {
             //error handnling here
-            Debug.WriteLine("Password missing requirement");
+            ShowErrorMessage("Password missing requirement");
             return;
         }
 
@@ -40,23 +42,20 @@ public partial class RegisterPage : ContentPage
         {
             case -1:
                 //error handling here
-                Debug.WriteLine("Failed to connect to server");
+                ShowErrorMessage("Failed to connect to server");
                 break;
             case -2:
                 //error handling here
-                Debug.WriteLine("Duplicate Username");
+                ShowErrorMessage("Duplicate Username");
                 break;
             case -3:
                 //error handling here
-                Debug.WriteLine("Duplicate Email");
+                ShowErrorMessage("Duplicate Email");
                 break;
             default:
-                ProfileSingleton.GetInstance().loginSuccessful.Invoke();
+                ProfileSingleton.GetInstance().switchMainPage(new NavigationPage(new TabbedMainPage()));
                 break;
         }
-
-
-
     }
 
     private bool ValidEmail()
@@ -96,5 +95,11 @@ public partial class RegisterPage : ContentPage
             }
         }
         return false;
+    }
+
+    private void ShowErrorMessage(string message)
+    {
+        var popup = new ErrorPopup(message);
+        this.ShowPopup(popup);
     }
 }

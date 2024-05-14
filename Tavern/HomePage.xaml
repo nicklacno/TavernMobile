@@ -52,13 +52,15 @@
                                     <Label x:Name="lbName" HorizontalTextAlignment="Center" FontFamily="Algerian" FontSize="25" HorizontalOptions="Center" Text="{Binding Name}"/>
                                     <Label x:Name="lbBio" FontFamily="Sedan" FontSize="20" MaxLines="2" Text="{Binding Bio}"/>
                                     <CollectionView ItemsSource="{Binding Tags}" 
-                                                    ItemsLayout="VerticalGrid 3" 
+                                                    ItemsLayout="VerticalGrid, 2" 
                                                     MaximumHeightRequest="40" 
-                                                    MinimumHeightRequest="0">
+                                                    MinimumHeightRequest="0"
+                                                    HorizontalOptions="CenterAndExpand">
                                         <CollectionView.ItemTemplate>
                                             <DataTemplate>
-                                                <Label Text="{Binding .}" 
-                                                    FontFamily="Sedan" />
+                                                <Grid>
+                                                    <Label Text="{Binding Name}" FontFamily="Sedan" />
+                                                </Grid>
                                             </DataTemplate>
                                         </CollectionView.ItemTemplate>
                                     </CollectionView>
