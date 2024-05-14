@@ -25,7 +25,6 @@
                 HorizontalOptions="Fill" 
                 MaxLines="10"
                 />
-            <Button x:Name="ProfileEdit" HorizontalOptions="End" Text="Edit Profile" Clicked="EditProfile"/>
             <VerticalStackLayout x:Name="TagsList" Padding="10, 0">
                 <Label HorizontalTextAlignment="Center">Tags</Label>
                 <CollectionView x:Name="tagList" ItemsLayout="VerticalGrid, 2" MaximumHeightRequest="80" HorizontalOptions="CenterAndExpand">

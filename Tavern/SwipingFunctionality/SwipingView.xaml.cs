@@ -45,10 +45,10 @@ public partial class SwipingView : SwipeView
             lbMembers.FontFamily = "Sedan";
             lbMembers.FontAttributes = FontAttributes.Bold;
 
-            foreach (string tag in groupData.Tags)
+            foreach (Tag tag in groupData.Tags)
             {
                 Label lb = new Label();
-                lb.Text = tag;
+                lb.Text = tag.Name;
                 lb.FontFamily = "Sedan";
                 lb.FontSize = 25;
                 hStackTag.Children.Add(lb);

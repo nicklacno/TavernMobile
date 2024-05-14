@@ -19,14 +19,17 @@ namespace Tavern.SwipingFunctionality
         public static GroupAction RequestGroup;
         public Group LikedGroup { get; set; }
         private readonly HttpClient _httpClient = new(); //creates client
-        private const string BASE_ADDRESS = "https://cxbg938k-7111.usw2.devtunnels.ms/"; //base address for persistent dev-tunnel for api
+        private const string BASE_ADDRESS = "https://n588x7k6-5273.usw2.devtunnels.ms/"; //base address for persistent dev-tunnel for api
         private SwipingSingleton()
         {
             _httpClient.BaseAddress = new Uri(BASE_ADDRESS); 
         }
         public static SwipingSingleton GetInstance()
         {
-            _instance = new SwipingSingleton();
+            if (_instance == null)
+            {
+                _instance = new SwipingSingleton();
+            }
             return _instance;
         }
         public async Task SwipeRight(Group likedGroup)
