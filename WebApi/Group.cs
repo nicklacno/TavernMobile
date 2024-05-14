@@ -447,7 +447,7 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "SELECT TOP 10 GroupID FROM Groups g " +
+                        cmd.CommandText = "SELECT TOP 100 GroupID FROM Groups g " +
                                           "WHERE (SELECT COUNT(GroupID) FROM MemberGroup " +
                                           "WHERE GroupID = g.GroupID " +
                                           "AND UserID = @UserID) = 0 " +
