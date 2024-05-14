@@ -41,6 +41,7 @@ public partial class EditGroupPage : ContentPage
 
     private void ProcessStatus(int status)
     {
+        var newList = new ObservableCollection<Request>(requests);
         if (status > 0)
         {
             var errored = requestStack.SelectedItems.ElementAt(status - 1);
@@ -49,22 +50,25 @@ public partial class EditGroupPage : ContentPage
                 if (user == errored) return;
                 else
                 {
-                    requestStack.SelectedItems.Remove(user);
-                    requests.Remove((Request)user);
+                    newList.Remove((Request)user);
                 }
             }
+            requestStack.SelectedItems.Clear();
+            requests = newList;
             requestStack.ItemsSource = requests;
         }
         else
         {
             foreach (var user in requestStack.SelectedItems)
             {
-                requestStack.SelectedItems.Remove(user);
-                requests.Remove((Request)user);
+                newList.Remove((Request)user);
             }
+            requestStack.SelectedItems.Clear();
+            requests = newList;
             requestStack.ItemsSource = requests;
         }
     }
+
 
     public void ShowErrorMessage(string message)
     {

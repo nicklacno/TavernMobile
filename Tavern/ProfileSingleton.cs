@@ -483,9 +483,32 @@ namespace Tavern
                     tags.Add(new Tag { Name = name, Id = id });
                 }
             }
-
-
             return tags;
+        }
+
+        public async Task<ObservableCollection<Tag>> GetGroupTags(int id = -1)
+        {
+            await GetAllGroupTags();
+
+            return GroupTags;
+        }
+
+        private async Task<ObservableCollection<Tag>> GetAllGroupTags()
+        {
+            if (GroupTags != null) return GroupTags;
+            try
+            {
+                var response = await _httpClient.GetAsync("Profile/Tags");
+                string list = response.Content.ReadAsStringAsync().Result;
+
+                GroupTags = ConvertToTagList(list);
+                return GroupTags;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
         }
 
         public bool CanAccessGroup(int groupId)

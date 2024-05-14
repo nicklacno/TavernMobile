@@ -10,8 +10,6 @@ public partial class GroupPage : ContentPage
 	GroupChatView ChatView { get; set; }
 	public bool Updating { get; set; }
 
-	public CancellationTokenSource cancelTokenSource { get; set; }
-
 	public GroupPage(int id)
 	{
 		InitializeComponent();
@@ -24,11 +22,10 @@ public partial class GroupPage : ContentPage
 		GroupData = data;
 		UpdatePage();
 		Updating = true;
-		cancelTokenSource = new CancellationTokenSource();
 
 		ChatView = new GroupChatView(GroupData.GroupId, this);
 		GroupChat.Add(ChatView);
-		Task.Run(BackgroundUpdate, cancelTokenSource.Token);
+		Task.Run(BackgroundUpdate);
 	}
 
 	/**
@@ -92,19 +89,7 @@ public partial class GroupPage : ContentPage
     {
 		await Navigation.PushAsync(new EditGroupPage(GroupData.GroupId));
     }
-    protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
-    {
-        base.OnNavigatedFrom(args);
-		cancelTokenSource.Cancel();
-		cancelTokenSource.Dispose();
-    }
 
-    protected override void OnNavigatedTo(NavigatedToEventArgs args)
-    {
-        base.OnNavigatedTo(args);
-		cancelTokenSource = new CancellationTokenSource();
-		Task.Run(BackgroundUpdate, cancelTokenSource.Token);
-    }
     public void ShowErrorMessage(string message)
     {
         var popup = new ErrorPopup(message);
@@ -115,12 +100,8 @@ public partial class GroupPage : ContentPage
 	{
 		while (Updating)
 		{
-			if (cancelTokenSource.Token.IsCancellationRequested)
-			{
-				return;
-			}
 			await ChatView.RetrieveNewMessages();
-			await UpdatePage();
+			//await UpdatePage();
 
 			Thread.Sleep(2000);
 		}
