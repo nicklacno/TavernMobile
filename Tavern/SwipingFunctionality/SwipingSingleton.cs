@@ -76,9 +76,26 @@ namespace Tavern.SwipingFunctionality
             group.Bio = (string)data["bio"];
             group.OwnerId = (int)data["ownerId"];
             group.Members = data["members"].Values<string>().ToList();
-            group.Tags = data["tags"].Values<string>().ToList();
+            group.Tags = ConvertToTagList(data["tags"].ToString());
 
             return group;
+        }
+
+        private ObservableCollection<Tag> ConvertToTagList(string list)
+        {
+            ObservableCollection<Tag> tags = new ObservableCollection<Tag>();
+            if (!string.IsNullOrEmpty(list))
+            {
+                JToken data = JToken.Parse(list);
+                foreach (JObject tag in data.Children())
+                {
+                    string name = (string)tag["tagName"];
+                    int id = (int)tag["tagId"];
+
+                    tags.Add(new Tag { Name = name, Id = id });
+                }
+            }
+            return tags;
         }
 
         public async Task SwipeRight(Group likedGroup)
