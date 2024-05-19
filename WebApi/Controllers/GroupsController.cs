@@ -24,6 +24,12 @@ namespace WebApi.Controllers
             return Group.GetGroup(id);
         }
 
+        [HttpGet("{id}/Tags")]
+        public List<Tag> GetGroupTags(int id)
+        {
+            return Group.GetTags(id);
+        }
+
         [HttpPost("EditGroup")]
         public int EditGroup(Dictionary<string, string> data)
         {

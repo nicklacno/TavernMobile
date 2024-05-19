@@ -100,7 +100,7 @@ namespace WebApi
          * @param id - Group Id the members are apart of
          * @return - the list of names of the group members, null if error
          */
-        private static List<Tag>? GetTags(int id)
+        public static List<Tag>? GetTags(int id)
         {
             SetConnectionString();
             try

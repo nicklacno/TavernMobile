@@ -43,51 +43,25 @@ public partial class GroupPage : ContentPage
 			lbGroupName.Text = GroupData.Name;
 			lbGroupBio.Text = GroupData.Bio;
 
-			Label lb;
+			layoutTags.ItemsSource = GroupData.Tags;
 
-			foreach (Tag tag in GroupData.Tags) 
+			layoutMembers.ItemsSource = GroupData.Members;
+
+			if (GroupData.OwnerId == ProfileSingleton.GetInstance().ProfileId)
 			{
-				lb = new Label();
-				lb.Text = tag.Name;
-				layoutTags.Add(lb);
+				ModifyButton.Text = "Edit Group";
+				ModifyButton.Clicked += PushEditGroupPage;
 			}
-
-			lb = new Label();
-			lb.FontSize = 20;
-			lb.Text = "* " + GroupData.Members[0] + " *";
-			layoutMembers.Add(lb);
-
-			for (int i = 1; i < GroupData.Members.Count; i++)
+			else
 			{
-				lb = new Label();
-				lb.FontSize = 18;
-				lb.Text = GroupData.Members[i];
-				layoutMembers.Add(lb);
+				ModifyButton.Text = "Leave Group";
 			}
-
-			ShowEditGroup();
 		}
     }
 
-	/**
-	 * Show Exit Button - Shows the edit group button if it is the ownner of the group
-	 */
-	private void ShowEditGroup()
-	{
-		int id = ProfileSingleton.GetInstance().ProfileId;
-		if (id > 0 && id == GroupData.OwnerId)
-		{
-			Button btn = new Button();
-			btn.Text = "Edit Group";
-			btn.Clicked += PushEditGroupPage;
-
-			stackInfo.Insert(4, btn);
-		}
-	}
-
     private async void PushEditGroupPage(object sender, EventArgs e)
     {
-		await Navigation.PushAsync(new EditGroupPage(GroupData.GroupId));
+		await Navigation.PushAsync(new EditGroupPage(GroupData));
     }
 
     public void ShowErrorMessage(string message)

@@ -8,45 +8,71 @@
     </ContentPage.Resources>
     <Grid>
         <Image Source="/Resources/Images/paper_login.png" Aspect="Fill"/>
-        <VerticalStackLayout Padding="10" x:Name="stackInfo">
-            <Label 
-                x:Name="lbGroupName"
-                Text="Group Name"
-                FontFamily="Algerian"
-                FontSize="60"
-                HorizontalOptions="Center" 
-                HorizontalTextAlignment="Center"
-                />
-            <Label
-                x:Name="lbGroupBio"
-                Text="Insert Group Bio Here"
-                FontFamily="Sedan"
-                FontSize="30"
-                HorizontalOptions="Center"
-                HorizontalTextAlignment="Start"
-                />
-            <Label
-                x:Name="lbTagHead"
-                Text="Tags:"
-                FontFamily="Sedan"
-                FontSize="24"
-                />
-            <FlexLayout 
-                x:Name="layoutTags" 
-                Wrap="Wrap"
-                JustifyContent="SpaceEvenly"
-                VerticalOptions="Center"
-                />
-            <VerticalStackLayout x:Name="layoutMembers">
+        <ScrollView>
+            <VerticalStackLayout Padding="10" x:Name="stackInfo">
+                <Button x:Name="ModifyButton" FontSize="24" FontFamily="Sedan"/>
                 <Label 
-                    x:Name="lbMemberHead"
-                    Text="Members: "
+                    x:Name="lbGroupName"
+                    Text="Group Name"
+                    FontFamily="Algerian"
+                    FontSize="60"
+                    HorizontalOptions="Center" 
+                    HorizontalTextAlignment="Center"
+                    />
+                <Label
+                    x:Name="lbGroupBio"
+                    Text="Insert Group Bio Here"
+                    FontFamily="Sedan"
+                    FontSize="30"
+                    HorizontalOptions="Center"
+                    HorizontalTextAlignment="Start"
+                    />
+                <!--<Label
+                    x:Name="lbTagHead"
+                    Text="Tags:"
                     FontFamily="Sedan"
                     FontSize="24"
                     />
+                <FlexLayout 
+                    x:Name="layoutTags" 
+                    Wrap="Wrap"
+                    JustifyContent="SpaceEvenly"
+                    VerticalOptions="Center"
+                    />-->
+                <CollectionView x:Name="layoutTags"
+                                HorizontalOptions="CenterAndExpand"
+                                ItemsLayout="VerticalGrid, 2"
+                                >
+                    <CollectionView.Header>
+                        <Label x:Name="lbTagHead"
+                            Text="Tags:"
+                            FontFamily="Sedan"
+                            FontSize="24"
+                            />
+                    </CollectionView.Header>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Label Text="{Binding Name}" FontSize="20" FontFamily="Sedan"/>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <CollectionView x:Name="layoutMembers">
+                    <CollectionView.Header>
+                        <Label x:Name="lbMemberHead"
+                            Text="Members: "
+                            FontFamily="Sedan"
+                            FontSize="24"
+                            />
+                    </CollectionView.Header>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Label Text="{Binding .}" FontSize="20" FontFamily="Sedan"/>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Grid x:Name="GroupChat" />
             </VerticalStackLayout>
-            <Grid x:Name="GroupChat" />
-        </VerticalStackLayout>
+        </ScrollView>
     </Grid>
 
 </ContentPage>

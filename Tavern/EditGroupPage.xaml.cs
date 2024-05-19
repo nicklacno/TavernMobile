@@ -6,21 +6,36 @@ namespace Tavern;
 
 public partial class EditGroupPage : ContentPage
 {
-    public int Id { get; set; }
+    public Group GroupData { get; set; }
     public ObservableCollection<Request> requests { get; set; }
 
-    public EditGroupPage(int id)
+    public ObservableCollection<Tag> tags { get; set; }
+
+    public EditGroupPage(Group data)
 	{
 		InitializeComponent();
-		Id = id;
-        GetRequests();
+		GroupData = data;
+        //GetRequests();
+        PopulateDataFields();
 	}
 
-    private async Task GetRequests()
+    //private async Task GetRequests()
+    //{
+    //    var singleton = ProfileSingleton.GetInstance();
+    //    requests = await singleton.GetGroupRequests(Id);
+    //    requestStack.ItemsSource = requests;
+    //}
+
+    private async void PopulateDataFields()
     {
         var singleton = ProfileSingleton.GetInstance();
-        requests = await singleton.GetGroupRequests(Id);
-        requestStack.ItemsSource = requests;
+        tags = await singleton.GetGroupTags();
+        GroupTagsList.ItemsSource = tags;
+
+        foreach (var tag in GroupData.Tags)
+        {
+            GroupTagsList.SelectedItems.Add(tag);
+        }
     }
 
     public async void AcceptUsers(object sender, EventArgs e)
@@ -69,7 +84,10 @@ public partial class EditGroupPage : ContentPage
         }
     }
 
-
+    public async void UpdateTagsList(object sender, EventArgs e)
+    {
+        
+    }
     public void ShowErrorMessage(string message)
     {
         var popup = new ErrorPopup(message);

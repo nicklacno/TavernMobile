@@ -189,7 +189,7 @@ namespace Tavern
          * ConvertToGroupList - takes a json and converts it into a list of Group Objects
          * @param json - the json that needs to be parsed
          */
-        private void ConvertToGroupList(string json)
+        private async Task ConvertToGroupList(string json)
         {
             try
             {
@@ -200,7 +200,7 @@ namespace Tavern
                     JToken data = JToken.Parse(json);
                     foreach (JObject groupData in data.Children())
                     {
-                        groups.Add(ConvertToGroup(groupData));
+                        groups.Add(await ConvertToGroup(groupData));
                     }
                 }
 
@@ -229,7 +229,7 @@ namespace Tavern
                 {
                     JObject data = JObject.Parse(json);
 
-                    group = ConvertToGroup(data);
+                    group = await ConvertToGroup(data);
                 }
                 return group;
             }
@@ -245,7 +245,7 @@ namespace Tavern
          * @param data - the JObject that stores the data
          * @return - the group object
          */
-        private Group ConvertToGroup(JObject data)
+        private async Task<Group> ConvertToGroup(JObject data)
         {
             int id = (int)data["groupId"];
             Group group = new Group(id);
@@ -253,8 +253,8 @@ namespace Tavern
             group.Name = (string)data["name"];
             group.Bio = (string)data["bio"];
             group.OwnerId = (int)data["ownerId"];
-            group.Members = data["members"].Values<string>().ToList();
-            group.Tags = ConvertToTagList(data["tags"].ToString());
+            group.Members = new ObservableCollection<string>(data["members"].Values<string>().ToList());
+            group.Tags = await GetGroupTags(id);
 
             return group;
         }
@@ -489,9 +489,38 @@ namespace Tavern
 
         public async Task<ObservableCollection<Tag>> GetGroupTags(int id = -1)
         {
-            await GetAllGroupTags();
+            if (GroupTags == null) await GetAllGroupTags();
 
-            return GroupTags;
+            if (id == -1) return GroupTags;
+            try
+            {
+                var response = await _httpClient.GetStringAsync($"Groups/{id}/Tags");
+                if (response == null) return null;
+                
+                var curr = ConvertToTagList(response);
+                ObservableCollection<Tag> tags = new ObservableCollection<Tag>();
+
+                Dictionary<int, string> dict = new Dictionary<int, string>();
+                foreach (var tag in curr)
+                {
+                    dict.Add(tag.Id, tag.Name);
+                }
+
+                foreach (var tag in GroupTags)
+                {
+                    if (dict.ContainsKey(tag.Id) && dict[tag.Id].Equals(tag.Name))
+                    {
+                        tags.Add(tag);
+                    }
+                }
+
+                return tags;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
         }
 
         private async Task<ObservableCollection<Tag>> GetAllGroupTags()
@@ -499,7 +528,7 @@ namespace Tavern
             if (GroupTags != null) return GroupTags;
             try
             {
-                var response = await _httpClient.GetAsync("Profile/Tags");
+                var response = await _httpClient.GetAsync("Groups/Tags");
                 string list = response.Content.ReadAsStringAsync().Result;
 
                 GroupTags = ConvertToTagList(list);

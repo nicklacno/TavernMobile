@@ -10,6 +10,7 @@ public partial class HomePage : ContentPage
 	{
 		InitializeComponent();
 		//AddGroupsToHomePage();
+		ProfileSingleton.GetInstance().SetValues();
 		groupList.ItemsSource = ProfileSingleton.GetInstance().Groups;
 
 	}
@@ -28,11 +29,7 @@ public partial class HomePage : ContentPage
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);
-		if (group != null)
-		{
-			group.Updating = false;
-			group = null;
-		}
+		groupList.ItemsSource = ProfileSingleton.GetInstance().Groups;
     }
 
     private void GroupSelected(object sender, SelectionChangedEventArgs e)

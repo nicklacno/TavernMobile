@@ -12,7 +12,7 @@
             <VerticalStackLayout>
                 <CollectionView x:Name="requestStack" SelectionMode="Multiple">
                     <CollectionView.Header>
-                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="25">Requests (Select User(s) then Accept/Reject), </Label>
+                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="25">Requests (Select User(s) then Accept/Reject),</Label>
                     </CollectionView.Header>
                     <CollectionView.EmptyView>
                         <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center">No message History</Label>
@@ -28,6 +28,25 @@
                             <Button Text="Decline" WidthRequest="200" HorizontalOptions="End" Clicked="RejectUsers"/>
                         </HorizontalStackLayout>
                     </CollectionView.Footer>
+                </CollectionView>
+                <CollectionView
+                    x:Name="GroupTagsList"
+                    SelectionMode="Multiple">
+                    <CollectionView.Header>
+                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="25">Tags</Label>
+                    </CollectionView.Header>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Label Text="{Binding Name}"
+                                HorizontalOptions="Center"
+                                HorizontalTextAlignment="Center" 
+                                FontFamily="Sedan"/>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <CollectionView.Footer>
+                        <Button Text="Update Tags" HorizontalOptions="CenterAndExpand" Clicked="UpdateTagsList"/>
+                    </CollectionView.Footer>
+                    
                 </CollectionView>
             </VerticalStackLayout>
         </ScrollView>

@@ -75,7 +75,7 @@ namespace Tavern.SwipingFunctionality
             group.Name = (string)data["name"];
             group.Bio = (string)data["bio"];
             group.OwnerId = (int)data["ownerId"];
-            group.Members = data["members"].Values<string>().ToList();
+            group.Members = new ObservableCollection<string>(data["members"].Values<string>().ToList());
             group.Tags = ConvertToTagList(data["tags"].ToString());
 
             return group;
