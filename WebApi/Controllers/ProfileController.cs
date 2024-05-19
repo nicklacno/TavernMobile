@@ -135,5 +135,17 @@ namespace WebApi.Controllers
         {
             return Profile.GetOpenPrivateRequests(id);
         }
+
+        [HttpPost("SendFriendRequest")]
+        public int SendFriendRequest(Dictionary<string, int> data)
+        {
+            return Profile.SendFriendRequest(data);
+        }
+
+        [HttpPost("ModifyFriendRequest")]
+        public int ModifyFriendRequest(Dictionary<string, int> data)
+        {
+            return Profile.ModifyRequest(data);
+        }
     }
 }

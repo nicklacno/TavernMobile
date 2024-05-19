@@ -690,5 +690,118 @@ namespace WebApi
                 return null;
             }
         }
+
+        public static int SendFriendRequest(Dictionary<string, int> data)
+        {
+            SetConnectionString();
+            if (RequestExists(data, "userId", "otherId")) return 0;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "INSERT INTO Relationships (UserID_1, UserID_2, Relationship) " +
+                            "VALUES (@userId, @otherId, 'R');";
+                        cmd.Parameters.AddWithValue("@userId", data["userId"]);
+                        cmd.Parameters.AddWithValue("@otherId", data["otherId"]);
+                        cmd.ExecuteNonQuery();
+
+                        return 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+        public static int ModifyRequest(Dictionary<string, int> data)
+        {
+            SetConnectionString();
+            if (!RequestExists(data, "requestorID", "userID")) return -2;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "DELETE FROM Relationships WHERE UserID_1 = @requestor AND UserID_2 = @user AND Relationship = 'R'";
+                        cmd.Parameters.AddWithValue("@requestor", data["requestorID"]);
+                        cmd.Parameters.AddWithValue("@user", data["userID"]);
+
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    if (!data.ContainsKey("isAccepted")) return -1;
+                    if (data.ContainsKey("isAccepted") && data["isAccepted"] == 0) return 0;
+
+                    int chatId;
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT Max(RelationshipID) FROM Relationships";
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            reader.Read();
+                            chatId = reader.GetInt32(0);
+                            chatId++;
+                        }
+
+                    }
+
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "INSERT INTO Relationships (UserID_1, UserID_2, Relationship, PrivateChatID) " +
+                            "VALUES (@requestor, @user, 'F', @chatId), (@user, @requestor, 'F', @chatId)";
+                        cmd.Parameters.AddWithValue("@requestor", data["requestorID"]);
+                        cmd.Parameters.AddWithValue("@user", data["userID"]);
+                        cmd.Parameters.AddWithValue("@chatId", chatId);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                    return 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+        private static bool RequestExists(Dictionary<string, int> data, string key1, string key2)
+        {
+            if (!data.ContainsKey(key1) || !data.ContainsKey(key2)) return false;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT RelationshipID FROM Relationships WHERE UserID_1 = @requestor " +
+                            "AND UserID_2 = @user AND Relationship = 'R'";
+                        cmd.Parameters.AddWithValue("@requestor", data[key1]);
+                        cmd.Parameters.AddWithValue("@user", data[key2]);
+
+                        var reader = cmd.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            return true;
+                        }
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return false;
+            }
+        }
     }
 }
