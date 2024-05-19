@@ -11,12 +11,12 @@
     <TabbedPage.Style>
         <Style TargetType="TabbedPage">
             <Setter Property="BarTextColor" Value="white" />
-            <Setter Property="SelectedTabColor" Value="#331900"/>
-            <Setter Property="UnselectedTabColor" Value="#230900" />
+            <Setter Property="UnselectedTabColor" Value="#331900"/>
+            <Setter Property="SelectedTabColor" Value="white" />
             <Setter Property="BarBackgroundColor" Value="#230900" />
         </Style>
     </TabbedPage.Style>
-    <local:HomePage Title="Home"/>
+    <local:HomePage Title="Home" IconImageSource="Resources/Images/home.png"/>
     <!--<swiping:SwipingPage Title="Find Groups"/>-->
-    <local:ProfilePage Title="My Profile"/>
+    <local:ProfilePage Title="My Profile" IconImageSource="Resources/Images/user.png"/>
 </TabbedPage>

@@ -447,6 +447,7 @@ namespace Tavern
             Groups.Clear();
             Groups = null;
             Friends = null;
+            Tags.Clear();
             switchMainPage.Invoke(new NavigationPage(new LoginPage()));
         }
 

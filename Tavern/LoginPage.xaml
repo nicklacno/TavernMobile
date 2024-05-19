@@ -19,11 +19,13 @@
             <Entry
                 x:Name="txtUsername"
                 Placeholder="Username"
+                FontFamily="Sedan"
                 />
             <Entry
                 x:Name="txtPassword"
                 Placeholder="Password"
                 IsPassword="True"
+                FontFamily="Sedan"
                 />
             
             <HorizontalStackLayout>

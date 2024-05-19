@@ -7,4 +7,10 @@
         public int ProfileId { get; set; }
         public string? ProfileName { get; set; }
     }
+
+    public class Tag
+    {
+        public required int TagId { get; set; }
+        public required string TagName { get; set; }
+    }
 }

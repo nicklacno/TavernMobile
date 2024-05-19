@@ -47,9 +47,13 @@
 	<ItemGroup>
 	  <None Remove="Resources\Fonts\Algerian Regular.ttf" />
 	  <None Remove="Resources\Fonts\SedanSC-Regular.ttf" />
+	  <None Remove="Resources\Images\home.png" />
 	  <None Remove="Resources\Images\logintavern.png" />
+	  <None Remove="Resources\Images\messages.png" />
 	  <None Remove="Resources\Images\paper_login.jpg" />
+	  <None Remove="Resources\Images\search.png" />
 	  <None Remove="Resources\Images\tavern.png" />
+	  <None Remove="Resources\Images\user.png" />
 	</ItemGroup>
 
 	<ItemGroup>

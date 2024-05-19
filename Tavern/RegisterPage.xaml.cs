@@ -10,6 +10,8 @@ public partial class RegisterPage : ContentPage
     {
         InitializeComponent();
         dropState.SelectedIndex = 0;
+        txtDate.MaximumDate = DateTime.Now;
+        txtDate.Date = DateTime.Now.AddYears(-15);
     }
 
     public async void RegisterButton(object sender, EventArgs e)
@@ -52,6 +54,13 @@ public partial class RegisterPage : ContentPage
         else if (verification == -4)
         {
             ShowErrorMessage("Password missing number");
+            return;
+        }
+
+        if (txtDate.Date.AddYears(18) > DateTime.Now)
+        {
+            ShowErrorMessage("You are under 18, Redirecting to Login Page");
+            Navigation.PopAsync();
             return;
         }
 

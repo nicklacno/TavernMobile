@@ -32,11 +32,13 @@
                 x:Name="txtPassword"
                 Placeholder="Password"
                 IsPassword="True"
+                FontFamily="Sedan"
                 />
             <Entry
                 x:Name="txtConfirmPassword"
                 Placeholder="Confirm Password"
                 IsPassword="True"
+                FontFamily="Sedan"
                 />
             <HorizontalStackLayout>
                 <Label FontSize="20" VerticalOptions="End" VerticalTextAlignment="Center" FontFamily="Sedan">Enter Date of Birth:</Label>
@@ -48,11 +50,13 @@
                     Placeholder="City"
                     WidthRequest="200"
                     MaxLength="30"
+                    FontFamily="Sedan"
                     />
                 <Picker x:Name="dropState"
                         Title="State"
                         TitleColor="#3f3f3f"
-                        TextColor="#3f3f3f">
+                        TextColor="#3f3f3f"
+                        FontFamily="Sedan">
                     <Picker.Items>
                         <x:String>AL</x:String>
                         <x:String>AK</x:String>

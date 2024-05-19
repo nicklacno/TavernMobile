@@ -174,12 +174,39 @@ namespace WebApi
                     }
                 }
                 int id = GetGroupId(data["name"]);
-                AddMemberToGroup(id, Convert.ToInt32(data["ownerId"]));
+                if (AddMemberToGroup(id, Convert.ToInt32(data["ownerId"])) != 0)
+                {
+                    DeleteGroupFromCreationError(id);
+                    return -1;
+                }
                 return id;
             }
             catch (Exception ex)
             {
                 return -1;
+            }
+        }
+
+        //Delete group if theres an error in creation
+        private static void DeleteGroupFromCreationError(int id)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using(SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "DELETE FROM Groups WHERE GroupID = @id";
+                        cmd.Parameters.AddWithValue("@id", id);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return;
             }
         }
 
@@ -524,12 +551,10 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "SELECT TOP 100 GroupID FROM Groups g " +
-                                          "WHERE (SELECT COUNT(GroupID) FROM MemberGroup " +
-                                          "WHERE GroupID = g.GroupID " +
-                                          "AND UserID = @UserID) = 0 " +
-                                          "ORDER BY NEWID()";
-                        cmd.Parameters.AddWithValue("@UserID", userId);
+                        cmd.CommandText = "SELECT TOP 10 GroupID FROM Groups g " +
+                            "WHERE NOT EXISTS (SELECT 1 GroupID FROM GroupRequests WHERE GroupID = g.GroupID AND UserID = @id) " +
+                            "AND NOT EXISTS (SELECT 1 GroupID FROM MemberGroup WHERE GroupID = g.GroupID AND UserID = @id);";
+                        cmd.Parameters.AddWithValue("@id", userId);
 
                         SqlDataReader reader = cmd.ExecuteReader();
                         while (reader.Read())
