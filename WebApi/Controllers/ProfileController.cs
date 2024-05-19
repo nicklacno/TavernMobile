@@ -147,5 +147,11 @@ namespace WebApi.Controllers
         {
             return Profile.ModifyRequest(data);
         }
+
+        [HttpPost("SendPrivateMessage")]
+        public int SendPrivateMessage(Dictionary<string, string> data)
+        {
+            return Profile.SendPrivateMessage(data);
+        }
     }
 }

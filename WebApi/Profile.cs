@@ -803,5 +803,67 @@ namespace WebApi
                 return false;
             }
         }
+
+        private static int GetChatID(int user1, int user2)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (var cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT PrivateChatID FROM Relationships WHERE UserID_1 = @user1 AND UserID_2 = @user2 AND " +
+                            "Relationship = 'F'";
+                        cmd.Parameters.AddWithValue("@user1", user1);
+                        cmd.Parameters.AddWithValue("@user2", user2);
+
+                        var reader = cmd.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            return reader.GetInt32(0);
+                        }
+                        return -1;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+        public static int SendPrivateMessage(Dictionary<string, string> data)
+        {
+            SetConnectionString();
+            int chatId = GetChatID(Convert.ToInt32(data["senderId"]), Convert.ToInt32(data["recieverId"]));
+            if (chatId < 0) return -2;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (var cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "INSERT INTO Messages (PrivateChatID, SenderID, Message, TimeStamp) " +
+                            "VALUES (@chatId, @sender, @message, @timestamp)";
+                        cmd.Parameters.AddWithValue("@chatId", chatId);
+                        cmd.Parameters.AddWithValue("@sender", Convert.ToInt32(data["senderId"]));
+                        cmd.Parameters.AddWithValue("@message", data["message"]);
+                        cmd.Parameters.AddWithValue("@timestamp", Convert.ToDateTime(data["timestamp"]));
+
+                        cmd.ExecuteNonQuery();
+                        return 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
     }
 }
