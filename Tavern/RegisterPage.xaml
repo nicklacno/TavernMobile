@@ -10,38 +10,45 @@
         <Image Source="/Resources/Images/paper_login.jpg" Aspect="AspectFill" />
         <VerticalStackLayout>
             <Label
-            x:Name="lbHeader"
-            Text="Register"
-            HorizontalTextAlignment="Center"
-            HorizontalOptions="Center"
-            />
+                x:Name="lbHeader"
+                Text="Register"
+                HorizontalTextAlignment="Center"
+                HorizontalOptions="Center"
+                FontFamily="Algerian"
+                />
             <Entry
-            x:Name="txtUsername"
-            Placeholder="Username"
-            MaxLength="20"
-            />
+                x:Name="txtUsername"
+                Placeholder="Username"
+                MaxLength="20"
+                FontFamily="Sedan"
+                />
             <Entry
-            x:Name="txtEmail"
-            Placeholder="Email"
-            MaxLength="50"
-            />
+                x:Name="txtEmail"
+                Placeholder="Email"
+                MaxLength="50"
+                FontFamily="Sedan"
+                />
             <Entry
-            x:Name="txtPassword"
-            Placeholder="Password"
-            IsPassword="True"
-            />
+                x:Name="txtPassword"
+                Placeholder="Password"
+                IsPassword="True"
+                />
             <Entry
-            x:Name="txtConfirmPassword"
-            Placeholder="Confirm Password"
-            IsPassword="True"
-            />
+                x:Name="txtConfirmPassword"
+                Placeholder="Confirm Password"
+                IsPassword="True"
+                />
+            <HorizontalStackLayout>
+                <Label FontSize="20" VerticalOptions="End" VerticalTextAlignment="Center" FontFamily="Sedan">Enter Date of Birth:</Label>
+                <DatePicker x:Name="txtDate" VerticalOptions="Center" FontSize="20" FontFamily="Sedan" TextColor="#3f3f3f"/>
+            </HorizontalStackLayout>
             <HorizontalStackLayout>
                 <Entry
-                x:Name="txtCity"
-                Placeholder="City"
-                WidthRequest="200"
-                MaxLength="30"
-                />
+                    x:Name="txtCity"
+                    Placeholder="City"
+                    WidthRequest="200"
+                    MaxLength="30"
+                    />
                 <Picker x:Name="dropState"
                         Title="State"
                         TitleColor="#3f3f3f"

@@ -22,7 +22,7 @@ public partial class ProfilePage : ContentPage
 		groupList.ItemsSource = singleton.Groups;
 		tagList.ItemsSource = singleton.Tags;
 
-		Task.Run(BackgroundStuff);
+		//Task.Run(BackgroundStuff);
 	}
 	/**
 	 * TryGetData - Attempts to get the data for the profile from the database using the singleton
@@ -68,16 +68,26 @@ public partial class ProfilePage : ContentPage
         ProfileSingleton singleton = ProfileSingleton.GetInstance();
 		await singleton.SetValues();
         Name.Text = singleton.ProfileName;//sets profile name
-		Name.FontFamily = "Algerian";
         Bio.Text = singleton.ProfileBio;//sets profile bio
-		Bio.FontFamily = "Sedan";
 
 		//Need to add updating friends and groups !!!
 		groupList.ItemsSource = singleton.Groups;
 		tagList.ItemsSource = singleton.Tags;
     }
 
-	private async Task BackgroundStuff()
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+		UpdateProfile();
+    }
+
+    protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
+    {
+        base.OnNavigatedFrom(args);
+		UpdateProfile();
+    }
+
+    private async Task BackgroundStuff()
 	{
 		ProfileSingleton singleton = ProfileSingleton.GetInstance();
 		while(singleton.isLoggedIn)

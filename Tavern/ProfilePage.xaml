@@ -17,6 +17,7 @@
                 Text=""
                 VerticalOptions="Center" 
                 HorizontalOptions="Fill" 
+                FontFamily="Algerian"
                 />
             <Label
                 x:Name="Bio"
@@ -24,6 +25,7 @@
                 FontSize="25"
                 HorizontalOptions="Fill" 
                 MaxLines="10"
+                FontFamily="Sedan"
                 />
             <VerticalStackLayout x:Name="TagsList" Padding="10, 0">
                 <Label HorizontalTextAlignment="Center">Tags</Label>
@@ -31,7 +33,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid>
-                                <Label Text="{Binding Name}" HorizontalTextAlignment="Center"/>
+                                <Label Text="{Binding Name}" HorizontalTextAlignment="Center" FontFamily="Sedan"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
@@ -46,7 +48,7 @@
                 <CollectionView x:Name="groupList" ItemsLayout="Vertical" MaximumHeightRequest="140" VerticalScrollBarVisibility="Always">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Label Text="{Binding Name}" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                            <Label Text="{Binding Name}" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontFamily="Sedan"/>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                     <CollectionView.EmptyView>

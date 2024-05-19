@@ -14,10 +14,15 @@ public partial class RegisterPage : ContentPage
 
     public async void RegisterButton(object sender, EventArgs e)
     {
+        if (txtUsername.Text == "")
+        {
+            ShowErrorMessage("Enter Valid Username");
+            return;
+        }
         if (!txtConfirmPassword.Text.Equals(txtPassword.Text))
         {
             //error handling here
-            ShowErrorMessage("Confirm Password and Password dont match");
+            ShowErrorMessage("Confirm Password and Password don't match");
             return;
         }
 
@@ -26,12 +31,27 @@ public partial class RegisterPage : ContentPage
             //error handling here
             ShowErrorMessage("Invalid Email");
             return;
-        }    
-
-        if (!PasswordVerification())
+        }
+        int verification = PasswordVerification();
+        if (verification == -1)
         {
             //error handnling here
-            ShowErrorMessage("Password missing requirement");
+            ShowErrorMessage("Password missing lowercase character");
+            return;
+        }
+        else if (verification == -2) 
+        {
+            ShowErrorMessage("Password missing uppercase character");
+            return;
+        }
+        else if (verification == -3)
+        {
+            ShowErrorMessage("Password missing special character");
+            return;
+        }
+        else if (verification == -4)
+        {
+            ShowErrorMessage("Password missing number");
             return;
         }
 
@@ -74,12 +94,12 @@ public partial class RegisterPage : ContentPage
         return false;
     }
 
-    private bool PasswordVerification()
+    private int PasswordVerification()
     {
         string special = "!@#$%^&*<>?:;'\"-+=|[]{}()";
 
         string password = txtPassword.Text;
-        bool containsSpecial = false, containsUppercase = false, containsLowercase = false;
+        bool containsSpecial = false, containsUppercase = false, containsLowercase = false, containsNumber = false ;
         foreach (char c in password)
         {
             if (!containsLowercase && Char.IsLower(c))
@@ -88,13 +108,19 @@ public partial class RegisterPage : ContentPage
                 containsUppercase = true;
             else if (!containsSpecial && special.Contains(c))
                 containsSpecial = true;
+            else if (!containsNumber && Char.IsDigit(c))
+                containsNumber = true;
 
-            if (containsLowercase && containsUppercase && containsSpecial)
+            if (containsLowercase && containsUppercase && containsSpecial && containsNumber)
             {
-                return true;
+                return 0;
             }
         }
-        return false;
+        if (!containsLowercase) return -1;
+        else if (!containsUppercase) return -2;
+        else if (!containsSpecial) return -3;
+        else if (!containsNumber) return -4;
+        return 0;//should not reach here
     }
 
     private void ShowErrorMessage(string message)
