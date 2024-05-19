@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Net.Http.Headers;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text.Json;
@@ -599,7 +597,7 @@ namespace WebApi
             if (!AlreadyInTable(data["userId"], data["tagId"])) return 0;
             try
             {
-                using(SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
@@ -623,6 +621,74 @@ namespace WebApi
         public static int DeleteGroup(Dictionary<string, string> data)
         {
             throw new NotImplementedException();
+        }
+
+        public static List<MiniInfo> GetOwnedGroups(int id)
+        {
+            SetConnectionString();
+            try
+            {
+                List<MiniInfo> groups = new List<MiniInfo>();
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT GroupID, GroupName FROM Groups WHERE OwnerID = @id";
+                        cmd.Parameters.AddWithValue("@id", id);
+
+                        var reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            var group = new MiniInfo();
+                            group.Id = reader.GetInt32(0);
+                            group.Name = reader.GetString(1);
+                            groups.Add(group);
+                        }
+                        return groups;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
+        public static List<MiniInfo> GetOpenPrivateRequests(int id)
+        {
+            SetConnectionString();
+            try
+            {
+                List<MiniInfo> requests = new List<MiniInfo>();
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT UserID_1, UserName FROM Relationships " +
+                            "JOIN Customers ON UserID_1 = UserID WHERE Relationship = 'R' AND UserID_2 = @id;";
+                        cmd.Parameters.AddWithValue("@id", id);
+
+                        var reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            var request = new MiniInfo();
+                            request.Id = reader.GetInt32(0);
+                            request.Name = reader.GetString(1);
+
+                            requests.Add(request);
+                        }
+                        return requests;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
         }
     }
 }

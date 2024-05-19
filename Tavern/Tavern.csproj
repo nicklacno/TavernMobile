@@ -51,6 +51,7 @@
 	  <None Remove="Resources\Images\logintavern.png" />
 	  <None Remove="Resources\Images\messages.png" />
 	  <None Remove="Resources\Images\paper_login.jpg" />
+	  <None Remove="Resources\Images\request.png" />
 	  <None Remove="Resources\Images\search.png" />
 	  <None Remove="Resources\Images\tavern.png" />
 	  <None Remove="Resources\Images\user.png" />

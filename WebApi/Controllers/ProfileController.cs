@@ -123,5 +123,17 @@ namespace WebApi.Controllers
         {
             return Profile.DeleteGroup(data);
         }
+
+        [HttpGet("{id}/OwnedGroups")]
+        public List<MiniInfo> GetOwnedGroups(int id)
+        {
+            return Profile.GetOwnedGroups(id);
+        }
+
+        [HttpGet("{id}/OpenPrivateRequests")]
+        public List<MiniInfo> GetOpenPrivateRequests(int id)
+        {
+            return Profile.GetOpenPrivateRequests(id);
+        }
     }
 }
