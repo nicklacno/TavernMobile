@@ -13,7 +13,7 @@ namespace WebApi
         public string? Name { get; set; }
         public string? Bio { get; set; }
         public int OwnerId { get; set; }
-        public List<string>? Members { get; set; }
+        public List<MiniInfo>? Members { get; set; }
         public List<Tag>? Tags { get; set; }
 
         /**
@@ -64,18 +64,18 @@ namespace WebApi
          * @param id - Group Id the members are apart of
          * @return - the list of names of the group members, null if error
          */
-        private static List<string>? GetMembers(int id)
+        private static List<MiniInfo>? GetMembers(int id)
         {
             SetConnectionString();
             try
             {
-                List<string> members = new List<string>();
+                List<MiniInfo> members = new List<MiniInfo>();
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "SELECT UserName FROM MemberGroup JOIN Customers " +
+                        cmd.CommandText = "SELECT UserId, UserName FROM MemberGroup JOIN Customers " +
                                             "ON MemberGroup.UserID = Customers.UserID " +
                                             "WHERE GroupID = @GroupP";
                         cmd.Parameters.AddWithValue("@GroupP", id);
@@ -83,7 +83,7 @@ namespace WebApi
                         SqlDataReader reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
-                            members.Add(reader.GetString(0));
+                            members.Add(new MiniInfo { Name = reader.GetString(1), Id = reader.GetInt32(0) });
                         }
                     }
                 }
@@ -195,7 +195,7 @@ namespace WebApi
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    using(SqlCommand cmd = conn.CreateCommand())
+                    using (SqlCommand cmd = conn.CreateCommand())
                     {
                         cmd.CommandText = "DELETE FROM Groups WHERE GroupID = @id";
                         cmd.Parameters.AddWithValue("@id", id);
@@ -390,7 +390,7 @@ namespace WebApi
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    using(SqlCommand cmd = conn.CreateCommand())
+                    using (SqlCommand cmd = conn.CreateCommand())
                     {
                         cmd.CommandText = "SELECT GroupID, UserID FROM GroupRequests WHERE RequestID = @req";
                         cmd.Parameters.AddWithValue("@req", requestId);
@@ -442,13 +442,13 @@ namespace WebApi
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    using(SqlCommand cmd = conn.CreateCommand())
+                    using (SqlCommand cmd = conn.CreateCommand())
                     {
                         cmd.CommandText = "INSERT INTO MemberGroup (GroupID, UserID) VALUES (@group, @user);";
                         cmd.Parameters.AddWithValue("@group", groupId);
                         cmd.Parameters.AddWithValue("@user", userId);
 
-                        cmd.ExecuteNonQuery ();
+                        cmd.ExecuteNonQuery();
                         return 0;
                     }
                 }
@@ -768,7 +768,7 @@ namespace WebApi
                         cmd.CommandText = "SELECT RequestID, GroupID, c.UserID, UserName FROM GroupRequests r " +
                             "JOIN Customers c ON r.UserID = c.UserID WHERE GroupID = @id";
                         cmd.Parameters.AddWithValue("@id", id);
-                        
+
                         var reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
@@ -783,6 +783,58 @@ namespace WebApi
                         return requests;
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
+        public static List<Group> SearchGroups(Dictionary<string, string> data)
+        {
+            int tagCount = 1;
+            bool hasTags = data.ContainsKey("tag" + tagCount);
+            List<Group> groups = new List<Group>();
+            SetConnectionString();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        if (hasTags)
+                        {
+                            cmd.CommandText += "SELECT g.GroupID, COUNT(TagID) AS matching " +
+                                "FROM Groups g JOIN GroupTags gt ON g.GroupID = gt.GroupID " +
+                                "WHERE UPPER(g.GroupName) LIKE UPPER('%'+@text+'%') AND (TagID = @tag1";
+                            cmd.Parameters.AddWithValue("@tag1", Convert.ToInt32(data["tag" + tagCount]));
+                            tagCount++;
+                            while (data.ContainsKey("tag" + tagCount))
+                            {
+                                cmd.CommandText += " OR TagID = @tag" + tagCount;
+                                cmd.Parameters.AddWithValue("@tag" + tagCount, Convert.ToInt32(data["tag" + tagCount]));
+                                tagCount++;
+                            }
+                            cmd.CommandText += ") GROUP BY g.GroupID, GroupName, GroupBio ORDER BY matching DESC";
+                        }
+                        else
+                        {
+                            cmd.CommandText = "SELECT g.GroupID FROM Groups g WHERE UPPER(g.GroupName) LIKE UPPER('%'+@text+'%')";
+                        }
+                        string text = data.ContainsKey("text") ? data["text"] : "";
+                        cmd.Parameters.AddWithValue("@text", text);
+                        var reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            groups.Add(GetGroup(reader.GetInt32(0)));
+                        }
+
+                    }
+                }
+
+                return groups;
             }
             catch (Exception ex)
             {

@@ -90,5 +90,11 @@ namespace WebApi.Controllers
             if (!data.ContainsKey("requestId") || !data.ContainsKey("isAccepted")) return -1;
             return Group.ModifyRequest(data["requestId"], data["isAccepted"] != 0);
         }
+
+        [HttpPost("SearchGroups")]
+        public List<Group> PostSearchGroups(Dictionary<string, string> data)
+        {
+            return Group.SearchGroups(data);
+        }
     }
 }
