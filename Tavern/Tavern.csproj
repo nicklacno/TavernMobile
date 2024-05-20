@@ -86,6 +86,9 @@
 	  <MauiXaml Update="ErrorPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="FindGroupPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="GroupCard.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

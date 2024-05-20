@@ -645,7 +645,7 @@ namespace Tavern
 
                     try
                     {
-                        var response = await _httpClient.PostAsync("/Groups/ModifyRequest", content);
+                        var response = await _httpClient.PostAsync("Groups/ModifyRequest", content);
                         int status = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
 
                         if (status != 0) return selectedItems.IndexOf(user) + 1;
@@ -677,7 +677,7 @@ namespace Tavern
 
                     try
                     {
-                        var response = await _httpClient.PostAsync("/Groups/ModifyRequest", content);
+                        var response = await _httpClient.PostAsync("Groups/ModifyRequest", content);
                         int status = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
 
                         if (status != 0) return selectedItems.IndexOf(user) + 1;
@@ -688,6 +688,48 @@ namespace Tavern
                         return -1;
                     }
                 }
+            }
+            return 0;
+        }
+
+        public async Task<int> UpdateGroupTags(Group groupData, Dictionary<int, bool> updatedValues)
+        {
+            if (groupData == null) return -1;
+            Group g = null;
+            foreach (var group in Groups)
+            {
+                if (group.GroupId == groupData.GroupId)
+                {
+                    g = group;
+                    break;
+                }
+            }
+
+            if (g == null) return -1;
+
+            g.Tags.Clear();
+            foreach (var tag in GroupTags)
+            {
+                Dictionary<string, int> values = new Dictionary<string, int>
+                {
+                    { "groupId", g.GroupId },
+                    { "tagId", tag.Id }
+                };
+                var json = JsonSerializer.Serialize(values);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response;
+
+                if (updatedValues.ContainsKey(tag.Id) && updatedValues[tag.Id])
+                {
+                    g.Tags.Add(tag);
+                    response = await _httpClient.PostAsync("Groups/AddTag", content);
+                }
+                else
+                {
+                    response = await _httpClient.PostAsync("Groups/RemoveTag", content);
+                }
+                var retVal = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
+                if (retVal != 0) return -2;
             }
             return 0;
         }

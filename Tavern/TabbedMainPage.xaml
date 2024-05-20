@@ -17,6 +17,6 @@
         </Style>
     </TabbedPage.Style>
     <local:HomePage Title="Home" IconImageSource="Resources/Images/home.png"/>
-    <!--<swiping:SwipingPage Title="Find Groups"/>-->
+    <local:FindGroupPage Title="Find Groups" IconImageSource="Resources/Images/search.png"/>
     <local:ProfilePage Title="My Profile" IconImageSource="Resources/Images/user.png"/>
 </TabbedPage>

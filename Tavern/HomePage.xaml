@@ -14,21 +14,6 @@
                 VerticalScrollBarVisibility="Never"
                 >
             <VerticalStackLayout>
-                <!--<VerticalStackLayout 
-                    x:Name="layoutGroup"
-                    HorizontalOptions="Fill" 
-                    Padding="10"
-                    Spacing="10"
-                    />-->
-                <Button
-    x:Name="btnSwipeNavigate"
-    Text="Find Groups"
-    FontFamily="Sedan"
-    TextColor="Black"
-    BackgroundColor="BurlyWood"
-    FontSize="30"
-    Clicked="NavigateToSwipe"
-/>
                 <Button
     x:Name="btnCreateNavigate"
     FontFamily="Sedan"
@@ -66,13 +51,6 @@
                                     </CollectionView>
                                     <Label x:Name="lbMembers" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontFamily="Sedan" FontSize="20"
                                         Text="{Binding Members.Count, StringFormat='Members: {0:D}'}"/>
-                                    <!--<Button 
-                                        x:Name="btnViewGroup"
-                                        Text="View Group"
-                                        Clicked="ViewGroup"
-                                        VerticalOptions="End"
-                                        HorizontalOptions="Fill"
-                                        />-->
                                 </VerticalStackLayout>
                             </Grid>
                         </DataTemplate>

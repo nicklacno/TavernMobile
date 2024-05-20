@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Tavern.FindGroupPage"
+             Title="Find Groups">
+    <Grid>
+        <Image Source="/Resources/Images/tavern.png" Aspect="AspectFill" />
+        <VerticalStackLayout Padding="30">
+            <Grid HeightRequest="325" Padding="0,15">
+                <Image Source="/Resources/Images/paper_login.png" Aspect="Fill"/>
+                <VerticalStackLayout VerticalOptions="CenterAndExpand">
+                    <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" 
+                           FontSize="24" FontFamily="Algerian" Padding="0,10"
+                           TextColor="#230900">Find Groups By:</Label>
+                    <Button VerticalOptions="CenterAndExpand" Text="Swiping"
+                            FontSize="24" FontFamily="Sedan" Clicked="OnClickSwiping"
+                            HorizontalOptions="CenterAndExpand"
+                            BackgroundColor="BurlyWood" TextColor="Black"
+                            />
+                </VerticalStackLayout>
+            </Grid>
+            <Grid HeightRequest="325" Padding="0,15">
+                <Image Source="/Resources/Images/paper_login.png" Aspect="Fill"/>
+                <VerticalStackLayout VerticalOptions="CenterAndExpand">
+                    <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" 
+                           FontSize="24" FontFamily="Algerian" Padding="0,10"
+                           TextColor="#230900">Find Groups By:</Label>
+                    <Button VerticalOptions="CenterAndExpand" Text="Searching"
+                            FontSize="24" FontFamily="Sedan" Clicked="OnClickSearching"
+                            HorizontalOptions="CenterAndExpand"
+                            BackgroundColor="BurlyWood" TextColor="Black"
+                            />
+                </VerticalStackLayout>
+            </Grid>
+        </VerticalStackLayout>
+    </Grid>
+    
+        
+</ContentPage>

@@ -21,7 +21,6 @@ public partial class GroupPage : ContentPage
 		InitializeComponent();
 		GroupData = data;
 		UpdatePage();
-		Updating = true;
 
 		ChatView = new GroupChatView(GroupData.GroupId, this);
 		GroupChat.Add(ChatView);
@@ -58,6 +57,18 @@ public partial class GroupPage : ContentPage
 			}
 		}
     }
+
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+		NavigationUpdate();
+    }
+
+	private async Task NavigationUpdate()
+	{
+		GroupData = await ProfileSingleton.GetInstance().GetGroup(GroupData.GroupId);
+		await UpdatePage();
+	}
 
     private async void PushEditGroupPage(object sender, EventArgs e)
     {

@@ -86,7 +86,17 @@ public partial class EditGroupPage : ContentPage
 
     public async void UpdateTagsList(object sender, EventArgs e)
     {
-        
+        Dictionary<int, bool> updatedValues = new Dictionary<int, bool>();
+        foreach (var tag in GroupTagsList.SelectedItems)
+        {
+            if (tag is Tag t)
+            {
+                updatedValues[t.Id] = true;
+            }
+        }
+
+        int val = await ProfileSingleton.GetInstance().UpdateGroupTags(GroupData,  updatedValues);
+        ShowErrorMessage(val == 0 ? "Successfully Updated Tags" : "Failed to Update Tag");
     }
     public void ShowErrorMessage(string message)
     {

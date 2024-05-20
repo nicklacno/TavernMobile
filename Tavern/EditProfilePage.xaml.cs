@@ -76,5 +76,7 @@ public partial class EditProfilePage : ContentPage
 		}
 		//tagList.SelectedItems.Clear();
 		await singleton.UpdateProfile(updatedStatus);
+
+		ShowErrorMessage("Successfully Updated Tags");
 	}
 }
