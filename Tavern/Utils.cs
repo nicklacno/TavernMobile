@@ -23,6 +23,12 @@ namespace Tavern
         public string Name { set; get; }
     }
 
+    public class Member
+    {
+        public int Id { set; get; }
+        public string Name { set; get; }
+    }
+
     public class Request
     {
         public int RequestId { get; set; }

@@ -96,5 +96,18 @@ namespace WebApi.Controllers
         {
             return Group.SearchGroups(data);
         }
+
+        [HttpGet("Code={code}")]
+        public Group? GetGroup(string code)
+        {
+            if (code.Length != 6) return null;
+            return Group.GetGroup(code);
+        }
+
+        [HttpGet("{id}/Code")]
+        public string GetGroupCode(int id)
+        {
+            return Group.GetGroupCode(id);
+        }
     }
 }

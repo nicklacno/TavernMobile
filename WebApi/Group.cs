@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using System;
 using System.Diagnostics;
 
 namespace WebApi
@@ -841,6 +842,89 @@ namespace WebApi
                 Debug.WriteLine(ex);
                 return null;
             }
+        }
+
+        public static Group? GetGroup(string code)
+        {
+            SetConnectionString();
+            int id = CodeExists(code);
+            if (id < 0) return null;
+            return GetGroup(id);
+        }
+
+        public static string GetGroupCode(int id)
+        {
+            SetConnectionString();
+            if (!Exists(id)) return "";
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT GroupCode FROM Groups WHERE GroupID = @id";
+                        cmd.Parameters.AddWithValue("@id", id);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            reader.Read();
+                            if (!reader.IsDBNull(0)) return reader.GetString(0);
+                        }
+                    }
+                    Random rand = new Random(id);
+                    string code = GetNewCode(rand);
+                    while (CodeExists(code) != -1) code = GetNewCode(rand);
+                    
+                    using(SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "UPDATE Groups SET GroupCode = @code WHERE GroupID = @id";
+                        cmd.Parameters.AddWithValue("@code", code);
+                        cmd.Parameters.AddWithValue("@id", id);
+
+                        cmd.ExecuteNonQuery();
+                        return code;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return "";
+            }
+        }
+
+        //return group id of group if exists, else returns negative
+        private static int CodeExists(string code)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT GroupID FROM Groups WHERE GroupCode = @code";
+                        cmd.Parameters.AddWithValue("@code", code);
+                        var reader = cmd.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            return reader.GetInt32(0);
+                        }
+                        return -1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -2;
+            }
+        }
+        private static string GetNewCode(Random random)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, 6)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }

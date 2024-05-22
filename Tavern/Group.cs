@@ -13,7 +13,7 @@ namespace Tavern
         public string? Name { get; set; }
         public string? Bio { get; set; }
         public int OwnerId { get; set; }
-        public ObservableCollection<string> Members { get; set; }
+        public ObservableCollection<Member> Members { get; set; }
         public ObservableCollection<Tag> Tags { get; set; }
 
 

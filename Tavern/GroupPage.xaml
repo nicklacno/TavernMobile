@@ -66,7 +66,7 @@
                     </CollectionView.Header>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Label Text="{Binding .}" FontSize="20" FontFamily="Sedan"/>
+                            <Label Text="{Binding Name}" FontSize="20" FontFamily="Sedan"/>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

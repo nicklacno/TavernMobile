@@ -46,7 +46,21 @@ public partial class GroupPage : ContentPage
 
 			layoutMembers.ItemsSource = GroupData.Members;
 
-			if (GroupData.OwnerId == ProfileSingleton.GetInstance().ProfileId)
+			bool isInGroup = false;
+			foreach (Member m in GroupData.Members)
+			{
+				if (m.Id == ProfileSingleton.GetInstance().ProfileId)
+				{
+					isInGroup = true;
+					return;
+				}
+			}
+			
+			if (!isInGroup)
+			{
+				ModifyButton.Text = "Request to Join";
+			}
+			else if (GroupData.OwnerId == ProfileSingleton.GetInstance().ProfileId)
 			{
 				ModifyButton.Text = "Edit Group";
 				ModifyButton.Clicked += PushEditGroupPage;

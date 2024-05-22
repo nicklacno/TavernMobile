@@ -96,8 +96,25 @@ public partial class EditGroupPage : ContentPage
         }
 
         int val = await ProfileSingleton.GetInstance().UpdateGroupTags(GroupData,  updatedValues);
-        ShowErrorMessage(val == 0 ? "Successfully Updated Tags" : "Failed to Update Tag");
+        ShowErrorMessage(val == 0 ? "Successfully Updated Tags" : "Failed to Update Tags");
     }
+
+    public async void UpdateGroupInfo(object sender, EventArgs e)
+    {
+
+    }
+
+    public async void KickMembers(object sender, EventArgs e)
+    {
+
+    }
+
+    public async void BanMembers(object sender, EventArgs e)
+    {
+
+    }
+
+
     public void ShowErrorMessage(string message)
     {
         var popup = new ErrorPopup(message);

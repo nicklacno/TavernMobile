@@ -22,8 +22,9 @@
         <StyleSheet Source="../Resources/Styles/PageStyles/GroupCard.css"/>
     </SwipeView.Resources>
     <Grid>
-        <Image Source="/Resources/Images/paper_login.jpg" Aspect="Fill"/> 
+        <Image Source="/Resources/Images/paper_login.jpg" Aspect="Fill"/>
         <VerticalStackLayout Padding="10" Spacing="10">
+            <Label x:Name="Instructions" Text="(Swipe left to request to join, Swipe right to skip)"/>
             <Label
                 x:Name="lbName"
                 Text="Test Group"
@@ -49,7 +50,7 @@
                 />
             <FlexLayout x:Name="hStackTag" JustifyContent="SpaceEvenly" Direction="Column" AlignItems="Center" VerticalOptions="CenterAndExpand" ></FlexLayout>
             <Label x:Name="lbMembers" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
+            
         </VerticalStackLayout>
     </Grid>
-    
 </SwipeView>
