@@ -38,51 +38,51 @@ public partial class EditGroupPage : ContentPage
         }
     }
 
-    public async void AcceptUsers(object sender, EventArgs e)
-    {
-        if (requestStack.SelectedItems.Count < 0) return;
-        int result = await ProfileSingleton.GetInstance().AcceptMembers(requestStack.SelectedItems);
-        if (result == -1) ShowErrorMessage("An Error has occurred, Try again later");
-        else ProcessStatus(result);
-    }
+    //public async void AcceptUsers(object sender, EventArgs e)
+    //{
+    //    if (requestStack.SelectedItems.Count < 0) return;
+    //    int result = await ProfileSingleton.GetInstance().AcceptMembers(requestStack.SelectedItems);
+    //    if (result == -1) ShowErrorMessage("An Error has occurred, Try again later");
+    //    else ProcessStatus(result);
+    //}
 
-    public async void RejectUsers(object sender, EventArgs e)
-    {
-        if (requestStack.SelectedItems.Count < 0) return;
-        int result = await ProfileSingleton.GetInstance().RejectMembers(requestStack.SelectedItems);
-        if (result == -1) ShowErrorMessage("An error has occurred, Try again later");
-        else ProcessStatus(result);
-    }
+    //public async void RejectUsers(object sender, EventArgs e)
+    //{
+    //    if (requestStack.SelectedItems.Count < 0) return;
+    //    int result = await ProfileSingleton.GetInstance().RejectMembers(requestStack.SelectedItems);
+    //    if (result == -1) ShowErrorMessage("An error has occurred, Try again later");
+    //    else ProcessStatus(result);
+    //}
 
-    private void ProcessStatus(int status)
-    {
-        var newList = new ObservableCollection<Request>(requests);
-        if (status > 0)
-        {
-            var errored = requestStack.SelectedItems.ElementAt(status - 1);
-            foreach (var user in requestStack.SelectedItems)
-            {
-                if (user == errored) return;
-                else
-                {
-                    newList.Remove((Request)user);
-                }
-            }
-            requestStack.SelectedItems.Clear();
-            requests = newList;
-            requestStack.ItemsSource = requests;
-        }
-        else
-        {
-            foreach (var user in requestStack.SelectedItems)
-            {
-                newList.Remove((Request)user);
-            }
-            requestStack.SelectedItems.Clear();
-            requests = newList;
-            requestStack.ItemsSource = requests;
-        }
-    }
+    //private void ProcessStatus(int status)
+    //{
+    //    var newList = new ObservableCollection<Request>(requests);
+    //    if (status > 0)
+    //    {
+    //        var errored = requestStack.SelectedItems.ElementAt(status - 1);
+    //        foreach (var user in requestStack.SelectedItems)
+    //        {
+    //            if (user == errored) return;
+    //            else
+    //            {
+    //                newList.Remove((Request)user);
+    //            }
+    //        }
+    //        requestStack.SelectedItems.Clear();
+    //        requests = newList;
+    //        requestStack.ItemsSource = requests;
+    //    }
+    //    else
+    //    {
+    //        foreach (var user in requestStack.SelectedItems)
+    //        {
+    //            newList.Remove((Request)user);
+    //        }
+    //        requestStack.SelectedItems.Clear();
+    //        requests = newList;
+    //        requestStack.ItemsSource = requests;
+    //    }
+    //}
 
     public async void UpdateTagsList(object sender, EventArgs e)
     {

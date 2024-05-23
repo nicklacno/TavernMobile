@@ -79,49 +79,30 @@ namespace WebApi
          * @param id - Profile Id to retrieve friends
          * @return - Json of Friends, empty if none, null if error along the way
          */
-        public static string? GetFriends(int id)
+        public static List<MiniInfo>? GetFriends(int id)
         {
             SetConnectionString();
             try
             {
-                List<string> friends = new List<string>(); //List that stores the friend username(s)
-                List<int> ids = new List<int>(); //List that stores the friend's ID's
+                
+                List<MiniInfo> ids = new List<MiniInfo>(); //List that stores the friend's ID's
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open(); //Opens connection to database
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "SELECT UserID_1, UserID_2 FROM tavern.dbo.PrivateChat WHERE Relationship='F' AND " +
-                            "(UserID_1=@ProfileID OR UserID_2=@ProfileID)"; //Query
+                        cmd.CommandText = "SELECT UserID_2, UserName FROM Relationships JOIN Customers ON UserID_2 = UserID " +
+                            "WHERE Relationship='F' AND UserID_1 = @ProfileID"; //Query
                         cmd.Parameters.AddWithValue("@ProfileID", id);
                         SqlDataReader reader = cmd.ExecuteReader(); //Passes friends ids to reader
                         while (reader.Read()) //Grabs all friend ids and adds them to ids list
                         {
-                            if (reader.GetInt32(0) == id) //UserId_1 is the Current Profile
-                                ids.Add(reader.GetInt32(1));
-                            else //UserId_2 is the current profile
-                                ids.Add(reader.GetInt32(0));
+                            ids.Add(new MiniInfo { Id = reader.GetInt32(0), Name = reader.GetString(1) });
                         }
-                    }
-                    conn.Close(); //closes first connection
-                    if (ids.Count < 0) //Checks for any friends
-                    {
-                        conn.Open(); //Opens new connection, conn doesnt like creating multiple commands. Double check for later!!!
-                        using (SqlCommand cmd = conn.CreateCommand())
-                        {
-                            cmd.CommandText = $"SELECT UserID, UserName FROM tavern.dbo.Customers";  //Gets all Profiles. Double check if theres a better way!!!
-                            SqlDataReader reader = cmd.ExecuteReader(); //Passes to reader
-                            while (reader.Read())
-                            {
-                                if (ids.Contains(reader.GetInt32(0)))//checks if profile is in list, there's got to be a better way!!!
-                                    friends.Add(reader.GetString(1));
-                            }
-                        }
-                        conn.Close(); //close connection
                     }
 
                 }
-                return JsonSerializer.Serialize(friends); //returns the json of the friends names
+                return ids; //returns the json of the friends names
 
             }
             catch (Exception e) //returns null if error
@@ -380,7 +361,8 @@ namespace WebApi
                         cmd.CommandText = command;
                         cmd.Parameters.AddWithValue("@IdP", Convert.ToInt32(data["profileId"]));
 
-                        cmd.ExecuteNonQuery();
+                        int rows = cmd.ExecuteNonQuery();
+                        if (rows == 0) return -10;
                     }
                 }
                 return 0;
@@ -865,5 +847,13 @@ namespace WebApi
                 return -1;
             }
         }
+
+        //Delete Account
+        //MyRequests
+        //PrivateRequests to me
+        //GroupRequests for groups that I own
+        //Remove Friend
+        //IsFriend
+        
     }
 }

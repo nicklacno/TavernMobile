@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
 using JsonSerializer = System.Text.Json.JsonSerializer;
-using System.Collections.ObjectModel;
+using MemberList = System.Collections.ObjectModel.ObservableCollection<Tavern.Member>;
 
 namespace Tavern.SwipingFunctionality
 {
@@ -23,7 +19,7 @@ namespace Tavern.SwipingFunctionality
         private const string BASE_ADDRESS = "https://n588x7k6-5273.usw2.devtunnels.ms/"; //base address for persistent dev-tunnel for api
         private SwipingSingleton()
         {
-            _httpClient.BaseAddress = new Uri(BASE_ADDRESS); 
+            _httpClient.BaseAddress = new Uri(BASE_ADDRESS);
         }
         public static SwipingSingleton GetInstance()
         {
@@ -38,7 +34,7 @@ namespace Tavern.SwipingFunctionality
             ProfileSingleton instance = ProfileSingleton.GetInstance();
 
             string groups = await _httpClient.GetStringAsync($"Groups/{instance.ProfileId}/PopulateGroups");
-            
+
             Groups = ConvertToGroupList(groups);
             return;
         }
@@ -75,11 +71,22 @@ namespace Tavern.SwipingFunctionality
             group.Name = (string)data["name"];
             group.Bio = (string)data["bio"];
             group.OwnerId = (int)data["ownerId"];
-            group.Members = new ObservableCollection<string>(data["members"].Values<string>().ToList());
+            group.Members = ConvertToMembers(data["members"].Values<string>().ToList());
             group.Tags = ConvertToTagList(data["tags"].ToString());
 
             return group;
         }
+        private MemberList ConvertToMembers(List<string> json)
+        {
+            MemberList list = new MemberList();
+            foreach (string member in json)
+            {
+                JObject memberData = JObject.Parse(member);
+                list.Add(new Member { Id = (int)memberData["id"], Name = (string)memberData["name"] });
+            }
+            return list;
+        }
+
 
         private ObservableCollection<Tag> ConvertToTagList(string list)
         {
@@ -125,7 +132,7 @@ namespace Tavern.SwipingFunctionality
             //Group.JoinRequest(likedGroup.GroupId, singleton.ProfileId);
         }
     }
-    
 
-    
+
+
 }

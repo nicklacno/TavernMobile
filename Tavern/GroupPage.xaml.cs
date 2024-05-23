@@ -52,7 +52,7 @@ public partial class GroupPage : ContentPage
 				if (m.Id == ProfileSingleton.GetInstance().ProfileId)
 				{
 					isInGroup = true;
-					return;
+					break;
 				}
 			}
 			

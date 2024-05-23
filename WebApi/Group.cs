@@ -41,18 +41,20 @@ namespace WebApi
                         {
                             group.OwnerId = reader.GetInt32(0);
                             group.Name = reader.GetString(1);
-                            if (reader.GetValue(2) != System.DBNull.Value)
+                            if (!reader.IsDBNull(2))
                             {
                                 group.Bio = reader.GetString(2);
                             }
 
                             group.Members = GetMembers(id);
                             group.Tags = GetTags(id);
+                            return group;
                         }
+                        return null;
+
                     }
                 }
 
-                return group;
             }
             catch (Exception ex)
             {
@@ -76,7 +78,7 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "SELECT UserId, UserName FROM MemberGroup JOIN Customers " +
+                        cmd.CommandText = "SELECT Customers.UserID, UserName FROM MemberGroup JOIN Customers " +
                                             "ON MemberGroup.UserID = Customers.UserID " +
                                             "WHERE GroupID = @GroupP";
                         cmd.Parameters.AddWithValue("@GroupP", id);
@@ -92,6 +94,7 @@ namespace WebApi
             }
             catch (Exception ex)
             {
+                Debug.WriteLine(ex);
                 return null;
             }
         }
@@ -338,7 +341,8 @@ namespace WebApi
                         cmd.Parameters.AddWithValue("@Owner", Convert.ToInt32(data["ownerId"]));
                         cmd.Parameters.AddWithValue("@Group", Convert.ToInt32(data["groupId"]));
 
-                        cmd.ExecuteNonQuery();
+                        int rows = cmd.ExecuteNonQuery();
+                        if (rows == 0) return -10;
                     }
                 }
                 return 0;
@@ -855,7 +859,6 @@ namespace WebApi
         public static string GetGroupCode(int id)
         {
             SetConnectionString();
-            if (!Exists(id)) return "";
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -867,6 +870,7 @@ namespace WebApi
                         cmd.Parameters.AddWithValue("@id", id);
                         using (var reader = cmd.ExecuteReader())
                         {
+                            if (!reader.HasRows) return "missing";
                             reader.Read();
                             if (!reader.IsDBNull(0)) return reader.GetString(0);
                         }
@@ -881,7 +885,8 @@ namespace WebApi
                         cmd.Parameters.AddWithValue("@code", code);
                         cmd.Parameters.AddWithValue("@id", id);
 
-                        cmd.ExecuteNonQuery();
+                        int rows = cmd.ExecuteNonQuery();
+                        if (rows == 0) return "missing";
                         return code;
                     }
                 }
@@ -926,5 +931,9 @@ namespace WebApi
             return new string(Enumerable.Repeat(chars, 6)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
+
+        //Delete Group
+        //Kick member
+        //Ban member
     }
 }

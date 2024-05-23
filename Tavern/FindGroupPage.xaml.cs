@@ -14,6 +14,6 @@ public partial class FindGroupPage : ContentPage
 
 	public async void OnClickSearching(object sender, EventArgs e)
 	{
-
+		await Navigation.PushAsync(new SearchFunctionality.SearchPage());
 	}
 }

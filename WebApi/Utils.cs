@@ -14,6 +14,14 @@
         public required string TagName { get; set; }
     }
 
+    public class OpenRequest
+    { 
+        public int RequestId { get; set;}
+        public int OtherID {  get; set; }
+        public string OtherName { get; set; }
+        public int ProfileId { get; set;}
+    }
+
     //The data structure for the minimal data that may be returned to the application
     public class MiniInfo
     {

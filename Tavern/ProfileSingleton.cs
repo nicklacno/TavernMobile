@@ -1,9 +1,10 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Reflection.Metadata;
 using System.Text;
 using JsonSerializer = System.Text.Json.JsonSerializer;
-
+using MemberList = System.Collections.ObjectModel.ObservableCollection<Tavern.Member>;
 namespace Tavern
 {
     public class ProfileSingleton
@@ -253,10 +254,20 @@ namespace Tavern
             group.Name = (string)data["name"];
             group.Bio = (string)data["bio"];
             group.OwnerId = (int)data["ownerId"];
-            group.Members = new ObservableCollection<string>(data["members"].Values<string>().ToList());
+            group.Members = ConvertToMembers(data["members"]);
             group.Tags = await GetGroupTags(id);
 
             return group;
+        }
+
+        private MemberList ConvertToMembers(JToken json)
+        {
+            MemberList list = new MemberList();
+            foreach (JObject member in json.Children())
+            {
+                list.Add(new Member { Id = (int)member["id"], Name = (string)member["name"] });
+            }
+            return list;
         }
 
         public async Task<int> Register(string username, string password, string email, string city, string state)
@@ -444,7 +455,7 @@ namespace Tavern
             ProfileId = -1;
             ProfileName = "";
             ProfileBio = "";
-            Groups.Clear();
+            Groups?.Clear();
             Groups = null;
             Friends = null;
             Tags.Clear();

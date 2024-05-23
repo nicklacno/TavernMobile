@@ -1,4 +1,4 @@
-namespace Tavern;
+namespace Tavern.SearchFunctionality;
 
 public partial class SearchPage : ContentPage
 {

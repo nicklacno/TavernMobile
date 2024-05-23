@@ -29,7 +29,7 @@ namespace WebApi.Controllers
          * @return - json string of friend usernames
          */
         [HttpGet("{id}/Friends")]
-        public string? GetFriends(int id)
+        public List<MiniInfo>? GetFriends(int id)
         {
             return Profile.GetFriends(id); //calls singleton
         }

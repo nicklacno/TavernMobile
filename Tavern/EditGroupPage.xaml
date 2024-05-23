@@ -50,7 +50,7 @@
                     <Button
                         x:Name="btnConfirm"
                         Text="Save Changes"
-                        Clicked="Update"
+                        Clicked="UpdateGroupInfo"
                         />
                 </VerticalStackLayout>
                 <CollectionView

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Tavern.SearchPage"
+             x:Class="Tavern.SearchFunctionality.SearchPage"
              Title="Search Page">
     <Grid>
-        <Image Source="/Resources/Images/tavern.png" Aspect="AspectFill" />
+        <Image Source="../Resources/Images/tavern.png" Aspect="AspectFill" />
         <VerticalStackLayout Padding="10">
             <Grid>
                 <Image Source="/Resources/Images/paper_login.jpg" Aspect="AspectFill"/>
@@ -17,7 +17,7 @@
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
-                    <Button x:Name="Search Button"/>
+                    <Button x:Name="SearchButton"/>
                 </VerticalStackLayout>
             </Grid>
         </VerticalStackLayout>
