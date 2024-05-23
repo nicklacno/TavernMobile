@@ -17,6 +17,10 @@ public partial class LoginPage : ContentPage
 		bool success = await ProfileSingleton.GetInstance().Login(txtUsername.Text, txtPassword.Text); //calls singleton to login using text boxes
 		if (success) 
 		{
+			if (checkRemember.IsChecked)
+			{
+				Preferences.Set("profileId", ProfileSingleton.GetInstance().ProfileId);
+			}
 			ProfileSingleton.GetInstance().switchMainPage(new NavigationPage(new TabbedMainPage())); //if successful, switch base page to main page
 		}
         else

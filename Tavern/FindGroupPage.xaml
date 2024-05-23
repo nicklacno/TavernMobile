@@ -6,7 +6,7 @@
     <Grid>
         <Image Source="/Resources/Images/tavern.png" Aspect="AspectFill" />
         <VerticalStackLayout Padding="30">
-            <Grid HeightRequest="325" Padding="0,15">
+            <Grid HeightRequest="300" Padding="0,15">
                 <Image Source="/Resources/Images/paper_login.png" Aspect="Fill"/>
                 <VerticalStackLayout VerticalOptions="CenterAndExpand">
                     <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" 
@@ -19,7 +19,7 @@
                             />
                 </VerticalStackLayout>
             </Grid>
-            <Grid HeightRequest="325" Padding="0,15">
+            <Grid HeightRequest="300" Padding="0,15">
                 <Image Source="/Resources/Images/paper_login.png" Aspect="Fill"/>
                 <VerticalStackLayout VerticalOptions="CenterAndExpand">
                     <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" 
@@ -32,8 +32,10 @@
                             />
                 </VerticalStackLayout>
             </Grid>
+            <Button x:Name="btnCode" Text="Find By Code" Clicked="FindByCode" 
+                    HorizontalOptions="CenterAndExpand" FontSize="24" BackgroundColor="BurlyWood"
+                    TextColor="Black" FontFamily="Sedan"/>
         </VerticalStackLayout>
     </Grid>
     
-        
 </ContentPage>

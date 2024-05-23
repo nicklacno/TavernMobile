@@ -42,6 +42,12 @@ namespace Tavern
 
             //set to true for tabbed page, false for login
             isLoggedIn = false; //sets the isLoggedIn to false, will change when retaining data
+
+            if (Preferences.ContainsKey("profileId") && Preferences.Get("profileId", -1) != -1)
+            {
+                ProfileId = Preferences.Get("profileId", -1);
+                isLoggedIn = true;
+            }
         }
 
         public async Task SetValues()
@@ -460,6 +466,7 @@ namespace Tavern
             Friends = null;
             Tags.Clear();
             switchMainPage.Invoke(new NavigationPage(new LoginPage()));
+            Preferences.Remove("profileId");
         }
 
         public async Task<ObservableCollection<Tag>> GetProfileTags()
