@@ -13,7 +13,7 @@ public partial class GroupPage : ContentPage
 	public GroupPage(int id)
 	{
 		InitializeComponent();
-		UpdatePage(id).RunSynchronously();
+		UpdatePage(id);
 	}
 
 	public GroupPage(Group data)
@@ -21,9 +21,8 @@ public partial class GroupPage : ContentPage
 		InitializeComponent();
 		GroupData = data;
 		UpdatePage();
-
-		ChatView = new GroupChatView(GroupData.GroupId, this);
-		GroupChat.Add(ChatView);
+		Updating = true;
+		
 		Task.Run(BackgroundUpdate);
 	}
 
@@ -59,6 +58,7 @@ public partial class GroupPage : ContentPage
 			if (!isInGroup)
 			{
 				ModifyButton.Text = "Request to Join";
+				return;
 			}
 			else if (GroupData.OwnerId == ProfileSingleton.GetInstance().ProfileId)
 			{
@@ -69,6 +69,8 @@ public partial class GroupPage : ContentPage
 			{
 				ModifyButton.Text = "Leave Group";
 			}
+			ChatView = new GroupChatView(GroupData.GroupId, this);
+			GroupChat.Add(ChatView);
 		}
     }
 
@@ -86,7 +88,7 @@ public partial class GroupPage : ContentPage
 
     private async void PushEditGroupPage(object sender, EventArgs e)
     {
-		await Navigation.PushAsync(new EditGroupPage(GroupData));
+		await Navigation.PushAsync(new EditGroupPage(GroupData), true);
     }
 
     public void ShowErrorMessage(string message)

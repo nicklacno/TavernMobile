@@ -45,10 +45,20 @@ namespace Tavern
 
             if (Preferences.ContainsKey("profileId") && Preferences.Get("profileId", -1) != -1)
             {
-                ProfileId = Preferences.Get("profileId", -1);
-                isLoggedIn = true;
-            }
+                
+                try
+                {
+                    ProfileId = Preferences.Get("profileId", -1);
+                    SetValues().RunSynchronously();
+                }
+                catch (Exception ex)
+                {
+                    Preferences.Remove("profileId");
+                    isLoggedIn = false;
+                }
         }
+            }
+            
 
         public async Task SetValues()
         {
@@ -61,8 +71,12 @@ namespace Tavern
 
                 await GetGroupsList();
                 await GetTags();
+                isLoggedIn = true;
             }
-
+            else
+            {
+                Logout();
+            }
 
         }
 
@@ -127,6 +141,7 @@ namespace Tavern
 
             if (ProfileId < 0) //returns null if Profile id was not set
                 return null;
+
             return await _httpClient.GetStringAsync($"Profile/{ProfileId}"); //calls for the profile id
         }
 
@@ -465,6 +480,7 @@ namespace Tavern
             Groups = null;
             Friends = null;
             Tags.Clear();
+            isLoggedIn = false;
             switchMainPage.Invoke(new NavigationPage(new LoginPage()));
             Preferences.Remove("profileId");
         }
@@ -750,6 +766,50 @@ namespace Tavern
                 if (retVal != 0) return -2;
             }
             return 0;
+        }
+
+
+        //null means no change
+        public async Task<int> UpdateGroupData(int id, string? newGroupname, string? newBio)
+        {
+            if (newGroupname == null && newBio == null) return 0;
+
+            Dictionary<string, string> values = new Dictionary<string, string>
+            {
+                { "newName", newGroupname },
+                { "newBio", newBio },
+                { "ownerId", ProfileId.ToString() },
+                { "groupId", id.ToString() }
+            };
+
+            try
+            {
+                var json = JsonSerializer.Serialize(values);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PostAsync("Groups/EditGroup", content);
+                var retVal = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
+
+                if (retVal == 0)
+                {
+                    foreach(Group g in Groups)
+                    {
+                        if (g.GroupId == id)
+                        {
+                            if (newGroupname != null) g.Name = newGroupname;
+                            if (newBio != null) g.Bio = newBio;
+                        }
+                    }
+                }
+
+                return retVal;
+            }
+            catch (Exception ex) 
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+
         }
     }
 }

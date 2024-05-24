@@ -315,9 +315,10 @@ namespace WebApi
 
         public static int EditGroup(Dictionary<string, string> data)
         {
+            SetConnectionString();
             if (!Exists(Convert.ToInt32(data["groupId"]))) return -10;
             if (data["newName"] == null && data["newBio"] == null) return 0;
-            if (DuplicateGroupName(data["newName"])) return -3;
+            if (data["newName"] != null && DuplicateGroupName(data["newName"])) return -3;
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -333,7 +334,7 @@ namespace WebApi
                         }
                         if (data["newBio"] != null)
                         {
-                            command += "Bio = @BioP ";
+                            command += "GroupBio = @BioP ";
                             cmd.Parameters.AddWithValue("@BioP", data["newBio"]);
                         }
                         command += "WHERE OwnerId = @Owner AND GroupID = @Group;";
@@ -342,7 +343,7 @@ namespace WebApi
                         cmd.Parameters.AddWithValue("@Group", Convert.ToInt32(data["groupId"]));
 
                         int rows = cmd.ExecuteNonQuery();
-                        if (rows == 0) return -10;
+                        if (rows == 0) return -5;//non owner somehow
                     }
                 }
                 return 0;

@@ -71,18 +71,17 @@ namespace Tavern.SwipingFunctionality
             group.Name = (string)data["name"];
             group.Bio = (string)data["bio"];
             group.OwnerId = (int)data["ownerId"];
-            group.Members = ConvertToMembers(data["members"].Values<string>().ToList());
+            group.Members = ConvertToMembers(data["members"]); ;
             group.Tags = ConvertToTagList(data["tags"].ToString());
 
             return group;
         }
-        private MemberList ConvertToMembers(List<string> json)
+        private MemberList ConvertToMembers(JToken json)
         {
             MemberList list = new MemberList();
-            foreach (string member in json)
+            foreach (JObject member in json.Children())
             {
-                JObject memberData = JObject.Parse(member);
-                list.Add(new Member { Id = (int)memberData["id"], Name = (string)memberData["name"] });
+                list.Add(new Member { Id = (int)member["id"], Name = (string)member["name"] });
             }
             return list;
         }

@@ -10,7 +10,6 @@ public partial class HomePage : ContentPage
 	{
 		InitializeComponent();
 		//AddGroupsToHomePage();
-		ProfileSingleton.GetInstance().SetValues();
 		groupList.ItemsSource = ProfileSingleton.GetInstance().Groups;
 
 	}

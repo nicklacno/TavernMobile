@@ -75,8 +75,8 @@ public partial class EditProfilePage : ContentPage
 			updatedStatus.Add(tag.Id, tagList.SelectedItems.Contains(tag));
 		}
 		//tagList.SelectedItems.Clear();
-		await singleton.UpdateProfile(updatedStatus);
+		int val = await singleton.UpdateProfile(updatedStatus);
 
-		ShowErrorMessage("Successfully Updated Tags");
+		ShowErrorMessage(val == 0 ? "Successfully Updated Tags" : "Failed to Update Tags");
 	}
 }

@@ -36,6 +36,9 @@ public partial class EditGroupPage : ContentPage
         {
             GroupTagsList.SelectedItems.Add(tag);
         }
+
+        entryUsername.Text = GroupData.Name;
+        entryBio.Text = GroupData.Bio;
     }
 
     //public async void AcceptUsers(object sender, EventArgs e)
@@ -101,6 +104,38 @@ public partial class EditGroupPage : ContentPage
 
     public async void UpdateGroupInfo(object sender, EventArgs e)
     {
+        if (string.IsNullOrWhiteSpace(entryUsername.Text))
+        {
+            ShowErrorMessage("Cannot have blank Username");
+            return;
+        }
+        string name = entryUsername.Text.Equals(GroupData.Name) ? null : entryUsername.Text;
+        string bio = entryBio.Text.Equals(GroupData.Bio) ? null : entryBio.Text;
+
+        var retval = await ProfileSingleton.GetInstance().UpdateGroupData(GroupData.GroupId, name, bio);
+        switch (retval)
+        {
+            case -10:
+                ShowErrorMessage("Group does not exist");
+                await Navigation.PopToRootAsync();
+                break;
+            case -3:
+                ShowErrorMessage("Duplicate group name");
+                break;
+            case -5:
+                ShowErrorMessage("Only the owner can edit the group");
+                await Navigation.PopAsync();
+                break;
+            case -1:
+                ShowErrorMessage("An error had occurred, Try again later");
+                break;
+            case 0:
+                ShowErrorMessage("Successfully updated group");
+                break;
+            default:
+                ShowErrorMessage("A unexpected errror had occurred");
+                break;
+        }
 
     }
 

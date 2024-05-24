@@ -80,4 +80,5 @@ public partial class GroupChatView : ContentView
         }
     }
 
+
 }
