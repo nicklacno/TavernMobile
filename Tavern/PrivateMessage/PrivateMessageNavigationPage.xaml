@@ -3,10 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Tavern.PrivateMessage.PrivateMessageNavigationPage"
              Title="PrivateMessageNavigationPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid>
+        <Image Source="../Resources/Images/tavern.png" Aspect="AspectFill" />
+        <CollectionView x:Name="friendsList">
+            
+        </CollectionView>
+    </Grid>
 </ContentPage>

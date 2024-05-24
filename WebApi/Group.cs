@@ -17,6 +17,9 @@ namespace WebApi
         public List<MiniInfo>? Members { get; set; }
         public List<Tag>? Tags { get; set; }
 
+        public bool IsPrivate { get; set; }
+        public string? GroupCode { get; set; }
+
         /**
          * GetGroup - Returns the group given the specific id
          * @param id - Id for the group
@@ -34,7 +37,7 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "SELECT OwnerID, GroupName, GroupBio FROM Groups WHERE GroupID = @GID";
+                        cmd.CommandText = "SELECT OwnerID, GroupName, GroupBio, private FROM Groups WHERE GroupID = @GID";
                         cmd.Parameters.AddWithValue("@GID", id);
                         SqlDataReader reader = cmd.ExecuteReader();
                         if (reader.Read())
@@ -48,6 +51,10 @@ namespace WebApi
 
                             group.Members = GetMembers(id);
                             group.Tags = GetTags(id);
+
+                            group.IsPrivate = !reader.IsDBNull(3) && reader.GetInt32(3) == 1;
+                            group.GroupCode = GetGroupCode(id);
+
                             return group;
                         }
                         return null;
@@ -317,7 +324,7 @@ namespace WebApi
         {
             SetConnectionString();
             if (!Exists(Convert.ToInt32(data["groupId"]))) return -10;
-            if (data["newName"] == null && data["newBio"] == null) return 0;
+            if (data["newName"] == null && data["newBio"] == null && data["isPrivate"] == null) return 0;
             if (data["newName"] != null && DuplicateGroupName(data["newName"])) return -3;
             try
             {
@@ -336,6 +343,11 @@ namespace WebApi
                         {
                             command += "GroupBio = @BioP ";
                             cmd.Parameters.AddWithValue("@BioP", data["newBio"]);
+                        }
+                        if (data["isPrivate"] != null)
+                        {
+                            command += "private = @private ";
+                            cmd.Parameters.AddWithValue("@private", Convert.ToBoolean(data["isPrivate"]) ? 1 : 0);
                         }
                         command += "WHERE OwnerId = @Owner AND GroupID = @Group;";
                         cmd.CommandText = command;
@@ -827,7 +839,7 @@ namespace WebApi
                         }
                         else
                         {
-                            cmd.CommandText = "SELECT g.GroupID FROM Groups g WHERE UPPER(g.GroupName) LIKE UPPER('%'+@text+'%')";
+                            cmd.CommandText = "SELECT g.GroupID FROM Groups g WHERE UPPER(g.GroupName) LIKE UPPER('%'+@text+'%') AND";
                         }
                         string text = data.ContainsKey("text") ? data["text"] : "";
                         cmd.Parameters.AddWithValue("@text", text);

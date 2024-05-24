@@ -848,12 +848,45 @@ namespace WebApi
             }
         }
 
+        public static List<Group> GetPublicGroups(int id)
+        {
+            SetConnectionString();
+            try
+            {
+                List<Group> groups = new List<Group>();
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT g.GroupID FROM Groups g JOIN MemberGroup mg ON mg.GroupID = g.GroupID " +
+                            "WHERE mg.UserID = @id AND (g.private IS NULL OR g.private != 1);";
+                        cmd.Parameters.AddWithValue("@id", id);
+                        
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            var group = Group.GetGroup(reader.GetInt32(0));
+                            if (group != null)
+                                groups.Add(group);
+                        }
+                    }
+                }
+                return groups;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
         //Delete Account
         //MyRequests
         //PrivateRequests to me
         //GroupRequests for groups that I own
         //Remove Friend
         //IsFriend
-        
+
     }
 }

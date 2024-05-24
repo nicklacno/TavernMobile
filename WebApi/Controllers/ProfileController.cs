@@ -39,7 +39,7 @@ namespace WebApi.Controllers
          * @param id - the id of the user
          * @return - json string of the group names
          */
-        [HttpGet("{id}/Groups")]
+        [HttpGet("{id}/AllGroups")]
         public List<Group>? GetGroups(int id)
         {
             return Profile.GetGroups(id);
@@ -152,6 +152,12 @@ namespace WebApi.Controllers
         public int SendPrivateMessage(Dictionary<string, string> data)
         {
             return Profile.SendPrivateMessage(data);
+        }
+
+        [HttpGet("Groups")]
+        public List<Group> GetPublicGroups(int id)
+        {
+            return Profile.GetPublicGroups(id);
         }
     }
 }
