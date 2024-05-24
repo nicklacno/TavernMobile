@@ -24,7 +24,6 @@
     <Grid>
         <Image Source="/Resources/Images/paper_login.jpg" Aspect="Fill"/>
         <VerticalStackLayout Padding="10" Spacing="10">
-            <Label x:Name="Instructions" Text="(Swipe left to request to join, Swipe right to skip)"/>
             <Label
                 x:Name="lbName"
                 Text="Test Group"
@@ -51,6 +50,8 @@
             <FlexLayout x:Name="hStackTag" JustifyContent="SpaceEvenly" Direction="Column" AlignItems="Center" VerticalOptions="CenterAndExpand" ></FlexLayout>
             <Label x:Name="lbMembers" HorizontalOptions="Start" HorizontalTextAlignment="Start"/>
             
+            <Label x:Name="Instructions" Text="Swipe left to request to join, Swipe right to skip" FontSize="25" HorizontalOptions="CenterAndExpand"
+                   HorizontalTextAlignment="Center" FontFamily="Sedan" TextColor="Black"/>
         </VerticalStackLayout>
     </Grid>
 </SwipeView>
