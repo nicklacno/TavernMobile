@@ -5,6 +5,7 @@ using System.Reflection.Metadata;
 using System.Text;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using MemberList = System.Collections.ObjectModel.ObservableCollection<Tavern.Member>;
+using GroupsList = System.Collections.ObjectModel.ObservableCollection<Tavern.Group>;
 namespace Tavern
 {
     public class ProfileSingleton
@@ -20,7 +21,7 @@ namespace Tavern
         public string ProfileBio { get; set; }
 
         public List<string> Friends { get; set; }
-        public ObservableCollection<Group> Groups { get; private set; }
+        public GroupsList Groups { get; private set; }
         public ObservableCollection<Tag> Tags { get; private set; } = new ObservableCollection<Tag>();
 
         public List<string> BlockedUsers { get; set; }
@@ -49,7 +50,8 @@ namespace Tavern
                 try
                 {
                     ProfileId = Preferences.Get("profileId", -1);
-                    SetValues().RunSynchronously();
+                    Task t = Task.Run(async () => { await SetValues(); });
+                    t.Wait();
                 }
                 catch (Exception ex)
                 {
@@ -197,12 +199,12 @@ namespace Tavern
          * GetGroupsList - Returns a list of group names using the stored id
          * @return - List of group names
          */
-        public async Task<ObservableCollection<Group>> GetGroupsList()
+        public async Task<GroupsList> GetGroupsList()
         {
             if (ProfileId < 0)
                 return null;
 
-            ConvertToGroupList(await _httpClient.GetStringAsync($"Profile/{ProfileId}/Groups"));
+            Groups = await ConvertToGroupList(await _httpClient.GetStringAsync($"Profile/{ProfileId}/Groups"));
             return Groups;
         }
 
@@ -211,11 +213,11 @@ namespace Tavern
          * ConvertToGroupList - takes a json and converts it into a list of Group Objects
          * @param json - the json that needs to be parsed
          */
-        private async Task ConvertToGroupList(string json)
+        private async Task<GroupsList> ConvertToGroupList(string json)
         {
             try
             {
-                ObservableCollection<Group> groups = new ObservableCollection<Group>();
+                GroupsList groups = new GroupsList();
 
                 if (json != null)
                 {
@@ -227,12 +229,12 @@ namespace Tavern
                 }
 
 
-                Groups = groups;
+                return groups;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
-                Groups = null;
+                return null;
             }
         }
 
@@ -810,6 +812,24 @@ namespace Tavern
                 return -1;
             }
 
+        }
+
+        public async Task<GroupsList> GetSearchResults(Dictionary<string, string> values)
+        {
+            var json = JsonSerializer.Serialize(values);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            try
+            {
+                var response = await _httpClient.PostAsync("Groups/SearchGroups", content);
+                string ret = response.Content.ReadAsStringAsync().Result;
+                return await ConvertToGroupList(ret);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
         }
     }
 }

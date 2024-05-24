@@ -3,10 +3,41 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Tavern.SearchFunctionality.SearchResultsPage"
              Title="Results">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid>
+        <Image Source="/Resources/Images/tavern.png" Aspect="AspectFill" />
+        <CollectionView
+            x:Name="groupList"
+            ItemsLayout="VerticalGrid, 2"
+            SelectionChanged="GroupSelected"
+            SelectionMode="Single"
+            >
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <Grid Padding="5">
+                    <Image Source="/Resources/Images/paper_login.png" Aspect="Fill"/>
+                    <VerticalStackLayout VerticalOptions="StartAndExpand" Padding="10" Spacing="10" HorizontalOptions="FillAndExpand">
+                        <Label x:Name="lbName" HorizontalTextAlignment="Center" FontFamily="Algerian" FontSize="25" HorizontalOptions="Center" 
+                               Text="{Binding Name}" TextColor="black"/>
+                        <Label x:Name="lbBio" FontFamily="Sedan" FontSize="20" MaxLines="2" Text="{Binding Bio}" TextColor="Black"/>
+                        <CollectionView ItemsSource="{Binding Tags}" 
+                                    ItemsLayout="VerticalGrid, 2" 
+                                    MaximumHeightRequest="40" 
+                                    MinimumHeightRequest="0"
+                                    HorizontalOptions="CenterAndExpand">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Label Text="{Binding Name}" FontFamily="Sedan" TextColor="Black"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <Label x:Name="lbMembers" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontFamily="Sedan" FontSize="20"
+                        Text="{Binding Members.Count, StringFormat='Members: {0:D}'}" TextColor="Black"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
 </ContentPage>

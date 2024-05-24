@@ -15,7 +15,7 @@
                     <Button VerticalOptions="CenterAndExpand" Text="Swiping"
                             FontSize="24" FontFamily="Sedan" Clicked="OnClickSwiping"
                             HorizontalOptions="CenterAndExpand"
-                            BackgroundColor="BurlyWood" TextColor="Black"
+                            BackgroundColor="#66000000" TextColor="White"
                             />
                 </VerticalStackLayout>
             </Grid>
@@ -28,7 +28,7 @@
                     <Button VerticalOptions="CenterAndExpand" Text="Searching"
                             FontSize="24" FontFamily="Sedan" Clicked="OnClickSearching"
                             HorizontalOptions="CenterAndExpand"
-                            BackgroundColor="BurlyWood" TextColor="Black"
+                            BackgroundColor="#66000000" TextColor="White"
                             />
                 </VerticalStackLayout>
             </Grid>
