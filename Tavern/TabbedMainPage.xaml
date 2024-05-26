@@ -18,5 +18,6 @@
     </TabbedPage.Style>
     <local:HomePage Title="Home" IconImageSource="Resources/Images/home.png"/>
     <local:FindGroupPage Title="Find Groups" IconImageSource="Resources/Images/search.png"/>
+    <local:RequestsPage Title="Requests" IconImageSource="Resources/Images/request.png"/>
     <local:ProfilePage Title="My Profile" IconImageSource="Resources/Images/user.png"/>
 </TabbedPage>

@@ -2,11 +2,26 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Tavern.RequestsPage"
-             Title="RequestsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             xmlns:local ="clr-namespace:Tavern"
+             Title="Requests">
+    <ContentPage.Resources>
+        <StyleSheet Source="/Resources/Styles/PageStyles/RequestPage.css"/>
+    </ContentPage.Resources>
+    <Grid Padding="15">
+        <Image Source="/Resources/Images/paper_login.jpg" Aspect="AspectFill" />
+        <CollectionView x:Name="requestStack" IsGrouped="True" SelectionMode="Single">
+            <CollectionView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <Label HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" Text="{Binding GroupName}"
+                           FontSize="30" FontFamily="Algerian" Padding="0,20,0,0" TextColor="Black"/>
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="local:Request">
+                    <Label Text="{Binding UserName}" HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start"
+                           FontSize="24" FontFamily="Sedan" Padding="15,5,0,5" TextColor="Black"/>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
 </ContentPage>

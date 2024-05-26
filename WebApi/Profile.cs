@@ -315,11 +315,7 @@ namespace WebApi
 
                         SqlDataReader reader = cmd.ExecuteReader();
 
-                        if (reader.Read())
-                        {
-                            return true;
-                        }
-                        return false;
+                        return reader.Read();
                     }
                 }
             }
@@ -881,10 +877,78 @@ namespace WebApi
             }
         }
 
+        public static List<MiniInfo> OpenFriendRequests(int id)
+        {
+            SetConnectionString();
+            try
+            {
+                List<MiniInfo> requests = new List<MiniInfo>();
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT UserID_2, UserName FROM Relationships JOIN Customers ON UserID_1 = UserID " +
+                            "WHERE Relationship = 'R' AND UserID_1 = @id";
+                        cmd.Parameters.AddWithValue("@id", id);
+                        
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            requests.Add(new MiniInfo
+                            {
+                                Id = reader.GetInt32(0),
+                                Name = reader.GetString(1)
+                            });
+                        }
+                        return requests;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return null;
+            }
+        }
+        public static List<OpenRequest> OpenGroupRequests(int id)
+        {
+            SetConnectionString();
+            try
+            {
+                List<OpenRequest> requests = new List<OpenRequest>();
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT RequestID, Groups.GroupID, GroupName FROM GroupRequests " +
+                            "JOIN Groups ON GroupRequests.GroupID = Groups.GroupID WHERE UserID = @id";
+                        cmd.Parameters.AddWithValue("@id", id);
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            requests.Add(new OpenRequest
+                            {
+                                RequestId = reader.GetInt32(0),
+                                OtherID = reader.GetInt32(1),
+                                OtherName = reader.GetString(2),
+                                ProfileId = id
+                            });
+                        }
+
+                        return requests;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return null;
+            }
+        }
         //Delete Account
-        //MyRequests
-        //PrivateRequests to me
-        //GroupRequests for groups that I own
         //Remove Friend
         //IsFriend
 

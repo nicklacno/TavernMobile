@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Reflection.Metadata;
 using System.Text;
 using JsonSerializer = System.Text.Json.JsonSerializer;
-using MemberList = System.Collections.ObjectModel.ObservableCollection<Tavern.Member>;
+using MemberList = System.Collections.ObjectModel.ObservableCollection<Tavern.OtherUser>;
 using GroupsList = System.Collections.ObjectModel.ObservableCollection<Tavern.Group>;
 namespace Tavern
 {
@@ -20,7 +20,7 @@ namespace Tavern
         public string ProfileName { get; set; }
         public string ProfileBio { get; set; }
 
-        public List<string> Friends { get; set; }
+        public List<OtherUser> Friends { get; set; }
         public GroupsList Groups { get; private set; }
         public ObservableCollection<Tag> Tags { get; private set; } = new ObservableCollection<Tag>();
 
@@ -204,7 +204,7 @@ namespace Tavern
             if (ProfileId < 0)
                 return null;
 
-            Groups = await ConvertToGroupList(await _httpClient.GetStringAsync($"Profile/{ProfileId}/Groups"));
+            Groups = await ConvertToGroupList(await _httpClient.GetStringAsync($"Profile/{ProfileId}/AllGroups"));
             return Groups;
         }
 
@@ -279,6 +279,8 @@ namespace Tavern
             group.OwnerId = (int)data["ownerId"];
             group.Members = ConvertToMembers(data["members"]);
             group.Tags = await GetGroupTags(id);
+            group.isPrivate = (bool)data["isPrivate"];
+            group.GroupCode = group.OwnerId == ProfileId ? (string)data["groupCode"] : null;
 
             return group;
         }
@@ -288,7 +290,7 @@ namespace Tavern
             MemberList list = new MemberList();
             foreach (JObject member in json.Children())
             {
-                list.Add(new Member { Id = (int)member["id"], Name = (string)member["name"] });
+                list.Add(new OtherUser { Id = (int)member["id"], Name = (string)member["name"] });
             }
             return list;
         }
@@ -656,8 +658,8 @@ namespace Tavern
                     {
                         RequestId = (int)req["requestId"],
                         GroupId = (int)req["groupId"],
-                        ProfileId = (int)req["profileId"],
-                        ProfileName = (string)req["profileName"]
+                        UserId = (int)req["profileId"],
+                        UserName = (string)req["profileName"]
                     });
                 }
             }
@@ -824,6 +826,61 @@ namespace Tavern
                 var response = await _httpClient.PostAsync("Groups/SearchGroups", content);
                 string ret = response.Content.ReadAsStringAsync().Result;
                 return await ConvertToGroupList(ret);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
+        public async Task<ObservableCollection<RequestByGroup>> GetAllRequests()
+        {
+            try
+            {
+                ObservableCollection<RequestByGroup> requests = new ObservableCollection<RequestByGroup>();
+                var friend = await GetFriendRequests();
+                if (friend.Count > 0)
+                {
+                    requests.Add(friend);
+                }
+                var response = await _httpClient.GetStringAsync($"Profile/{ProfileId}/OwnedGroups");
+                JToken data = JToken.Parse(response);
+                foreach (var group in data.Children())
+                {
+                    var reqs = await GetGroupRequests((int)group["id"]);
+                    if (reqs.Count > 0)
+                    {
+                        requests.Add(new RequestByGroup((int)group["id"], (string)group["name"],reqs));
+                    }
+                }               
+                return requests;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
+        private async Task<RequestByGroup> GetFriendRequests()
+        {
+            var reqs = new ObservableCollection<Request>();
+            try
+            {
+                var response = await _httpClient.GetStringAsync($"Profile/{ProfileId}/OpenFriendRequests");
+                JToken data = JToken.Parse(response);
+                foreach (JObject obj in data.Children())
+                {
+                    Request r = new Request
+                    {
+                        GroupId = -1,
+                        UserId = (int)obj["id"],
+                        UserName = (string)obj["name"],
+                        RequestId = -1
+                    };
+                }
+                return new RequestByGroup(-1, "Friend Requests", reqs);
             }
             catch (Exception ex)
             {

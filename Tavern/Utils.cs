@@ -23,7 +23,7 @@ namespace Tavern
         public string Name { set; get; }
     }
 
-    public class Member
+    public class OtherUser
     {
         public int Id { set; get; }
         public string Name { set; get; }
@@ -33,7 +33,20 @@ namespace Tavern
     {
         public int RequestId { get; set; }
         public int GroupId { get; set; }
-        public int ProfileId { get; set; }
-        public string? ProfileName { get; set; }
+        public int UserId { get; set; }
+        public required string UserName { get; set; }
     }
+
+    public class RequestByGroup : ObservableCollection<Request>
+    {
+        public int GroupId { set; get; }
+        public string GroupName { set; get; }
+
+        public RequestByGroup(int GroupId, string GroupName, ObservableCollection<Request> requests) : base(requests)
+        {
+            this.GroupId = GroupId;
+            this.GroupName = GroupName;
+        }
+    }
+
 }

@@ -13,8 +13,10 @@ namespace Tavern
         public string? Name { get; set; }
         public string? Bio { get; set; }
         public int OwnerId { get; set; }
-        public ObservableCollection<Member> Members { get; set; }
+        public ObservableCollection<OtherUser> Members { get; set; }
         public ObservableCollection<Tag> Tags { get; set; }
+        public bool isPrivate { get; set; }
+        public string? GroupCode { get; set; }
 
 
         public Group(int id, string name="", string bio="")

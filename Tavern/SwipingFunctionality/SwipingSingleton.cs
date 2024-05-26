@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
 using JsonSerializer = System.Text.Json.JsonSerializer;
-using MemberList = System.Collections.ObjectModel.ObservableCollection<Tavern.Member>;
+using MemberList = System.Collections.ObjectModel.ObservableCollection<Tavern.OtherUser>;
 
 namespace Tavern.SwipingFunctionality
 {
@@ -81,7 +81,7 @@ namespace Tavern.SwipingFunctionality
             MemberList list = new MemberList();
             foreach (JObject member in json.Children())
             {
-                list.Add(new Member { Id = (int)member["id"], Name = (string)member["name"] });
+                list.Add(new OtherUser { Id = (int)member["id"], Name = (string)member["name"] });
             }
             return list;
         }

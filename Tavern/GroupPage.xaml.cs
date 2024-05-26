@@ -46,7 +46,7 @@ public partial class GroupPage : ContentPage
 			layoutMembers.ItemsSource = GroupData.Members;
 
 			bool isInGroup = false;
-			foreach (Member m in GroupData.Members)
+			foreach (OtherUser m in GroupData.Members)
 			{
 				if (m.Id == ProfileSingleton.GetInstance().ProfileId)
 				{

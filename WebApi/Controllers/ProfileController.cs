@@ -154,10 +154,22 @@ namespace WebApi.Controllers
             return Profile.SendPrivateMessage(data);
         }
 
-        [HttpGet("Groups")]
+        [HttpGet("{id}/Groups")]
         public List<Group> GetPublicGroups(int id)
         {
             return Profile.GetPublicGroups(id);
+        }
+
+        [HttpGet("{id}/OpenFriendRequests")]
+        public List<MiniInfo> GetFriendRequests(int id)
+        {
+            return Profile.OpenFriendRequests(id);
+        }
+
+        [HttpGet("{id}/OpenGroupRequests")]
+        public List<OpenRequest> GetGroupRequests(int id)
+        {
+            return Profile.OpenGroupRequests(id);
         }
     }
 }

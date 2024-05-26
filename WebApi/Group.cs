@@ -37,7 +37,7 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "SELECT OwnerID, GroupName, GroupBio, private FROM Groups WHERE GroupID = @GID";
+                        cmd.CommandText = "SELECT OwnerID, GroupName, GroupBio, private, GroupCode FROM Groups WHERE GroupID = @GID";
                         cmd.Parameters.AddWithValue("@GID", id);
                         SqlDataReader reader = cmd.ExecuteReader();
                         if (reader.Read())
@@ -53,12 +53,11 @@ namespace WebApi
                             group.Tags = GetTags(id);
 
                             group.IsPrivate = !reader.IsDBNull(3) && reader.GetInt32(3) == 1;
-                            group.GroupCode = GetGroupCode(id);
+                            group.GroupCode = reader.IsDBNull(4) ? null : reader.GetString(4);
 
                             return group;
                         }
                         return null;
-
                     }
                 }
 
