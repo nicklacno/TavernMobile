@@ -20,7 +20,7 @@ namespace Tavern
         public string ProfileName { get; set; }
         public string ProfileBio { get; set; }
 
-        public List<OtherUser> Friends { get; set; }
+        public MemberList Friends { get; set; }
         public GroupsList Groups { get; private set; }
         public ObservableCollection<Tag> Tags { get; private set; } = new ObservableCollection<Tag>();
 
@@ -73,6 +73,7 @@ namespace Tavern
 
                 await GetGroupsList();
                 await GetTags();
+                await GetFriendsList();
                 isLoggedIn = true;
             }
             else
@@ -151,11 +152,23 @@ namespace Tavern
          * GetFriendsList - Calls the Api for the friends list of a given user
          * @return - json of an array of strings
          */
-        public async Task<string> GetFriendsList()
+        public async Task<MemberList> GetFriendsList()
         {
             if (ProfileId < 0) // retest !!!
                 return null;
-            return await _httpClient.GetStringAsync($"Profile/{ProfileId}/Friends");
+            try
+            {
+                string json = await _httpClient.GetStringAsync($"Profile/{ProfileId}/Friends");
+                JToken token = JToken.Parse(json);
+                Friends = ConvertToMembers(token);
+
+                return Friends;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
         }
 
         /**
@@ -939,5 +952,6 @@ namespace Tavern
                 return null;
             }
         }
+
     }
 }

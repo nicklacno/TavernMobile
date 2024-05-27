@@ -177,5 +177,11 @@ namespace WebApi.Controllers
         {
             return Profile.GetPrivateMessages(id, data);
         }
+
+        [HttpPost("PrivateChat/GetChatID")]
+        public int GetPrivateChatID(Dictionary<string, string> data)
+        {
+            return Profile.GetPrivateChatId(data);
+        }
     }
 }

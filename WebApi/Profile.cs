@@ -991,9 +991,39 @@ namespace WebApi
                 return null;
             }
         }
+
+        public static int GetPrivateChatId(Dictionary<string, string> data)
+        {
+            SetConnectionString();
+            if (!data.ContainsKey("userId") || !data.ContainsKey("otherId")) return -1;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT PrivateChatID FROM Relationships WHERE UserID_1 = @user AND UserID_2 = @other";
+                        cmd.Parameters.AddWithValue("@user", data["userId"]);
+                        cmd.Parameters.AddWithValue("@other", data["otherId"]);
+
+                        var reader = cmd.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            return reader.GetInt32(0);
+                        }
+                        return -1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
         //Delete Account
         //Remove Friend
-        //IsFriend
 
     }
 }

@@ -62,6 +62,13 @@
                        Text="Friends"
                        FontFamily="Sedan"></Label>
                 <Rectangle HorizontalOptions="Fill" HeightRequest="4" Opacity="0"/>
+                <CollectionView x:Name="friendsList" ItemsLayout="Vertical" MaximumHeightRequest="140">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="n:OtherUser">
+                            <Label Text="{Binding Name}" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontFamily="Sedan"/>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
             </VerticalStackLayout>
 
         </VerticalStackLayout>

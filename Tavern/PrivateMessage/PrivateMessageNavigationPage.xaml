@@ -2,11 +2,21 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Tavern.PrivateMessage.PrivateMessageNavigationPage"
-             Title="PrivateMessageNavigationPage">
+             xmlns:local="clr-namespace:Tavern"
+             Title="Private Messages">
     <Grid>
         <Image Source="../Resources/Images/tavern.png" Aspect="AspectFill" />
         <CollectionView x:Name="friendsList">
-            
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="local:OtherUser">
+                    <Grid HeightRequest="50">
+                        <Image Source="../Resources/Images/paper_login.jpg" Aspect="AspectFill"/>
+                        <HorizontalStackLayout>
+                            <Label Text="{Binding Name}" VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
         </CollectionView>
     </Grid>
 </ContentPage>

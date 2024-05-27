@@ -21,6 +21,7 @@ public partial class ProfilePage : ContentPage
 		Bio.Text = singleton.ProfileBio;
 		groupList.ItemsSource = singleton.Groups;
 		tagList.ItemsSource = singleton.Tags;
+		friendsList.ItemsSource = singleton.Friends;
 
 		//Task.Run(BackgroundStuff);
 	}
