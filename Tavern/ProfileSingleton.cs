@@ -868,7 +868,7 @@ namespace Tavern
             var reqs = new ObservableCollection<Request>();
             try
             {
-                var response = await _httpClient.GetStringAsync($"Profile/{ProfileId}/OpenFriendRequests");
+                var response = await _httpClient.GetStringAsync($"Profile/{ProfileId}/OpenPrivateRequests");
                 JToken data = JToken.Parse(response);
                 foreach (JObject obj in data.Children())
                 {
@@ -879,8 +879,59 @@ namespace Tavern
                         UserName = (string)obj["name"],
                         RequestId = -1
                     };
+                    reqs.Add(r);
                 }
                 return new RequestByGroup(-1, "Friend Requests", reqs);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
+        public async Task<MemberList> MyFriendRequests()
+        {
+            try
+            {
+                var m = new MemberList();
+
+                var response = await _httpClient.GetStringAsync($"Profile/{ProfileId}/OpenFriendRequests");
+                JToken data = JToken.Parse(response);
+                foreach (JObject obj in data.Children())
+                {
+                    m.Add(new OtherUser { Id = (int)obj["id"], Name= (string)obj["name"] });
+                }
+                return m;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
+
+        //uses request class but username represents the group name
+        public async Task<ObservableCollection<Request>> MyGroupRequests()
+        {
+            try
+            {
+                var m = new ObservableCollection<Request>();
+
+                var response = await _httpClient.GetStringAsync($"Profile/{ProfileId}/OpenGroupRequests");
+                JToken data = JToken.Parse(response);
+                foreach (JObject obj in data.Children())
+                {
+                    m.Add(new Request
+                    {
+                        GroupId = (int)obj["otherID"],
+                        UserName = (string)obj["otherName"],
+                        RequestId = (int)obj["requestId"],
+                        UserId = ProfileId
+                    });
+                }
+                return m;
             }
             catch (Exception ex)
             {
