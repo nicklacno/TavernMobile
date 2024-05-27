@@ -6,13 +6,14 @@
              Title="Private Messages">
     <Grid>
         <Image Source="../Resources/Images/tavern.png" Aspect="AspectFill" />
-        <CollectionView x:Name="friendsList">
+        <CollectionView x:Name="friendsList" SelectionMode="Single" SelectionChanged="ChatSelected">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="local:OtherUser">
-                    <Grid HeightRequest="50">
+                    <Grid HeightRequest="100" Padding="5">
                         <Image Source="../Resources/Images/paper_login.jpg" Aspect="AspectFill"/>
-                        <HorizontalStackLayout>
-                            <Label Text="{Binding Name}" VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center"/>
+                        <HorizontalStackLayout Padding="10">
+                            <Label Text="{Binding Name}" VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center"
+                                   TextColor="Black" FontSize="24" FontFamily="Sedan"/>
                         </HorizontalStackLayout>
                     </Grid>
                 </DataTemplate>

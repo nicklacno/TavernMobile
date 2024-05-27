@@ -58,8 +58,8 @@ public partial class RequestsPage : ContentPage
 
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
+        base.OnNavigatedTo(args);
         Task t = Task.Run(async () => { await UpdateRequests(); });
         t.Wait();
-        base.OnNavigatedTo(args);
     }
 }
