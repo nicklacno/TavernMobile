@@ -948,6 +948,49 @@ namespace WebApi
                 return null;
             }
         }
+
+        public static List<Message> GetPrivateMessages(int id, Dictionary<string, string> data)
+        {
+            SetConnectionString();
+            try
+            {
+                var messages = new List<Message>();
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (var cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT UserName, Message, Timestamp FROM Messages JOIN Customers ON UserID = SenderID " +
+                            "WHERE PrivateChatID = @id AND GroupChatID IS NULL";
+                        if (data.ContainsKey("timestamp") && data["timestamp"] != null)
+                        {
+                            cmd.CommandText += " AND TimeStamp > @TimeStamp";
+                            cmd.Parameters.AddWithValue("@TimeStamp", Convert.ToDateTime(data["timestamp"]));
+                        }
+                        cmd.CommandText += " ORDER BY TimeStamp ASC";
+                        cmd.Parameters.AddWithValue("@id", id);
+
+                        var reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            messages.Add(new Message
+                            {
+                                Sender = reader.GetString(0),
+                                Body = reader.GetString(1),
+                                TimeStamp = reader.IsDBNull(2) ? null : reader.GetDateTime(2)
+                            });
+                        }
+
+                        return messages;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
         //Delete Account
         //Remove Friend
         //IsFriend

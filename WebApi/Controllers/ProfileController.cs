@@ -171,5 +171,11 @@ namespace WebApi.Controllers
         {
             return Profile.OpenGroupRequests(id);
         }
+
+        [HttpPost("PrivateChat/{id}")]
+        public List<Message> GetPrivateChat(int id, Dictionary<string, string> data)
+        {
+            return Profile.GetPrivateMessages(id, data);
+        }
     }
 }

@@ -29,4 +29,11 @@
         public int Id { get; set; }
     }
 
+    public class Message
+    {
+        public string Sender { get; set; }
+        public DateTime? TimeStamp { get; set; }
+        public string Body { get; set; }
+    }
+
 }
