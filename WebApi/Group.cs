@@ -303,6 +303,18 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
+                        cmd.CommandText = "SELECT UserID FROM GroupRequests WHERE UserID = @User AND GroupID = @Group";
+                        cmd.Parameters.AddWithValue("@User", userId);
+                        cmd.Parameters.AddWithValue("@Group", groupId);
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.HasRows) return 0;
+                        }
+                    }
+
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
                         cmd.CommandText = "INSERT INTO GroupRequests (UserID, GroupID) VALUES (@User, @Group)";
                         cmd.Parameters.AddWithValue("@User", userId);
                         cmd.Parameters.AddWithValue("@Group", groupId);

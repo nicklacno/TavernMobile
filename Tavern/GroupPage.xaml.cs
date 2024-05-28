@@ -58,6 +58,7 @@ public partial class GroupPage : ContentPage
 			if (!isInGroup)
 			{
 				ModifyButton.Text = "Request to Join";
+				ModifyButton.Clicked += SendRequest;
 				return;
 			}
 			else if (GroupData.OwnerId == ProfileSingleton.GetInstance().ProfileId)
@@ -96,6 +97,13 @@ public partial class GroupPage : ContentPage
         var popup = new ErrorPopup(message);
         this.ShowPopup(popup);
     }
+
+	private async void SendRequest(object sender, EventArgs e)
+	{
+		await SwipingFunctionality.SwipingSingleton.GetInstance().SwipeRight(GroupData);
+		ModifyButton.Text = "Request Sent";
+		ModifyButton.Clicked -= SendRequest;
+	}
 
 	public async Task BackgroundUpdate()
 	{
