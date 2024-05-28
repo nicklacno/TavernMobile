@@ -99,6 +99,12 @@ public partial class EditGroupPage : ContentPage
 
     }
 
+    public async void RetrieveCode(object sender, EventArgs e)
+    {
+        string code = await ProfileSingleton.GetInstance().GetGroupCode(GroupData.GroupId);
+        if (GroupData.GroupCode == null) GroupData.GroupCode = code;
+        await DisplayAlert("Private Code", $"Your group code is {code}", "Ok");
+    }
 
     public void ShowErrorMessage(string message)
     {

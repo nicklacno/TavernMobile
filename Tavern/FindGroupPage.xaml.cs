@@ -22,7 +22,8 @@ public partial class FindGroupPage : ContentPage
 	public async void FindByCode(object sender, EventArgs e)
 	{
 		string code = await DisplayPromptAsync("Group Code", "Enter The Group Code:", accept: "Search", placeholder: "Code", maxLength: 6);
-		Debug.WriteLine(code);
 
+		Group data = await ProfileSingleton.GetInstance().GetGroupFromCode(code);
+		await Navigation.PushAsync(new GroupPage(data));
 	}
 }

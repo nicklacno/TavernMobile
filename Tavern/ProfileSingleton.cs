@@ -1052,5 +1052,19 @@ namespace Tavern
                 return -1;
             }
         }
+
+        public async Task<Group> GetGroupFromCode(string code)
+        {
+            try
+            {
+                var response = await _httpClient.GetStringAsync($"Groups/Code={code}");
+                return await ConvertToGroup(JObject.Parse(response));
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
     }
 }

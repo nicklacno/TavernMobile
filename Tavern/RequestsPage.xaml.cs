@@ -15,8 +15,8 @@ public partial class RequestsPage : ContentPage
 	{
 		InitializeComponent();
 
-		myFriendRequestsStack.ItemsSource = myFriendRequests;
-		myGroupRequestsStack.ItemsSource= myGroupRequests;
+		//myFriendRequestsStack.ItemsSource = myFriendRequests;
+		//myGroupRequestsStack.ItemsSource= myGroupRequests;
 		requestStack.ItemsSource = requests;
 		
 		Task t = Task.Run(async () => { await UpdateRequests(); });
@@ -27,25 +27,25 @@ public partial class RequestsPage : ContentPage
 	{
 		var singleton = ProfileSingleton.GetInstance();
 
-		myFriendRequests.Clear();
-		var outgoingFriends = await singleton.MyFriendRequests();
-		if (outgoingFriends.Count > 0)
-		{
-			foreach (var friend in outgoingFriends)
-			{
-				myFriendRequests.Add(friend);
-			}
-		}
+		//myFriendRequests.Clear();
+		//var outgoingFriends = await singleton.MyFriendRequests();
+		//if (outgoingFriends.Count > 0)
+		//{
+		//	foreach (var friend in outgoingFriends)
+		//	{
+		//		myFriendRequests.Add(friend);
+		//	}
+		//}
 		
-		myGroupRequests.Clear();
-		var outgoingGroups = await singleton.MyGroupRequests();
-		if (outgoingGroups.Count > 0)
-		{
-			foreach(var group in outgoingGroups)
-			{
-				myGroupRequests.Add(group);
-			}
-		}
+		//myGroupRequests.Clear();
+		//var outgoingGroups = await singleton.MyGroupRequests();
+		//if (outgoingGroups.Count > 0)
+		//{
+		//	foreach(var group in outgoingGroups)
+		//	{
+		//		myGroupRequests.Add(group);
+		//	}
+		//}
 
 		requests.Clear();
 		var incomingRequests = await singleton.GetAllRequests();
@@ -102,6 +102,7 @@ public partial class RequestsPage : ContentPage
 				if (rbg.Remove(r))
 				{
 					if (rbg.Count == 0) requests.Remove(rbg);
+					requestStack.ItemsSource = requests;
 					break;
 				}
 			}

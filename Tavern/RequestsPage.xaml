@@ -29,7 +29,7 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                <CollectionView x:Name="myFriendRequestsStack" SelectionMode="Single" Margin="15" HeightRequest="200">
+                <!--<CollectionView x:Name="myFriendRequestsStack" SelectionMode="Single" Margin="15" HeightRequest="200">
                     <CollectionView.Header>
                         <Label Text="Outgoing Friend Requests:" HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" FontSize="24"
                                FontFamily="Algerian" TextColor="Black" TextDecorations="Underline"/>
@@ -61,7 +61,7 @@
                             <Label>You have no open Group requests</Label>
                         </DataTemplate>
                     </CollectionView.EmptyViewTemplate>
-                </CollectionView>
+                </CollectionView>-->
             </VerticalStackLayout>
         </ScrollView>
     </Grid>
