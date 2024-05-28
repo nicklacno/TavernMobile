@@ -838,7 +838,7 @@ namespace WebApi
                         }
                         else
                         {
-                            cmd.CommandText = "SELECT g.GroupID FROM Groups g WHERE UPPER(g.GroupName) LIKE UPPER('%'+@text+'%') AND";
+                            cmd.CommandText = "SELECT g.GroupID FROM Groups g WHERE UPPER(g.GroupName) LIKE UPPER('%'+@text+'%') AND private != 1";
                         }
                         string text = data.ContainsKey("text") ? data["text"] : "";
                         cmd.Parameters.AddWithValue("@text", text);

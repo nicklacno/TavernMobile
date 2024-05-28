@@ -6,6 +6,7 @@ using System.Text;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using MemberList = System.Collections.ObjectModel.ObservableCollection<Tavern.OtherUser>;
 using GroupsList = System.Collections.ObjectModel.ObservableCollection<Tavern.Group>;
+using MessageLog = System.Collections.ObjectModel.ObservableCollection<Tavern.MessageByDay>;
 namespace Tavern
 {
     public class ProfileSingleton
@@ -398,7 +399,7 @@ namespace Tavern
             }
         }
 
-        public async Task<ObservableCollection<MessageByDay>> GetMessages(int groupId, DateTime? timestamp = null)
+        public async Task<MessageLog> GetMessages(int groupId, DateTime? timestamp = null)
         {
             Dictionary<string, string> value = new Dictionary<string, string>();
             value["timestamp"] = timestamp == null ? null : timestamp.ToString();
@@ -420,9 +421,9 @@ namespace Tavern
             }
         }
 
-        private async Task<ObservableCollection<MessageByDay>> ConvertToMessageList(string messages)
+        private async Task<MessageLog> ConvertToMessageList(string messages)
         {
-            ObservableCollection<MessageByDay> messageList = new ObservableCollection<MessageByDay>();
+            MessageLog messageList = new MessageLog();
 
             MessageByDay? messageByDay = null;
 
@@ -787,16 +788,17 @@ namespace Tavern
 
 
         //null means no change
-        public async Task<int> UpdateGroupData(int id, string? newGroupname, string? newBio)
+        public async Task<int> UpdateGroupData(int id, string? newGroupname, string? newBio, bool? isPrivate)
         {
-            if (newGroupname == null && newBio == null) return 0;
+            if (newGroupname == null && newBio == null && isPrivate == null) return 0;
 
             Dictionary<string, string> values = new Dictionary<string, string>
             {
                 { "newName", newGroupname },
                 { "newBio", newBio },
                 { "ownerId", ProfileId.ToString() },
-                { "groupId", id.ToString() }
+                { "groupId", id.ToString() },
+                { "isPrivate", isPrivate.ToString()}
             };
 
             try
@@ -815,6 +817,7 @@ namespace Tavern
                         {
                             if (newGroupname != null) g.Name = newGroupname;
                             if (newBio != null) g.Bio = newBio;
+                            if (isPrivate != null) g.isPrivate = (bool)isPrivate;
                         }
                     }
                 }
@@ -953,5 +956,83 @@ namespace Tavern
             }
         }
 
+        public async Task<MessageLog> GetPrivateChat(int otherId, DateTime? lastRetrieval)
+        {
+            int chatId = await GetChatId(otherId);
+            if (chatId < 0) return null;
+
+            Dictionary<string, string> values = new Dictionary<string, string>();
+            values["timestamp"] = lastRetrieval == null ? null : lastRetrieval.ToString();
+
+            var json = JsonSerializer.Serialize(values);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            try
+            {
+                var response = await _httpClient.PostAsync($"Profile/PrivateChat/{chatId}", content);
+                string messages = response.Content.ReadAsStringAsync().Result;
+
+                return await ConvertToMessageList(messages);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
+        private async Task<int> GetChatId(int otherId)
+        {
+            Dictionary<string, int> values = new Dictionary<string, int>()
+            {
+                { "userId", ProfileId },
+                { "otherId", otherId }
+            };
+
+            var json = JsonSerializer.Serialize(values);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            try
+            {
+                var response = await _httpClient.PostAsync("Profile/PrivateChat/GetChatID", content);
+                var chatId = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
+
+                return chatId;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+        public async Task<string> GetGroupCode(int groupId)
+        {
+            try
+            {
+                return await _httpClient.GetStringAsync($"Groups/{groupId}/Code");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
+        public async int SendPrivateMessage(int otherId, string message)
+        {
+            int chatId = await GetChatId(otherId);
+            if (chatId < 0) return -1;
+
+            try
+            {
+                var 
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
     }
 }

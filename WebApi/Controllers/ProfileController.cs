@@ -173,15 +173,18 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("PrivateChat/{id}")]
-        public List<Message> GetPrivateChat(int id, Dictionary<string, string> data)
+        public List<Dictionary<string,string>> GetPrivateChat(int id, Dictionary<string, string> data)
         {
             return Profile.GetPrivateMessages(id, data);
         }
 
         [HttpPost("PrivateChat/GetChatID")]
-        public int GetPrivateChatID(Dictionary<string, string> data)
+        public int GetPrivateChatID(Dictionary<string, int> data)
         {
-            return Profile.GetPrivateChatId(data);
+            if (!data.ContainsKey("userId") || !data.ContainsKey("otherId")) return -1;
+
+            return Profile.GetChatID(data["userId"], data["otherId"]);
         }
+
     }
 }

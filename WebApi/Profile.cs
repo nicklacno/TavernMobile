@@ -782,8 +782,9 @@ namespace WebApi
             }
         }
 
-        private static int GetChatID(int user1, int user2)
+        public static int GetChatID(int user1, int user2)
         {
+            SetConnectionString();
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -949,12 +950,12 @@ namespace WebApi
             }
         }
 
-        public static List<Message> GetPrivateMessages(int id, Dictionary<string, string> data)
+        public static List<Dictionary<string, string>> GetPrivateMessages(int id, Dictionary<string, string> data)
         {
             SetConnectionString();
             try
             {
-                var messages = new List<Message>();
+                var log = new List<Dictionary<string, string>>();
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
@@ -973,15 +974,17 @@ namespace WebApi
                         var reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
-                            messages.Add(new Message
+                            Dictionary<string, string> message = new Dictionary<string, string>()
                             {
-                                Sender = reader.GetString(0),
-                                Body = reader.GetString(1),
-                                TimeStamp = reader.IsDBNull(2) ? null : reader.GetDateTime(2)
-                            });
+                                {"sender", reader.GetString(0) },
+                                {"message", reader.GetString(1) }
+                            };
+
+                            message["timestamp"] = reader.IsDBNull(2) ? null : reader.GetDateTime(2).ToString();
+                            log.Add(message);
                         }
 
-                        return messages;
+                        return log;
                     }
                 }
             }
@@ -992,36 +995,6 @@ namespace WebApi
             }
         }
 
-        public static int GetPrivateChatId(Dictionary<string, string> data)
-        {
-            SetConnectionString();
-            if (!data.ContainsKey("userId") || !data.ContainsKey("otherId")) return -1;
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    conn.Open();
-                    using (SqlCommand cmd = conn.CreateCommand())
-                    {
-                        cmd.CommandText = "SELECT PrivateChatID FROM Relationships WHERE UserID_1 = @user AND UserID_2 = @other";
-                        cmd.Parameters.AddWithValue("@user", data["userId"]);
-                        cmd.Parameters.AddWithValue("@other", data["otherId"]);
-
-                        var reader = cmd.ExecuteReader();
-                        if (reader.Read())
-                        {
-                            return reader.GetInt32(0);
-                        }
-                        return -1;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                return -1;
-            }
-        }
         //Delete Account
         //Remove Friend
 

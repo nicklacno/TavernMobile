@@ -10,25 +10,6 @@
         <Image Source="/Resources/Images/paper_login.jpg" Aspect="AspectFill" />
         <ScrollView>
             <VerticalStackLayout>
-                <!--<CollectionView x:Name="requestStack" SelectionMode="Multiple">
-                    <CollectionView.Header>
-                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="25">Requests (Select User(s) then Accept/Reject),</Label>
-                    </CollectionView.Header>
-                    <CollectionView.EmptyView>
-                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center">No message History</Label>
-                    </CollectionView.EmptyView>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Label Text="{Binding ProfileName}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="20"/>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                    <CollectionView.Footer>
-                        <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
-                            <Button Text="Accept" WidthRequest="200" HorizontalOptions="Start" Clicked="AcceptUsers"/>
-                            <Button Text="Decline" WidthRequest="200" HorizontalOptions="End" Clicked="RejectUsers"/>
-                        </HorizontalStackLayout>
-                    </CollectionView.Footer>
-                </CollectionView>-->
                 <VerticalStackLayout x:Name="stackGroupname">
                     <Label FontFamily="Sedan">Group Name</Label>
                     <Entry
@@ -46,6 +27,11 @@
                         FontFamily="Sedan"
                         />
                 </VerticalStackLayout>
+                <HorizontalStackLayout>
+                    <CheckBox x:Name="checkPrivate" HorizontalOptions="Start" VerticalOptions="StartAndExpand"/>
+                    <Label Text="Private" FontFamily="Sedan" FontAttributes="Bold" VerticalOptions="EndAndExpand" VerticalTextAlignment="End" 
+                           FontSize="16"/>
+                </HorizontalStackLayout>
                 <VerticalStackLayout x:Name="stackConfirm">
                     <Button
                         x:Name="btnConfirm"
