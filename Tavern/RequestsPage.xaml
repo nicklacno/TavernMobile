@@ -11,6 +11,24 @@
         <Image Source="/Resources/Images/paper_login.jpg" Aspect="AspectFill" />
         <ScrollView>
             <VerticalStackLayout>
+                <CollectionView x:Name="requestStack" IsGrouped="True" SelectionMode="Single" Margin="15" HeightRequest="200" SelectionChanged="UserSelected"  >
+                    <CollectionView.Header>
+                        <Label Text="Incoming Requests:" HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" FontSize="24"
+                               FontFamily="Algerian" TextColor="Black" TextDecorations="Underline"/>
+                    </CollectionView.Header>
+                    <CollectionView.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <Label HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" Text="{Binding GroupName}"
+                                   FontSize="24" FontFamily="Algerian" Padding="0,5,0,0" TextColor="Black"/>
+                        </DataTemplate>
+                    </CollectionView.GroupHeaderTemplate>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="local:Request">
+                            <Label Text="{Binding UserName}" HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start"
+                                   FontSize="20" FontFamily="Sedan" Padding="5,5" TextColor="Black"/>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
                 <CollectionView x:Name="myFriendRequestsStack" SelectionMode="Single" Margin="15" HeightRequest="200">
                     <CollectionView.Header>
                         <Label Text="Outgoing Friend Requests:" HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" FontSize="24"
@@ -43,24 +61,6 @@
                             <Label>You have no open Group requests</Label>
                         </DataTemplate>
                     </CollectionView.EmptyViewTemplate>
-                </CollectionView>
-                <CollectionView x:Name="requestStack" IsGrouped="True" SelectionMode="Single" Margin="15" HeightRequest="100">
-                    <CollectionView.Header>
-                        <Label Text="Incomming Requests:" HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" FontSize="24"
-                               FontFamily="Algerian" TextColor="Black" TextDecorations="Underline"/>
-                    </CollectionView.Header>
-                    <CollectionView.GroupHeaderTemplate>
-                        <DataTemplate>
-                            <Label HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" Text="{Binding GroupName}"
-                                   FontSize="24" FontFamily="Algerian" Padding="0,5,0,0" TextColor="Black"/>
-                        </DataTemplate>
-                    </CollectionView.GroupHeaderTemplate>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="local:Request">
-                            <Label Text="{Binding UserName}" HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start"
-                                   FontSize="20" FontFamily="Sedan" Padding="5,5" TextColor="Black"/>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
                 </CollectionView>
             </VerticalStackLayout>
         </ScrollView>

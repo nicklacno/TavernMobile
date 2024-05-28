@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Views;
 using System.Diagnostics;
 using MessageLog = System.Collections.ObjectModel.ObservableCollection<Tavern.MessageByDay>;
 namespace Tavern.PrivateMessage;
@@ -9,6 +10,8 @@ public partial class PrivateMessagePage : ContentPage
 	private bool Updating { get; set; } = true;
 
 	private MessageLog log =  new MessageLog();
+
+	object _lock = new object();
 
 	public PrivateMessagePage(OtherUser other)
 	{
@@ -43,7 +46,16 @@ public partial class PrivateMessagePage : ContentPage
 
 	public async void SendMessage(object sender, EventArgs e)
 	{
-		
+		var singleton = ProfileSingleton.GetInstance();
+		if (!string.IsNullOrEmpty(txtBody.Text))
+		{
+			int ret = await singleton.SendPrivateMessage(Other.Id, txtBody.Text);
+			if (ret != 0)
+			{
+				ShowErrorMessage("Failed to Send Message");
+			}
+		}
+		txtBody.Text = "";
 	}
 
 	private async Task GetMessages()
@@ -59,5 +71,10 @@ public partial class PrivateMessagePage : ContentPage
     {
 		Updating = false;
         return base.OnBackButtonPressed();
+    }
+    public void ShowErrorMessage(string message)
+    {
+        var popup = new ErrorPopup(message);
+        this.ShowPopup(popup);
     }
 }

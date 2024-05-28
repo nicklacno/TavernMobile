@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Reflection.Metadata;
 using System.Text;
+using GroupsList = System.Collections.ObjectModel.ObservableCollection<Tavern.Group>;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using MemberList = System.Collections.ObjectModel.ObservableCollection<Tavern.OtherUser>;
-using GroupsList = System.Collections.ObjectModel.ObservableCollection<Tavern.Group>;
 using MessageLog = System.Collections.ObjectModel.ObservableCollection<Tavern.MessageByDay>;
 namespace Tavern
 {
@@ -47,7 +46,7 @@ namespace Tavern
 
             if (Preferences.ContainsKey("profileId") && Preferences.Get("profileId", -1) != -1)
             {
-                
+
                 try
                 {
                     ProfileId = Preferences.Get("profileId", -1);
@@ -59,9 +58,9 @@ namespace Tavern
                     Preferences.Remove("profileId");
                     isLoggedIn = false;
                 }
-        }
             }
-            
+        }
+
 
         public async Task SetValues()
         {
@@ -373,13 +372,14 @@ namespace Tavern
             }
         }
 
-        public async Task<int> CreateGroup(string groupName, string groupBio)
+        public async Task<int> CreateGroup(string groupName, string groupBio, bool isPrivate)
         {
             Dictionary<string, string> values = new Dictionary<string, string>()
             {
                 { "name", groupName },
-                { "ownerId", ProfileId.ToString()},
-                { "bio", groupBio }
+                { "ownerId", ProfileId.ToString() },
+                { "bio", groupBio },
+                { "isPrivate", isPrivate.ToString() }
             };
 
             var json = JsonSerializer.Serialize(values);
@@ -548,7 +548,7 @@ namespace Tavern
             {
                 var response = await _httpClient.GetStringAsync($"Groups/{id}/Tags");
                 if (response == null) return null;
-                
+
                 var curr = ConvertToTagList(response);
                 ObservableCollection<Tag> tags = new ObservableCollection<Tag>();
 
@@ -680,68 +680,54 @@ namespace Tavern
             return requests;
         }
 
-        public async Task<int> AcceptMembers(IList<object> selectedItems)
+        public async Task<int> AcceptMember(Request r)
         {
-            foreach (object user in selectedItems)
-            {
-                if (user is Request r)
-                {
-                    Dictionary<string, int> values = new Dictionary<string, int>()
+            Dictionary<string, int> values = new Dictionary<string, int>()
                     {
                         { "requestId", r.RequestId },
                         { "isAccepted", 1 }
                     };
 
-                    var json = JsonSerializer.Serialize(values);
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var json = JsonSerializer.Serialize(values);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    try
-                    {
-                        var response = await _httpClient.PostAsync("Groups/ModifyRequest", content);
-                        int status = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
+            try
+            {
+                var response = await _httpClient.PostAsync("Groups/ModifyRequest", content);
+                int status = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
 
-                        if (status != 0) return selectedItems.IndexOf(user) + 1;
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex);
-                        return -1;
-                    }
-                }
+                return status;
             }
-            return 0;
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
         }
 
-        public async Task<int> RejectMembers(IList<object> selectedItems)
+        public async Task<int> RejectMember(Request r)
         {
-            foreach (object user in selectedItems)
-            {
-                if (user is Request r)
-                {
-                    Dictionary<string, int> values = new Dictionary<string, int>()
+            Dictionary<string, int> values = new Dictionary<string, int>()
                     {
                         { "requestId", r.RequestId },
                         { "isAccepted", 0 }
                     };
 
-                    var json = JsonSerializer.Serialize(values);
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var json = JsonSerializer.Serialize(values);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    try
-                    {
-                        var response = await _httpClient.PostAsync("Groups/ModifyRequest", content);
-                        int status = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
+            try
+            {
+                var response = await _httpClient.PostAsync("Groups/ModifyRequest", content);
+                int status = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
 
-                        if (status != 0) return selectedItems.IndexOf(user) + 1;
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex);
-                        return -1;
-                    }
-                }
+                return status;
             }
-            return 0;
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
         }
 
         public async Task<int> UpdateGroupTags(Group groupData, Dictionary<int, bool> updatedValues)
@@ -811,7 +797,7 @@ namespace Tavern
 
                 if (retVal == 0)
                 {
-                    foreach(Group g in Groups)
+                    foreach (Group g in Groups)
                     {
                         if (g.GroupId == id)
                         {
@@ -824,7 +810,7 @@ namespace Tavern
 
                 return retVal;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 Debug.WriteLine(ex);
                 return -1;
@@ -867,9 +853,9 @@ namespace Tavern
                     var reqs = await GetGroupRequests((int)group["id"]);
                     if (reqs.Count > 0)
                     {
-                        requests.Add(new RequestByGroup((int)group["id"], (string)group["name"],reqs));
+                        requests.Add(new RequestByGroup((int)group["id"], (string)group["name"], reqs));
                     }
-                }               
+                }
                 return requests;
             }
             catch (Exception ex)
@@ -916,7 +902,7 @@ namespace Tavern
                 JToken data = JToken.Parse(response);
                 foreach (JObject obj in data.Children())
                 {
-                    m.Add(new OtherUser { Id = (int)obj["id"], Name= (string)obj["name"] });
+                    m.Add(new OtherUser { Id = (int)obj["id"], Name = (string)obj["name"] });
                 }
                 return m;
             }
@@ -1019,14 +1005,46 @@ namespace Tavern
             }
         }
 
-        public async int SendPrivateMessage(int otherId, string message)
+        public async Task<int> SendPrivateMessage(int otherId, string message)
         {
-            int chatId = await GetChatId(otherId);
-            if (chatId < 0) return -1;
+            Dictionary<string, string> values = new Dictionary<string, string>()
+            {
+                { "senderId", ProfileId.ToString() },
+                { "recieverId", otherId.ToString() },
+                { "message", message },
+                { "timestamp", DateTime.UtcNow.ToString()}
+            };
+
+            var json = JsonSerializer.Serialize(values);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             try
             {
-                var 
+                var response = await _httpClient.PostAsync("Profile/SendPrivateMessage", content);
+                return Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+        public async Task<int> ModifyFriendRequest(int otherId, bool isAccepted)
+        {
+            Dictionary<string, int> values = new Dictionary<string, int>()
+            {
+                { "requestorID", otherId },
+                { "userID", ProfileId },
+                { "isAccepted", isAccepted ? 1 : 0 }
+            };
+
+            var json = JsonSerializer.Serialize(values);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            try
+            {
+                var response = await _httpClient.PostAsync("Profile/ModifyFriendRequest", content);
+                return Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
             }
             catch (Exception ex)
             {

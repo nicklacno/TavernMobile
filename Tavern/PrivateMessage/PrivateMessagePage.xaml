@@ -38,7 +38,7 @@
                 <Editor x:Name="txtBody" Placeholder="Text" WidthRequest="300" TextColor="Black" PlaceholderColor="Black"
                         FontFamily="Sedan" FontSize="24"/>
                 <Button Text="Send" WidthRequest="100" TextColor="White" BackgroundColor="#66000000"
-                        FontFamily="Algerian" FontSize="20" />
+                        FontFamily="Algerian" FontSize="20" Clicked="SendMessage"/>
             </HorizontalStackLayout>
         </VerticalStackLayout>
     </Grid>

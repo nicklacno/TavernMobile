@@ -68,7 +68,6 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </VerticalStackLayout>
-
         </VerticalStackLayout>
     </Grid>
 

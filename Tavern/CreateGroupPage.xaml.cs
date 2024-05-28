@@ -12,7 +12,7 @@ public partial class CreateGroupPage : ContentPage
 
 	private async void CreateGroup(object sender, EventArgs e)
 	{
-		int id = await ProfileSingleton.GetInstance().CreateGroup(txtGroupName.Text, txtBio.Text);
+		int id = await ProfileSingleton.GetInstance().CreateGroup(txtGroupName.Text, txtBio.Text, checkPrivate.IsChecked);
 		if (id > 0)
 		{
 			ProfileSingleton singleton = ProfileSingleton.GetInstance();
