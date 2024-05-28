@@ -10,6 +10,8 @@
         <Image Source="/Resources/Images/paper_login.jpg" Aspect="AspectFill" />
         <ScrollView>
             <VerticalStackLayout>
+                <Button Text="Show Group Code" HorizontalOptions="CenterAndExpand" Clicked="RetrieveCode" BackgroundColor="#66000000" 
+                        TextColor="White" FontFamily="Algerian" FontSize="24" WidthRequest="400" />
                 <VerticalStackLayout x:Name="stackGroupname">
                     <Label FontFamily="Sedan">Group Name</Label>
                     <Entry
@@ -37,13 +39,16 @@
                         x:Name="btnConfirm"
                         Text="Save Changes"
                         Clicked="UpdateGroupInfo"
+                        FontFamily="Algerian"
+                        FontSize="20"
                         />
                 </VerticalStackLayout>
                 <CollectionView
                     x:Name="GroupTagsList"
                     SelectionMode="Multiple">
                     <CollectionView.Header>
-                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="25">Tags</Label>
+                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="25" FontFamily="Algerian"
+                               TextDecorations="Underline">Tags</Label>
                     </CollectionView.Header>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
