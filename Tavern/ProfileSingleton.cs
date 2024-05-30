@@ -8,7 +8,7 @@ using MemberList = System.Collections.ObjectModel.ObservableCollection<Tavern.Ot
 using MessageLog = System.Collections.ObjectModel.ObservableCollection<Tavern.MessageByDay>;
 namespace Tavern
 {
-    public class ProfileSingleton
+    public class ProfileSingleton : Profile
     {
         private static ProfileSingleton _instance;
         public bool isLoggedIn;
@@ -16,15 +16,6 @@ namespace Tavern
         public delegate void BasePageEvent(Page page);
         public BasePageEvent switchMainPage; //login successful delegate
 
-        public int ProfileId { get; private set; }
-        public string ProfileName { get; set; }
-        public string ProfileBio { get; set; }
-
-        public MemberList Friends { get; set; }
-        public GroupsList Groups { get; private set; }
-        public ObservableCollection<Tag> Tags { get; private set; } = new ObservableCollection<Tag>();
-
-        public List<string> BlockedUsers { get; set; }
 
         private readonly HttpClient _httpClient = new(); //creates client
         private const string BASE_ADDRESS = "https://n588x7k6-5273.usw2.devtunnels.ms/"; //base address for persistent dev-tunnel for api
@@ -112,7 +103,7 @@ namespace Tavern
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
-                Tags = new ObservableCollection<Tag>();
+                Tags.Clear();
             }
         }
 
