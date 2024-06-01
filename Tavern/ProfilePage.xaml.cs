@@ -1,4 +1,3 @@
-using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.Controls.Shapes;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
@@ -50,7 +49,8 @@ public partial class ProfilePage : ContentPage
 		}
 		catch (Exception ex) 
 		{
-			this.ShowPopup(new ErrorPopup(ex.Message, true));
+			Debug.WriteLine(ex);
+			return;
 		}
 	}
 	/**

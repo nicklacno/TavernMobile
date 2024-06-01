@@ -2,23 +2,25 @@ namespace Tavern;
 
 public partial class OtherUserPage : ContentPage
 {
-	int ProfileId { get; set; }
+	Profile ProfileData { get; set; }
 
-	public OtherUserPage(int id)
+	public OtherUserPage(Profile data)
 	{
 		InitializeComponent();
-
-		Task t = Task.Run(PopulateData);
-		t.Wait();
+		ProfileData = data;
+		PopulateData();
 	}
 
-	public async Task PopulateData()
+	public void PopulateData()
 	{
-		
-	}
+		Name.Text = ProfileData.ProfileName;
+		Bio.Text = ProfileData.ProfileBio == null ? "" : ProfileData.ProfileBio;
+		tagList.ItemsSource = ProfileData.Tags;
+		groupList.ItemsSource = ProfileData.Groups;
+    }
 
     private void SendFriendRequest(object sender, EventArgs e)
     {
-
+		
     }
 }

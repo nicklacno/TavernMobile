@@ -1,5 +1,3 @@
-using CommunityToolkit.Maui.Views;
-
 namespace Tavern;
 
 public partial class LoginPage : ContentPage
@@ -25,8 +23,7 @@ public partial class LoginPage : ContentPage
 		}
         else
         {
-			var popup = new ErrorPopup("Failed to Login To Tavern");
-			this.ShowPopup(popup);
+			await DisplayAlert("Connection Error", "Failed to Login to Tavern", "Okay");
         }
     }
 

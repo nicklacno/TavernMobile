@@ -5,7 +5,9 @@
     <ContentView.Resources>
         <StyleSheet Source="/Resources/Styles/PageStyles/Chat.css" />
     </ContentView.Resources>
-    <VerticalStackLayout>
+    <VerticalStackLayout Padding="0,15">
+        <Label x:Name="lbChatHead" Text="Chat Log" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="24" FontFamily="Algerian"
+               TextDecorations="Underline"/>
         <CollectionView x:Name="messageBox" 
                         IsGrouped="True" 
                         SelectionMode="None"
@@ -18,7 +20,7 @@
                     <HorizontalStackLayout>
                         <Label Text="{Binding TimeSent}" WidthRequest="60"/>
                         <Label Text="{Binding Sender}" Padding="10, 0"/>
-                        <Label Text="{Binding Body}" LineBreakMode="WordWrap"/>
+                        <Label Text="{Binding Body}" LineBreakMode="WordWrap" FontFamily="Sedan" FontSize="16"/>
                     </HorizontalStackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
@@ -31,7 +33,7 @@
                 </DataTemplate>
             </CollectionView.GroupHeaderTemplate>
             <CollectionView.EmptyView>
-                <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center">No message History</Label>
+                <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontFamily="Sedan" FontSize="16">No message History</Label>
             </CollectionView.EmptyView>
         </CollectionView>
         <HorizontalStackLayout HorizontalOptions="CenterAndExpand">

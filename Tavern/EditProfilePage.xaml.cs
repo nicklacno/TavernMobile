@@ -1,4 +1,3 @@
-using CommunityToolkit.Maui.Views;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -35,17 +34,17 @@ public partial class EditProfilePage : ContentPage
 		if (val == -1)
 		{
 			//error handle
-			ShowErrorMessage("Failed to connect to server");
+			await ShowErrorMessage("Failed to connect to server");
 		}
 		else if (val == -2)
 		{
 			//error handling
-			ShowErrorMessage("Incorrect Password");
+			await ShowErrorMessage("Incorrect Password");
 		}
 		else if (val == -3)
 		{ 
 			//error handling
-			ShowErrorMessage("Duplicate username");
+			await ShowErrorMessage("Duplicate username");
 		}
 		else
 		{
@@ -60,10 +59,9 @@ public partial class EditProfilePage : ContentPage
 	{
 		ProfileSingleton.GetInstance().Logout();
 	}
-    private void ShowErrorMessage(string message)
+    private async Task ShowErrorMessage(string message)
     {
-        var popup = new ErrorPopup(message);
-        this.ShowPopup(popup);
+        await DisplayAlert("An Error Occurred", message, "Okay");
     }
 
 	public async void UpdateTags(object sender, EventArgs e)
@@ -77,6 +75,6 @@ public partial class EditProfilePage : ContentPage
 		//tagList.SelectedItems.Clear();
 		int val = await singleton.UpdateProfile(updatedStatus);
 
-		ShowErrorMessage(val == 0 ? "Successfully Updated Tags" : "Failed to Update Tags");
+		await ShowErrorMessage(val == 0 ? "Successfully Updated Tags" : "Failed to Update Tags");
 	}
 }

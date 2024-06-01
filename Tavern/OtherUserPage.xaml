@@ -3,10 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:n="clr-namespace:Tavern"
              x:Class="Tavern.OtherUserPage">
+    <ContentPage.Resources>
+        <StyleSheet Source="/Resources/Styles/PageStyles/ProfilePage.css" />
+    </ContentPage.Resources>
     <Grid>
         <Image Source="/Resources/Images/paper_login.jpg" Aspect="AspectFill" />
-        <VerticalStackLayout VerticalOptions="Start">
-            <Button x:Name="ProfileEdit" HorizontalOptions="End" Text="Send Friend Request" Clicked="SendFriendRequest"/>
+        <VerticalStackLayout VerticalOptions="Start" Padding="10">
+            <Button x:Name="btnRequest" Text="Send Friend Request" FontSize="24" FontFamily="Sedan"/>
             <Label 
             x:Name="Name"
             Text=""
@@ -48,19 +51,6 @@
                     <CollectionView.EmptyView>
                         <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center">You are apart of no groups</Label>
                     </CollectionView.EmptyView>
-                </CollectionView>
-            </VerticalStackLayout>
-
-            <VerticalStackLayout x:Name="FriendsList">
-                <Label Text="Friends" FontFamily="Sedan" FontSize="24" TextDecorations="Underline" />
-                <Rectangle HorizontalOptions="Fill" HeightRequest="4" Opacity="0"/>
-                <CollectionView x:Name="friendsList" ItemsLayout="Vertical" MaximumHeightRequest="140">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="n:OtherUser">
-                            <Label Text="{Binding Name}" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontFamily="Sedan"
-                               FontSize="20"/>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
                 </CollectionView>
             </VerticalStackLayout>
         </VerticalStackLayout>

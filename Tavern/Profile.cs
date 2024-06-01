@@ -17,7 +17,7 @@ namespace Tavern
 
         public MemberList Friends { get; set; }
         public GroupsList Groups { get; set; }
-        public ObservableCollection<Tag> Tags { get; private set; } = new ObservableCollection<Tag>();
+        public ObservableCollection<Tag> Tags { get; set; } = new ObservableCollection<Tag>();
 
         public List<string> BlockedUsers { get; set; }
     }

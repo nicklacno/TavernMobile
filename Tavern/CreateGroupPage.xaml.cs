@@ -1,4 +1,3 @@
-using CommunityToolkit.Maui.Views;
 using System.Diagnostics;
 
 namespace Tavern;
@@ -22,18 +21,13 @@ public partial class CreateGroupPage : ContentPage
 		else if (id == -1)
 		{
 			//error handle
-			ShowErrorMessage("Server connection error");
+			//ShowErrorMessage("Server connection error");
+			await DisplayAlert("An Error Occurred", "There was an error connecting to the Server", "Okay");
 		}
 		else if (id == -2)
 		{
 			//error handle
-			ShowErrorMessage("Duplicate Group name");
+			await DisplayAlert("Duplicate Group Name Error", "You entered a group name for a group that already exists", "Okay");
 		}
-    }
-
-    private void ShowErrorMessage(string message)
-    {
-        var popup = new ErrorPopup(message);
-        this.ShowPopup(popup);
     }
 }

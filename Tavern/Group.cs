@@ -15,7 +15,7 @@ namespace Tavern
         public int OwnerId { get; set; }
         public ObservableCollection<OtherUser> Members { get; set; }
         public ObservableCollection<Tag> Tags { get; set; }
-        public bool isPrivate { get; set; }
+        public bool IsPrivate { get; set; }
         public string? GroupCode { get; set; }
 
 

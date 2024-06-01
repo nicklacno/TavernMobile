@@ -1,7 +1,3 @@
-
-
-using CommunityToolkit.Maui.Views;
-
 namespace Tavern;
 
 public partial class GroupPage : ContentPage
@@ -59,6 +55,7 @@ public partial class GroupPage : ContentPage
 			{
 				ModifyButton.Text = "Request to Join";
 				ModifyButton.Clicked += SendRequest;
+				layoutMembers.SelectionMode = SelectionMode.None;
 				return;
 			}
 			else if (GroupData.OwnerId == ProfileSingleton.GetInstance().ProfileId)
@@ -92,10 +89,9 @@ public partial class GroupPage : ContentPage
 		await Navigation.PushAsync(new EditGroupPage(GroupData), true);
     }
 
-    public void ShowErrorMessage(string message)
+    public async Task ShowErrorMessage(string message)
     {
-        var popup = new ErrorPopup(message);
-        this.ShowPopup(popup);
+        await DisplayAlert("An Error Occurred", message, "Okay");
     }
 
 	private async void SendRequest(object sender, EventArgs e)
@@ -115,4 +111,18 @@ public partial class GroupPage : ContentPage
 			Thread.Sleep(2000);
 		}
 	}
+
+    private async void SelectMember(object sender, SelectionChangedEventArgs e)
+    {
+		if (layoutMembers.SelectedItem is OtherUser o)
+		{
+			ProfileSingleton singleton = ProfileSingleton.GetInstance();
+			Profile data = await singleton.GetProfile(o.Id);
+			if (data != null)
+			{
+				await Navigation.PushAsync(new OtherUserPage(data));
+			}
+		}
+		layoutMembers.SelectedItem = null;
+    }
 }

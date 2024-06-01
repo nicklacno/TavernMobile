@@ -1,4 +1,3 @@
-using CommunityToolkit.Maui.Views;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -94,7 +93,7 @@ public partial class RequestsPage : ContentPage
 			}
 			if (ret != 0)
 			{
-				ShowErrorMessage("Failed to Process Request");
+				await ShowErrorMessage("Failed to Process Request");
 				return;
 			}
 			foreach (var rbg in requests)
@@ -106,13 +105,12 @@ public partial class RequestsPage : ContentPage
 					break;
 				}
 			}
-			ShowErrorMessage("Successfully Processed Request");
+			await ShowErrorMessage("Successfully Processed Request");
 		}
     }
 
-    public void ShowErrorMessage(string message)
+    public async Task ShowErrorMessage(string message)
     {
-        var popup = new ErrorPopup(message);
-        this.ShowPopup(popup);
+        await DisplayAlert("An Error Occurred", message, "Okay");
     }
 }

@@ -283,7 +283,7 @@ namespace Tavern
             group.OwnerId = (int)data["ownerId"];
             group.Members = ConvertToMembers(data["members"]);
             group.Tags = await GetGroupTags(id);
-            group.isPrivate = (bool)data["isPrivate"];
+            group.IsPrivate = (bool)data["isPrivate"];
             group.GroupCode = group.OwnerId == ProfileId ? (string)data["groupCode"] : null;
 
             return group;
@@ -794,7 +794,7 @@ namespace Tavern
                         {
                             if (newGroupname != null) g.Name = newGroupname;
                             if (newBio != null) g.Bio = newBio;
-                            if (isPrivate != null) g.isPrivate = (bool)isPrivate;
+                            if (isPrivate != null) g.IsPrivate = (bool)isPrivate;
                         }
                     }
                 }
@@ -1057,5 +1057,31 @@ namespace Tavern
                 return null;
             }
         }
+
+        //other profile data
+        public async Task<Profile> GetProfile(int id)
+        {
+            Profile profile = new Profile { ProfileId = id };
+            try
+            {
+                string json = await _httpClient.GetStringAsync($"Profile/{id}");
+                var prof = JObject.Parse(json);
+                profile.ProfileName = (string)prof["name"];
+                profile.ProfileBio = (string)prof["bio"];
+
+                profile.Groups = await ConvertToGroupList(await _httpClient.GetStringAsync($"Profile/{id}/Groups"));
+                profile.Tags = ConvertToTagList(await _httpClient.GetStringAsync($"Profile/{id}/Tags"));
+                var token = JToken.Parse(await _httpClient.GetStringAsync($"Profile/{id}/Friends"));
+                profile.Friends = ConvertToMembers(token);
+
+                return profile;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
     }
 }

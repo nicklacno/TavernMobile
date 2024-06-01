@@ -1,5 +1,4 @@
 
-using CommunityToolkit.Maui.Views;
 using System.Collections.ObjectModel;
 
 namespace Tavern;
@@ -15,12 +14,13 @@ public partial class EditGroupPage : ContentPage
 	{
 		InitializeComponent();
 		GroupData = data;
-        checkPrivate.IsChecked = GroupData.isPrivate;
+        checkPrivate.IsChecked = GroupData.IsPrivate;
         //GetRequests();
-        PopulateDataFields();
+        Task t = Task.Run(async () => { await PopulateDataFields(); });
+        t.Wait();
 	}
 
-    private async void PopulateDataFields()
+    private async Task PopulateDataFields()
     {
         var singleton = ProfileSingleton.GetInstance();
         tags = await singleton.GetGroupTags();
@@ -47,43 +47,43 @@ public partial class EditGroupPage : ContentPage
         }
 
         int val = await ProfileSingleton.GetInstance().UpdateGroupTags(GroupData,  updatedValues);
-        ShowErrorMessage(val == 0 ? "Successfully Updated Tags" : "Failed to Update Tags");
+        await ShowErrorMessage(val == 0 ? "Successfully Updated Tags" : "Failed to Update Tags");
     }
 
     public async void UpdateGroupInfo(object sender, EventArgs e)
     {
         if (string.IsNullOrWhiteSpace(entryUsername.Text))
         {
-            ShowErrorMessage("Cannot have blank Username");
+            await ShowErrorMessage("Cannot have blank Username");
             return;
         }
         string name = entryUsername.Text.Equals(GroupData.Name) ? null : entryUsername.Text;
         string bio = entryBio.Text.Equals(GroupData.Bio) ? null : entryBio.Text;
-        bool? isPrivate = checkPrivate.IsChecked == GroupData.isPrivate ? null : checkPrivate.IsChecked;
+        bool? isPrivate = checkPrivate.IsChecked == GroupData.IsPrivate ? null : checkPrivate.IsChecked;
 
 
         var retval = await ProfileSingleton.GetInstance().UpdateGroupData(GroupData.GroupId, name, bio, isPrivate);
         switch (retval)
         {
             case -10:
-                ShowErrorMessage("Group does not exist");
+                await ShowErrorMessage("Group does not exist");
                 await Navigation.PopToRootAsync();
                 break;
             case -3:
-                ShowErrorMessage("Duplicate group name");
+                await ShowErrorMessage("Duplicate group name");
                 break;
             case -5:
-                ShowErrorMessage("Only the owner can edit the group");
+                await ShowErrorMessage("Only the owner can edit the group");
                 await Navigation.PopAsync();
                 break;
             case -1:
-                ShowErrorMessage("An error had occurred, Try again later");
+                await ShowErrorMessage("An error had occurred, Try again later");
                 break;
             case 0:
-                ShowErrorMessage("Successfully updated group");
+                await ShowErrorMessage("Successfully updated group", "Success");
                 break;
             default:
-                ShowErrorMessage("A unexpected errror had occurred");
+                await ShowErrorMessage("A unexpected errror had occurred");
                 break;
         }
 
@@ -106,9 +106,8 @@ public partial class EditGroupPage : ContentPage
         await DisplayAlert("Private Code", $"Your group code is {code}", "Ok");
     }
 
-    public void ShowErrorMessage(string message)
+    public async Task ShowErrorMessage(string message, string title = "An Error Occurred")
     {
-        var popup = new ErrorPopup(message);
-        this.ShowPopup(popup);
+        await DisplayAlert(title, message, "Okay");
     }
 }

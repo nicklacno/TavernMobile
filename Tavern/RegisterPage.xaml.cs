@@ -1,4 +1,3 @@
-using CommunityToolkit.Maui.Views;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
@@ -132,9 +131,8 @@ public partial class RegisterPage : ContentPage
         return 0;//should not reach here
     }
 
-    private void ShowErrorMessage(string message)
+    private async Task ShowErrorMessage(string message)
     {
-        var popup = new ErrorPopup(message);
-        this.ShowPopup(popup);
+        await DisplayAlert("An Error Occurred", message, "Okay");
     }
 }

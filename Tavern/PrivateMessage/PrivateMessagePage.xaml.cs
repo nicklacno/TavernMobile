@@ -1,4 +1,3 @@
-using CommunityToolkit.Maui.Views;
 using System.Diagnostics;
 using MessageLog = System.Collections.ObjectModel.ObservableCollection<Tavern.MessageByDay>;
 namespace Tavern.PrivateMessage;
@@ -72,9 +71,8 @@ public partial class PrivateMessagePage : ContentPage
 		Updating = false;
         return base.OnBackButtonPressed();
     }
-    public void ShowErrorMessage(string message)
+    public async Task ShowErrorMessage(string message)
     {
-        var popup = new ErrorPopup(message);
-        this.ShowPopup(popup);
+        await DisplayAlert("An Error Occurred", message, "Okay");
     }
 }

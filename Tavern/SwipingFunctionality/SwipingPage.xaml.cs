@@ -1,7 +1,3 @@
-
-
-using CommunityToolkit.Maui.Views;
-
 namespace Tavern.SwipingFunctionality;
 
 public partial class SwipingPage : ContentPage
