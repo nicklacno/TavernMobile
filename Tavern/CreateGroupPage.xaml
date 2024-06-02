@@ -14,24 +14,24 @@
                 Text="Create Group"
                 HorizontalTextAlignment="Center"
                 HorizontalOptions="Center"
-                FontFamily="Algerian"
+                FontFamily="Seagram"
                 />
             <Entry
                 x:Name="txtGroupName"
                 Placeholder="Group Name"
                 MaxLength="25"
-                FontFamily="Sedan"
+                FontFamily="Seagram"
                 />
             <Editor
                 x:Name="txtBio"
                 Placeholder="Group Bio"
                 MaxLength="200"
                 AutoSize="TextChanges"
-                FontFamily="Sedan"
+                FontFamily="Seagram"
                 />
             <HorizontalStackLayout>
                 <CheckBox x:Name="checkPrivate" HorizontalOptions="Start" VerticalOptions="StartAndExpand"/>
-                <Label Text="Private" FontFamily="Sedan" FontAttributes="Bold" VerticalOptions="EndAndExpand" VerticalTextAlignment="End" 
+                <Label Text="Private" FontFamily="Seagram" FontAttributes="Bold" VerticalOptions="EndAndExpand" VerticalTextAlignment="End" 
                        FontSize="16"/>
             </HorizontalStackLayout>
             <Button

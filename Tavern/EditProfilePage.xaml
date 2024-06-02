@@ -10,20 +10,20 @@
         <Image Source="/Resources/Images/paper_login.jpg" Aspect="AspectFill" />
         <VerticalStackLayout>
             <VerticalStackLayout x:Name="stackUsername">
-                <Label FontFamily="Sedan">Username </Label>
+                <Label FontFamily="Seagram">Username </Label>
                 <Entry
                     x:Name="entryUsername"
                     MaxLength="20"
-                    FontFamily="Sedan"
+                    FontFamily="Seagram"
                     />
             </VerticalStackLayout>
             <VerticalStackLayout x:Name="stackBio">
-                <Label FontFamily="Sedan">Bio</Label>
+                <Label FontFamily="Seagram">Bio</Label>
                 <Editor
                     x:Name="entryBio"
                     MaxLength="300"
                     AutoSize="TextChanges"
-                    FontFamily="Sedan"
+                    FontFamily="Seagram"
                     />
             </VerticalStackLayout>
             <VerticalStackLayout x:Name="stackConfirm">

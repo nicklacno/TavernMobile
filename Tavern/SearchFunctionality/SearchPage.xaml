@@ -10,21 +10,21 @@
                 <Image Source="/Resources/Images/paper_login.jpg" Aspect="AspectFill"/>
                 <VerticalStackLayout Padding="10">
                     <Entry x:Name="txtSearch" Placeholder="Search" HorizontalOptions="CenterAndExpand" WidthRequest="325"
-                           FontSize="20" FontFamily="Sedan"/>
+                           FontSize="20" FontFamily="Seagram"/>
                     <CollectionView x:Name="TagList" SelectionMode="Multiple" ItemsLayout="VerticalGrid, 2">
                         <CollectionView.Header>
-                            <Label HorizontalOptions="Center" FontSize="20" TextColor="black" FontFamily="Algerian" Padding="0,10,0,5" 
+                            <Label HorizontalOptions="Center" FontSize="20" TextColor="black" FontFamily="Seagram" Padding="0,10,0,5" 
                                    TextDecorations="Underline">Tags:</Label>
                         </CollectionView.Header>
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Label Text="{Binding Name}" HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" 
-                                       TextColor="Black" FontSize="15" FontFamily="Sedan"/>
+                                       TextColor="Black" FontSize="15" FontFamily="Seagram"/>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                     <Button x:Name="SearchButton" Clicked="Search" WidthRequest="325" Text="Search" FontSize="20" 
-                            FontFamily="Algerian" BackgroundColor="#66000000" TextColor="White" BorderColor="Black"/>
+                            FontFamily="Seagram" BackgroundColor="#66000000" TextColor="White" BorderColor="Black"/>
                 </VerticalStackLayout>
             </Grid>
         </VerticalStackLayout>

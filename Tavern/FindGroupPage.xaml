@@ -10,10 +10,10 @@
                 <Image Source="/Resources/Images/paper_login.png" Aspect="Fill"/>
                 <VerticalStackLayout VerticalOptions="CenterAndExpand">
                     <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" 
-                           FontSize="24" FontFamily="Algerian" Padding="0,10"
+                           FontSize="24" FontFamily="Seagram" Padding="0,10"
                            TextColor="#230900">Find Groups By:</Label>
                     <Button VerticalOptions="CenterAndExpand" Text="Swiping"
-                            FontSize="24" FontFamily="Sedan" Clicked="OnClickSwiping"
+                            FontSize="24" FontFamily="Seagram" Clicked="OnClickSwiping"
                             HorizontalOptions="CenterAndExpand"
                             BackgroundColor="#66000000" TextColor="White"
                             />
@@ -23,10 +23,10 @@
                 <Image Source="/Resources/Images/paper_login.png" Aspect="Fill"/>
                 <VerticalStackLayout VerticalOptions="CenterAndExpand">
                     <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" 
-                           FontSize="24" FontFamily="Algerian" Padding="0,10"
+                           FontSize="24" FontFamily="Seagram" Padding="0,10"
                            TextColor="#230900">Find Groups By:</Label>
                     <Button VerticalOptions="CenterAndExpand" Text="Searching"
-                            FontSize="24" FontFamily="Sedan" Clicked="OnClickSearching"
+                            FontSize="24" FontFamily="Seagram" Clicked="OnClickSearching"
                             HorizontalOptions="CenterAndExpand"
                             BackgroundColor="#66000000" TextColor="White"
                             />
@@ -34,7 +34,7 @@
             </Grid>
             <Button x:Name="btnCode" Text="Find By Code" Clicked="FindByCode" 
                     HorizontalOptions="CenterAndExpand" FontSize="24" BackgroundColor="BurlyWood"
-                    TextColor="Black" FontFamily="Sedan"/>
+                    TextColor="Black" FontFamily="Seagram"/>
         </VerticalStackLayout>
     </Grid>
     

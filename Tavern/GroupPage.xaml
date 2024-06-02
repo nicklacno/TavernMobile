@@ -10,11 +10,11 @@
         <Image Source="/Resources/Images/paper_login.png" Aspect="Fill"/>
         <ScrollView>
             <VerticalStackLayout Padding="10" x:Name="stackInfo">
-                <Button x:Name="ModifyButton" FontSize="24" FontFamily="Sedan"/>
+                <Button x:Name="ModifyButton" FontSize="24" FontFamily="Seagram"/>
                 <Label 
                     x:Name="lbGroupName"
                     Text="Group Name"
-                    FontFamily="Algerian"
+                    FontFamily="Seagram"
                     FontSize="60"
                     HorizontalOptions="Center" 
                     HorizontalTextAlignment="Center"
@@ -22,29 +22,33 @@
                 <Label
                     x:Name="lbGroupBio"
                     Text="Insert Group Bio Here"
-                    FontFamily="Sedan"
+                    FontFamily="Seagram"
                     FontSize="30"
                     HorizontalOptions="Center"
                     HorizontalTextAlignment="Start"
                     />
-                <Label x:Name="lbTagHead" Text="Tags:" FontFamily="Sedan" FontSize="24" TextDecorations="Underline" />
+                <BoxView HeightRequest="1" Color="#77000000"/>
                 <CollectionView x:Name="layoutTags"
                                 HorizontalOptions="CenterAndExpand"
                                 ItemsLayout="VerticalGrid, 2"
                                 >
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Label Text="{Binding Name}" FontSize="20" FontFamily="Sedan"/>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-                <CollectionView x:Name="layoutMembers" SelectionMode="Single" SelectionChanged="SelectMember">
                     <CollectionView.Header>
-                        <Label x:Name="lbMemberHead" Text="Members:" FontFamily="Sedan" FontSize="24" TextDecorations="Underline" HorizontalOptions="Center"/>
+                        <Label x:Name="lbTagHead" Text="Tags:" FontFamily="Seagram" FontSize="24" TextDecorations="Underline" HorizontalOptions="Center"/>
                     </CollectionView.Header>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Label Text="{Binding Name}" FontSize="20" FontFamily="Sedan" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center"/>
+                            <Label Text="{Binding Name}" FontSize="20" FontFamily="Seagram"/>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <BoxView HeightRequest="1" Color="#77000000"/>
+                <CollectionView x:Name="layoutMembers" SelectionMode="Single" SelectionChanged="SelectMember">
+                    <CollectionView.Header>
+                        <Label x:Name="lbMemberHead" Text="Members:" FontFamily="Seagram" FontSize="24" TextDecorations="Underline" HorizontalOptions="Center"/>
+                    </CollectionView.Header>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Label Text="{Binding Name}" FontSize="20" FontFamily="Seagram" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center"/>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

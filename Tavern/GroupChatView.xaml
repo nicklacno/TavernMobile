@@ -6,12 +6,13 @@
         <StyleSheet Source="/Resources/Styles/PageStyles/Chat.css" />
     </ContentView.Resources>
     <VerticalStackLayout Padding="0,15">
-        <Label x:Name="lbChatHead" Text="Chat Log" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="24" FontFamily="Algerian"
+        <BoxView HeightRequest="1" Color="#77000000"/>
+        <Label x:Name="lbChatHead" Text="Chat Log" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="24" FontFamily="Seagram"
                TextDecorations="Underline"/>
         <CollectionView x:Name="messageBox" 
                         IsGrouped="True" 
                         SelectionMode="None"
-                        HeightRequest="400"
+                        MinimumHeightRequest="200"
                         BindingContext="GroupChatView"
                         ItemsSource="{Binding Messages}"
                         >
@@ -20,7 +21,7 @@
                     <HorizontalStackLayout>
                         <Label Text="{Binding TimeSent}" WidthRequest="60"/>
                         <Label Text="{Binding Sender}" Padding="10, 0"/>
-                        <Label Text="{Binding Body}" LineBreakMode="WordWrap" FontFamily="Sedan" FontSize="16"/>
+                        <Label Text="{Binding Body}" LineBreakMode="WordWrap" FontFamily="Seagram" FontSize="16"/>
                     </HorizontalStackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
@@ -33,21 +34,13 @@
                 </DataTemplate>
             </CollectionView.GroupHeaderTemplate>
             <CollectionView.EmptyView>
-                <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontFamily="Sedan" FontSize="16">No message History</Label>
+                <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontFamily="Seagram" FontSize="16">No message History</Label>
             </CollectionView.EmptyView>
         </CollectionView>
         <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
-            <Editor 
-                x:Name="txtMessage"
-                MaxLength="200"
-                WidthRequest="250"
-                />
-            <Button 
-                x:Name="btnSendMessage"
-                Text="Send"
-                WidthRequest="150"
-                Clicked="SendMessage"
-                />
+            <Editor x:Name="txtMessage" MaxLength="200" WidthRequest="250" TextColor="#77000000" Placeholder="Message" PlaceholderColor="#77000000" 
+                    FontFamily="Seagram" FontSize="16" />
+            <Button x:Name="btnSendMessage" Text="Send" WidthRequest="150" Clicked="SendMessage" FontFamily="Seagram" FontSize="16"/>
         </HorizontalStackLayout>
     </VerticalStackLayout>
 </ContentView>

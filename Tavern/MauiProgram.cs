@@ -12,9 +12,9 @@ namespace Tavern
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("Algerian Regular.ttf", "Algerian");
-                    fonts.AddFont("SedanSC-Regular.ttf", "Sedan");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("Seagram tfb.ttf", "Seagram");
+                    fonts.AddFont("Ancient Medium.ttf", "Ancient");
                 });
 
 #if DEBUG

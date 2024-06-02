@@ -13,7 +13,7 @@
                         <Image Source="../Resources/Images/paper_login.jpg" Aspect="AspectFill"/>
                         <HorizontalStackLayout Padding="10">
                             <Label Text="{Binding Name}" VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center"
-                                   TextColor="Black" FontSize="24" FontFamily="Sedan"/>
+                                   TextColor="Black" FontSize="24" FontFamily="Seagram"/>
                         </HorizontalStackLayout>
                     </Grid>
                 </DataTemplate>

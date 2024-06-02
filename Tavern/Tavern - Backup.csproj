@@ -50,9 +50,8 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Fonts\Algerian Regular.ttf" />
-	  <None Remove="Resources\Fonts\Ancient Medium.ttf" />
 	  <None Remove="Resources\Fonts\Seagram tfb.ttf" />
-	  <None Remove="Resources\Fonts\SeagramSC-Regular.ttf" />
+	  <None Remove="Resources\Fonts\SeagramSCSeagram-Regular.ttf" />
 	  <None Remove="Resources\Images\home.png" />
 	  <None Remove="Resources\Images\logintavern.png" />
 	  <None Remove="Resources\Images\messages.png" />

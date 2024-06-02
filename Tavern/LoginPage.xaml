@@ -13,19 +13,19 @@
             <Label 
                 x:Name="lblTitle"
                 Text="Tavern"
-                FontFamily="Algerian"
+                FontFamily="Seagram"
                 VerticalOptions="Center" 
                 HorizontalOptions="Center" />
             <Entry
                 x:Name="txtUsername"
                 Placeholder="Username"
-                FontFamily="Sedan"
+                FontFamily="Seagram"
                 />
             <Entry
                 x:Name="txtPassword"
                 Placeholder="Password"
                 IsPassword="True"
-                FontFamily="Sedan"
+                FontFamily="Seagram"
                 />
             
             <HorizontalStackLayout>
@@ -35,7 +35,7 @@
                     />
                 <Label
                     Text="Remember Me"
-                    FontFamily="Sedan"
+                    FontFamily="Seagram"
                     FontAttributes="Bold"
                     VerticalOptions="Center"
                     />
@@ -43,7 +43,7 @@
             <Button
                 x:Name="btnLogin"
                 Text="Login"
-                FontFamily="Sedan"
+                FontFamily="Seagram"
                 FontSize="30"
                 FontAttributes="Bold"
                 Clicked="AttemptLogin"
@@ -53,7 +53,7 @@
             <Button
                 x:Name="btnRegister"
                 Text="Don't Have an account? Register Here"
-                FontFamily="Sedan"
+                FontFamily="Seagram"
                 HorizontalOptions="Center"
                 Clicked="Register"
                 />

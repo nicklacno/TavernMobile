@@ -16,7 +16,7 @@
             <VerticalStackLayout>
                 <Button
     x:Name="btnCreateNavigate"
-    FontFamily="Sedan"
+    FontFamily="Seagram"
     FontSize="30"
     TextColor="Black"
     BackgroundColor="BurlyWood"
@@ -34,8 +34,8 @@
                             <Grid Padding="5">
                                 <Image Source="/Resources/Images/paper_login.png" Aspect="Fill"/>
                                 <VerticalStackLayout VerticalOptions="StartAndExpand" Padding="10" Spacing="10" HorizontalOptions="FillAndExpand">
-                                    <Label x:Name="lbName" HorizontalTextAlignment="Center" FontFamily="Algerian" FontSize="25" HorizontalOptions="Center" Text="{Binding Name}"/>
-                                    <Label x:Name="lbBio" FontFamily="Sedan" FontSize="20" MaxLines="2" Text="{Binding Bio}"/>
+                                    <Label x:Name="lbName" HorizontalTextAlignment="Center" FontFamily="Seagram" FontSize="25" HorizontalOptions="Center" Text="{Binding Name}"/>
+                                    <Label x:Name="lbBio" FontFamily="Seagram" FontSize="20" MaxLines="2" Text="{Binding Bio}"/>
                                     <CollectionView ItemsSource="{Binding Tags}" 
                                                     ItemsLayout="VerticalGrid, 2" 
                                                     MaximumHeightRequest="40" 
@@ -44,12 +44,12 @@
                                         <CollectionView.ItemTemplate>
                                             <DataTemplate>
                                                 <Grid>
-                                                    <Label Text="{Binding Name}" FontFamily="Sedan" />
+                                                    <Label Text="{Binding Name}" FontFamily="Seagram" />
                                                 </Grid>
                                             </DataTemplate>
                                         </CollectionView.ItemTemplate>
                                     </CollectionView>
-                                    <Label x:Name="lbMembers" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontFamily="Sedan" FontSize="20"
+                                    <Label x:Name="lbMembers" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontFamily="Seagram" FontSize="20"
                                         Text="{Binding Members.Count, StringFormat='Members: {0:D}'}"/>
                                 </VerticalStackLayout>
                             </Grid>

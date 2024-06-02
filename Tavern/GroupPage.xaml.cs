@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+
 namespace Tavern;
 
 public partial class GroupPage : ContentPage
@@ -37,7 +39,8 @@ public partial class GroupPage : ContentPage
 			lbGroupName.Text = GroupData.Name;
 			lbGroupBio.Text = GroupData.Bio;
 
-			layoutTags.ItemsSource = GroupData.Tags;
+			if (GroupData.Tags != null && GroupData.Tags.Count == 0)
+				layoutTags.ItemsSource = GroupData.Tags;
 
 			layoutMembers.ItemsSource = GroupData.Members;
 

@@ -17,9 +17,9 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <HorizontalStackLayout>
-                            <Label Text="{Binding TimeSent}" WidthRequest="60" FontSize="16" FontFamily="Sedan"/>
-                            <Label Text="{Binding Sender}" Padding="10, 0" FontSize="20" FontFamily="Sedan"/>
-                            <Label Text="{Binding Body}" LineBreakMode="WordWrap" FontSize="20" FontFamily="Sedan"
+                            <Label Text="{Binding TimeSent}" WidthRequest="60" FontSize="16" FontFamily="Seagram"/>
+                            <Label Text="{Binding Sender}" Padding="10, 0" FontSize="20" FontFamily="Seagram"/>
+                            <Label Text="{Binding Body}" LineBreakMode="WordWrap" FontSize="20" FontFamily="Seagram"
                                    TextColor="Black"/>
                         </HorizontalStackLayout>
                     </DataTemplate>
@@ -27,7 +27,7 @@
                 <CollectionView.GroupHeaderTemplate>
                     <DataTemplate>
                         <Label Text="{Binding DateSent}" HorizontalOptions="Center" HorizontalTextAlignment="Center"
-                               TextColor="Black" FontSize="20" FontFamily="Algerian"/>
+                               TextColor="Black" FontSize="20" FontFamily="Seagram"/>
                     </DataTemplate>
                 </CollectionView.GroupHeaderTemplate>
                 <CollectionView.EmptyView>
@@ -36,9 +36,9 @@
             </CollectionView>
             <HorizontalStackLayout HorizontalOptions="CenterAndExpand" HeightRequest="50">
                 <Editor x:Name="txtBody" Placeholder="Text" WidthRequest="300" TextColor="Black" PlaceholderColor="Black"
-                        FontFamily="Sedan" FontSize="24"/>
+                        FontFamily="Seagram" FontSize="24"/>
                 <Button Text="Send" WidthRequest="100" TextColor="White" BackgroundColor="#66000000"
-                        FontFamily="Algerian" FontSize="20" Clicked="SendMessage"/>
+                        FontFamily="Seagram" FontSize="20" Clicked="SendMessage"/>
             </HorizontalStackLayout>
         </VerticalStackLayout>
     </Grid>

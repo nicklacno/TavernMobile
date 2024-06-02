@@ -14,18 +14,18 @@
                 <CollectionView x:Name="requestStack" IsGrouped="True" SelectionMode="Single" Margin="15" HeightRequest="200" SelectionChanged="UserSelected"  >
                     <CollectionView.Header>
                         <Label Text="Incoming Requests:" HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" FontSize="24"
-                               FontFamily="Algerian" TextColor="Black" TextDecorations="Underline"/>
+                               FontFamily="Seagram" TextColor="Black" TextDecorations="Underline"/>
                     </CollectionView.Header>
                     <CollectionView.GroupHeaderTemplate>
                         <DataTemplate>
                             <Label HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" Text="{Binding GroupName}"
-                                   FontSize="24" FontFamily="Algerian" Padding="0,5,0,0" TextColor="Black"/>
+                                   FontSize="24" FontFamily="Seagram" Padding="0,5,0,0" TextColor="Black"/>
                         </DataTemplate>
                     </CollectionView.GroupHeaderTemplate>
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="local:Request">
                             <Label Text="{Binding UserName}" HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start"
-                                   FontSize="20" FontFamily="Sedan" Padding="5,5" TextColor="Black"/>
+                                   FontSize="20" FontFamily="Seagram" Padding="5,5" TextColor="Black"/>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
@@ -53,7 +53,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="local:Request">
                             <Label Text="{Binding UserName}" HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start"
-                                   FontSize="20" FontFamily="Sedan" Padding="5,5" TextColor="Black"/>
+                                   FontSize="20" FontFamily="Seagram" Padding="5,5" TextColor="Black"/>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                     <CollectionView.EmptyViewTemplate>

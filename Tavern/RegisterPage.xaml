@@ -14,35 +14,35 @@
                 Text="Register"
                 HorizontalTextAlignment="Center"
                 HorizontalOptions="Center"
-                FontFamily="Algerian"
+                FontFamily="Seagram"
                 />
             <Entry
                 x:Name="txtUsername"
                 Placeholder="Username"
                 MaxLength="20"
-                FontFamily="Sedan"
+                FontFamily="Seagram"
                 />
             <Entry
                 x:Name="txtEmail"
                 Placeholder="Email"
                 MaxLength="50"
-                FontFamily="Sedan"
+                FontFamily="Seagram"
                 />
             <Entry
                 x:Name="txtPassword"
                 Placeholder="Password"
                 IsPassword="True"
-                FontFamily="Sedan"
+                FontFamily="Seagram"
                 />
             <Entry
                 x:Name="txtConfirmPassword"
                 Placeholder="Confirm Password"
                 IsPassword="True"
-                FontFamily="Sedan"
+                FontFamily="Seagram"
                 />
             <HorizontalStackLayout>
-                <Label FontSize="20" VerticalOptions="End" VerticalTextAlignment="Center" FontFamily="Sedan">Enter Date of Birth:</Label>
-                <DatePicker x:Name="txtDate" VerticalOptions="Center" FontSize="20" FontFamily="Sedan" TextColor="#3f3f3f"/>
+                <Label FontSize="20" VerticalOptions="End" VerticalTextAlignment="Center" FontFamily="Seagram">Enter Date of Birth:</Label>
+                <DatePicker x:Name="txtDate" VerticalOptions="Center" FontSize="20" FontFamily="Seagram" TextColor="#3f3f3f"/>
             </HorizontalStackLayout>
             <HorizontalStackLayout>
                 <Entry
@@ -50,13 +50,13 @@
                     Placeholder="City"
                     WidthRequest="200"
                     MaxLength="30"
-                    FontFamily="Sedan"
+                    FontFamily="Seagram"
                     />
                 <Picker x:Name="dropState"
                         Title="State"
                         TitleColor="#3f3f3f"
                         TextColor="#3f3f3f"
-                        FontFamily="Sedan">
+                        FontFamily="Seagram">
                     <Picker.Items>
                         <x:String>AL</x:String>
                         <x:String>AK</x:String>

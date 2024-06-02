@@ -11,27 +11,27 @@
         <ScrollView>
             <VerticalStackLayout>
                 <Button Text="Show Group Code" HorizontalOptions="CenterAndExpand" Clicked="RetrieveCode" BackgroundColor="#66000000" 
-                        TextColor="White" FontFamily="Algerian" FontSize="24" WidthRequest="400" />
+                        TextColor="White" FontFamily="Seagram" FontSize="24" WidthRequest="400" />
                 <VerticalStackLayout x:Name="stackGroupname">
-                    <Label FontFamily="Sedan">Group Name</Label>
+                    <Label FontFamily="Seagram">Group Name</Label>
                     <Entry
                         x:Name="entryUsername"
                         MaxLength="20"
-                        FontFamily="Sedan"
+                        FontFamily="Seagram"
                         />
                 </VerticalStackLayout>
                 <VerticalStackLayout x:Name="stackBio">
-                    <Label FontFamily="Sedan">Bio</Label>
+                    <Label FontFamily="Seagram">Bio</Label>
                     <Editor
                         x:Name="entryBio"
                         MaxLength="300"
                         AutoSize="TextChanges"
-                        FontFamily="Sedan"
+                        FontFamily="Seagram"
                         />
                 </VerticalStackLayout>
                 <HorizontalStackLayout>
                     <CheckBox x:Name="checkPrivate" HorizontalOptions="Start" VerticalOptions="StartAndExpand"/>
-                    <Label Text="Private" FontFamily="Sedan" FontAttributes="Bold" VerticalOptions="EndAndExpand" VerticalTextAlignment="End" 
+                    <Label Text="Private" FontFamily="Seagram" FontAttributes="Bold" VerticalOptions="EndAndExpand" VerticalTextAlignment="End" 
                            FontSize="16"/>
                 </HorizontalStackLayout>
                 <VerticalStackLayout x:Name="stackConfirm">
@@ -39,7 +39,7 @@
                         x:Name="btnConfirm"
                         Text="Save Changes"
                         Clicked="UpdateGroupInfo"
-                        FontFamily="Algerian"
+                        FontFamily="Seagram"
                         FontSize="20"
                         />
                 </VerticalStackLayout>
@@ -47,7 +47,7 @@
                     x:Name="GroupTagsList"
                     SelectionMode="Multiple">
                     <CollectionView.Header>
-                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="25" FontFamily="Algerian"
+                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="25" FontFamily="Seagram"
                                TextDecorations="Underline">Tags</Label>
                     </CollectionView.Header>
                     <CollectionView.ItemTemplate>
@@ -55,7 +55,7 @@
                             <Label Text="{Binding Name}"
                                 HorizontalOptions="Center"
                                 HorizontalTextAlignment="Center" 
-                                FontFamily="Sedan"/>
+                                FontFamily="Seagram"/>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                     <CollectionView.Footer>
