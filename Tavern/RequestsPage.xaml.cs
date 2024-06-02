@@ -70,8 +70,9 @@ public partial class RequestsPage : ContentPage
 
 		if (other is Request r)
 		{
-			string result = await DisplayActionSheet($"What would you like to do with {r.UserName}?", "Cancel", null, "Accept", "Reject");
-			//Debug.WriteLine(result);
+			string result = await DisplayActionSheet($"What would you like to do with {r.UserName}?", "Cancel", null, "Accept", "Reject", 
+				"View Profile");
+			Debug.WriteLine(result);
 			if (result.Equals("Cancel")) return;
 
 			bool isAccepted = result.Equals("Accept");

@@ -19,6 +19,22 @@ public partial class OtherUserPage : ContentPage
 		Task.Run(BackgroundUpdate);
 	}
 
+	public OtherUserPage(int id)
+	{
+		InitializeComponent();
+		
+	}
+
+	private async void ShowPreview(int id)
+	{
+		ProfileSingleton singleton = ProfileSingleton.GetInstance();
+		ProfileData = await singleton.GetProfile(id);
+
+		PopulateData();
+		btnRequest.Text = "";
+		btnRequest.IsEnabled = false;
+	}
+
 	public void PopulateData()
 	{
 		Name.Text = ProfileData.ProfileName;

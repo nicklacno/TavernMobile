@@ -31,11 +31,13 @@
                     x:Name="entryPassword"
                     Placeholder="Confirm With Password"
                     IsPassword="True"
+                    FontFamily="Seagram"
                     />
                 <Button
                     x:Name="btnConfirm"
                     Text="Save Changes"
                     Clicked="Update"
+                    FontFamily="Seagram"
                     />
             </VerticalStackLayout>
             <VerticalStackLayout>
