@@ -13,6 +13,7 @@
                     IsGrouped="True" 
                     SelectionMode="None"
                     MinimumHeightRequest="200"
+                    MaximumHeightRequest="500"
                     BindingContext="GroupChatView"
                     >
             <CollectionView.ItemTemplate>

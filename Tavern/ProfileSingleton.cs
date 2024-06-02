@@ -443,6 +443,7 @@ namespace Tavern
                         Body = mData["message"],
                         TimeSent = timestamp.ToShortTimeString()
                     });
+                    messageByDay.LastMessageTime = timestamp.ToUniversalTime();
                 }
                 if (messageByDay != null) messageList.Add(messageByDay);
             }

@@ -1,10 +1,11 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace Tavern.PrivateMessage;
 
 public partial class PrivateChatView : ContentView
 {
-    public int groupId;
+    public int otherId;
     public int totalMessages;
     public DateTime latestRetrieval;
     public bool isRetrievingMessages;
@@ -17,39 +18,41 @@ public partial class PrivateChatView : ContentView
         InitializeComponent();
     }
 
-    public PrivateChatView(int groupId, OtherUserPage parent)
+    public PrivateChatView(int otherId, OtherUserPage parent)
     {
         InitializeComponent();
-        this.groupId = groupId;
-        latestRetrieval = DateTime.UtcNow;
+        this.otherId = otherId;
         isRetrievingMessages = true;
-        AddMessages(groupId);
+        AddMessages(otherId);
         parentPage = parent;
 
-        Task.Run(RetrieveNewMessages);
+       // Task.Run(RetrieveNewMessages);
     }
 
     private async Task AddMessages(int groupId)
     {
-        Messages = await ProfileSingleton.GetInstance().GetMessages(groupId);
+        Messages = await ProfileSingleton.GetInstance().GetPrivateChat(otherId, null);
         if (Messages == null) Messages = new ObservableCollection<MessageByDay>();
         totalMessages = Messages.Count;
         foreach (var message in Messages)
         {
             totalMessages += message.Count;
         }
+        if (Messages.Count > 0) latestRetrieval = Messages.Last().LastMessageTime.AddSeconds(1);
+
         messageBox.ItemsSource = Messages;
         messageBox.ScrollTo(totalMessages);
     }
+
 
     private async void SendMessage(object sender, EventArgs e)
     {
         if (!string.IsNullOrEmpty(txtMessage.Text))
         {
-            int i = await ProfileSingleton.GetInstance().SendMessage(groupId, txtMessage.Text);
+            int i = await ProfileSingleton.GetInstance().SendPrivateMessage(otherId, txtMessage.Text); ;
             if (i < 0)
             {
-                parentPage.ShowErrorMessage("Failed to send Message");
+                await parentPage.ShowErrorMessage("Failed to send Message");
             }
             txtMessage.Text = "";
         }
@@ -57,8 +60,7 @@ public partial class PrivateChatView : ContentView
 
     public async Task RetrieveNewMessages()
     {
-        var newMessages = await ProfileSingleton.GetInstance().GetMessages(groupId, latestRetrieval);
-        latestRetrieval = DateTime.UtcNow;
+        var newMessages = await ProfileSingleton.GetInstance().GetPrivateChat(otherId, latestRetrieval);
         if (newMessages != null && newMessages.Count > 0)
         {
             if (Messages.Count > 0 && newMessages.First().DateSent == Messages.Last().DateSent)
@@ -68,6 +70,7 @@ public partial class PrivateChatView : ContentView
                     Messages.Last().Add(message);
                     totalMessages++;
                 }
+                Messages.Last().LastMessageTime = newMessages.First().LastMessageTime;
                 newMessages.RemoveAt(0);
             }
             foreach (var message in newMessages)
@@ -75,6 +78,7 @@ public partial class PrivateChatView : ContentView
                 totalMessages += message.Count;
                 Messages.Add(message);
             }
+            latestRetrieval = Messages.Last().LastMessageTime.AddSeconds(1);
             messageBox.ScrollTo(totalMessages);
         }
     }

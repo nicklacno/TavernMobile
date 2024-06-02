@@ -961,7 +961,7 @@ namespace WebApi
                     conn.Open();
                     using (var cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "SELECT UserName, Message, Timestamp FROM Messages JOIN Customers ON UserID = SenderID " +
+                        cmd.CommandText = "SELECT UserName, Message, Timestamp, MessageID FROM Messages JOIN Customers ON UserID = SenderID " +
                             "WHERE PrivateChatID = @id AND GroupChatID IS NULL";
                         if (data.ContainsKey("timestamp") && data["timestamp"] != null)
                         {
@@ -977,7 +977,8 @@ namespace WebApi
                             Dictionary<string, string> message = new Dictionary<string, string>()
                             {
                                 {"sender", reader.GetString(0) },
-                                {"message", reader.GetString(1) }
+                                {"message", reader.GetString(1) },
+                                {"id", reader.GetInt32(3).ToString() }
                             };
 
                             message["timestamp"] = reader.IsDBNull(2) ? null : reader.GetDateTime(2).ToString();

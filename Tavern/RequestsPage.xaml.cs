@@ -57,11 +57,10 @@ public partial class RequestsPage : ContentPage
 		}
 	}
 
-    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    protected async override void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);
-        Task t = Task.Run(async () => { await UpdateRequests(); });
-        t.Wait();
+		await UpdateRequests();
     }
 
     private async void UserSelected(object sender, SelectionChangedEventArgs e)
@@ -105,6 +104,7 @@ public partial class RequestsPage : ContentPage
 					break;
 				}
 			}
+			await singleton.SetValues();
 			await ShowErrorMessage("Successfully Processed Request");
 		}
     }

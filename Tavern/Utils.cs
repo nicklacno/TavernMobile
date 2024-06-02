@@ -13,6 +13,7 @@ namespace Tavern
     public class MessageByDay : ObservableCollection<Message>
     {
         public string DateSent { get; set; }
+        public DateTime LastMessageTime {  get; set; }
         public MessageByDay(string DateSent, ObservableCollection<Message> messages) : base(messages)
         {
             this.DateSent = DateSent;

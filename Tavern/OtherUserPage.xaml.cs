@@ -6,12 +6,17 @@ public partial class OtherUserPage : ContentPage
 	Profile ProfileData { get; set; }
 
 	PrivateChatView chat { get; set; }
+    public bool Updating { get; set; }
 
-	public OtherUserPage(Profile data)
+    public OtherUserPage(Profile data)
 	{
 		InitializeComponent();
 		ProfileData = data;
+		Title = ProfileData.ProfileName;
+		Updating = true;
 		PopulateData();
+
+		Task.Run(BackgroundUpdate);
 	}
 
 	public void PopulateData()
@@ -39,6 +44,8 @@ public partial class OtherUserPage : ContentPage
 		else
 		{
 			btnRequest.Text = "Remove Friend";
+			chat = new PrivateChatView(ProfileData.ProfileId, this);
+			PrivateChat.Add(chat);
 		}
     }
 
@@ -60,5 +67,20 @@ public partial class OtherUserPage : ContentPage
 	public async Task ShowErrorMessage(string message, string title = "An Error Occurred")
     {
         await DisplayAlert(title, message, "Okay");
+    }
+    protected override bool OnBackButtonPressed()
+    {
+		Updating = false;
+        return base.OnBackButtonPressed();
+    }
+    public async Task BackgroundUpdate()
+    {
+        while (Updating)
+        {
+            await chat.RetrieveNewMessages();
+            //await UpdatePage();
+
+            Thread.Sleep(2000);
+        }
     }
 }

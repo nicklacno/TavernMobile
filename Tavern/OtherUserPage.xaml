@@ -8,7 +8,8 @@
     </ContentPage.Resources>
     <Grid>
         <Image Source="/Resources/Images/paper_login.jpg" Aspect="AspectFill" />
-        <VerticalStackLayout VerticalOptions="Start" Padding="10">
+        <ScrollView>
+            <VerticalStackLayout VerticalOptions="Start" Padding="10">
             <Button x:Name="btnRequest" Text="Send Friend Request" FontSize="24" FontFamily="Seagram" />
             <Label 
                 x:Name="Name"
@@ -57,5 +58,7 @@
             </VerticalStackLayout>
             <Grid x:Name="PrivateChat"/>
         </VerticalStackLayout>
+        </ScrollView>
+        
     </Grid>
 </ContentPage>
