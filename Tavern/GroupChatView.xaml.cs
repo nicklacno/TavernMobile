@@ -22,12 +22,11 @@ public partial class GroupChatView : ContentView
     {
         InitializeComponent();
         this.groupId = groupId;
-        latestRetrieval = DateTime.UtcNow;
         isRetrievingMessages = true;
         AddMessages(groupId);
         parentPage = parent;
 
-        Task.Run(RetrieveNewMessages);
+        //Task.Run(RetrieveNewMessages);
     }
 
     private async Task AddMessages(int groupId)
@@ -39,6 +38,7 @@ public partial class GroupChatView : ContentView
         {
             totalMessages += message.Count;
         }
+        if (Messages.Count > 0) latestRetrieval = Messages.Last().LastMessageTime.AddSeconds(1);
         messageBox.ItemsSource = Messages;
         messageBox.ScrollTo(totalMessages);
     }
@@ -50,7 +50,7 @@ public partial class GroupChatView : ContentView
             int i = await ProfileSingleton.GetInstance().SendMessage(groupId, txtMessage.Text);
             if (i < 0)
             {
-                parentPage.ShowErrorMessage("Failed to send Message");
+                await parentPage.ShowErrorMessage("Failed to send Message");
             }
             txtMessage.Text = "";
         }
@@ -69,6 +69,7 @@ public partial class GroupChatView : ContentView
                     Messages.Last().Add(message);
                     totalMessages++;
                 }
+                Messages.Last().LastMessageTime = newMessages.First().LastMessageTime;
                 newMessages.RemoveAt(0);
             }
             foreach (var message in newMessages)
@@ -76,9 +77,8 @@ public partial class GroupChatView : ContentView
                 totalMessages += message.Count;
                 Messages.Add(message);
             }
+            latestRetrieval = Messages.Last().LastMessageTime.AddSeconds(1);
             messageBox.ScrollTo(totalMessages);
         }
     }
-
-
 }
