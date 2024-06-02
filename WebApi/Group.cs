@@ -169,16 +169,21 @@ namespace WebApi
                     {
                         if (data.ContainsKey("bio") && data["bio"] != null)
                         {
-                            cmd.CommandText = "INSERT INTO Groups (OwnerID, GroupName, GroupBio) VALUES (@Owner, @Name, @Bio)";
+                            cmd.CommandText = "INSERT INTO Groups (OwnerID, GroupName, GroupBio, private) VALUES (@Owner, @Name, @Bio, @private)";
                             cmd.Parameters.AddWithValue("@Bio", data["bio"]);
                         }
                         else
                         {
-                            cmd.CommandText = "INSERT INTO Groups (OwnerID, GroupName) VALUES (@Owner, @Name)";
+                            cmd.CommandText = "INSERT INTO Groups (OwnerID, GroupName, private) VALUES (@Owner, @Name, @private)";
                         }
 
                         cmd.Parameters.AddWithValue("@Owner", Convert.ToInt32(data["ownerId"]));
                         cmd.Parameters.AddWithValue("@Name", data["name"]);
+                        if (data.ContainsKey("isPrivate") && Convert.ToBoolean(data["isPrivate"]))
+                        {
+                            cmd.Parameters.AddWithValue("@private", "1");
+                        }
+                        else cmd.Parameters.AddWithValue("@private", "0");
 
                         cmd.ExecuteNonQuery();
                     }
@@ -502,7 +507,7 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        string query = "SELECT UserName, Message, TimeStamp FROM Messages " +
+                        string query = "SELECT MessageID, UserName, Message, TimeStamp FROM Messages " +
                             "JOIN Customers ON UserID = SenderID WHERE GroupChatID = @Group";
                         if (data.ContainsKey("timestamp") && data["timestamp"] != null)
                         {
@@ -519,11 +524,12 @@ namespace WebApi
                         {
                             Dictionary<string, string> message = new Dictionary<string, string>()
                             {
-                                {"sender", reader.GetString(0) },
-                                {"message", reader.GetString(1) }
+                                { "id", reader.GetInt32(0).ToString() },
+                                {"sender", reader.GetString(1) },
+                                {"message", reader.GetString(2) }
                             };
 
-                            message["timestamp"] = reader.IsDBNull(2) ? null : reader.GetDateTime(2).ToString();
+                            message["timestamp"] = reader.IsDBNull(3) ? null : reader.GetDateTime(3).ToString();
 
                             log.Add(message);
                         }

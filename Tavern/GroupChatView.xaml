@@ -14,13 +14,12 @@
                         SelectionMode="None"
                         MinimumHeightRequest="200"
                         BindingContext="GroupChatView"
-                        ItemsSource="{Binding Messages}"
                         >
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <HorizontalStackLayout>
-                        <Label Text="{Binding TimeSent}" WidthRequest="60"/>
-                        <Label Text="{Binding Sender}" Padding="10, 0"/>
+                        <Label Text="{Binding TimeSent}" WidthRequest="60" FontFamily="Seagram" FontSize="12" VerticalOptions="Center"/>
+                        <Label Text="{Binding Sender}" Padding="10, 0" FontFamily="Seagram" FontSize="16"/>
                         <Label Text="{Binding Body}" LineBreakMode="WordWrap" FontFamily="Seagram" FontSize="16"/>
                     </HorizontalStackLayout>
                 </DataTemplate>
@@ -30,6 +29,7 @@
                     <Label Text="{Binding DateSent}"
                            HorizontalOptions="Center"
                            HorizontalTextAlignment="Center"
+                           FontFamily="Seagram" FontSize="16"
                            />
                 </DataTemplate>
             </CollectionView.GroupHeaderTemplate>

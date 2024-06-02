@@ -9,7 +9,7 @@
     <Grid>
         <Image Source="/Resources/Images/paper_login.jpg" Aspect="AspectFill" />
         <ScrollView>
-            <VerticalStackLayout>
+            <VerticalStackLayout Padding="10">
                 <Button Text="Show Group Code" HorizontalOptions="CenterAndExpand" Clicked="RetrieveCode" BackgroundColor="#66000000" 
                         TextColor="White" FontFamily="Seagram" FontSize="24" WidthRequest="400" />
                 <VerticalStackLayout x:Name="stackGroupname">

@@ -438,6 +438,7 @@ namespace Tavern
 
                     messageByDay.Add(new Message()
                     {
+                        Id = Convert.ToInt32(mData["id"]),
                         Sender = mData["sender"],
                         Body = mData["message"],
                         TimeSent = timestamp.ToShortTimeString()

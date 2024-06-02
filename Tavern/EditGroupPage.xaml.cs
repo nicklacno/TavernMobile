@@ -1,5 +1,6 @@
 
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace Tavern;
 
@@ -10,7 +11,7 @@ public partial class EditGroupPage : ContentPage
 
     public ObservableCollection<Tag> tags { get; set; }
 
-    public EditGroupPage(Group data)
+    public EditGroupPage(in Group data)
 	{
 		InitializeComponent();
 		GroupData = data;
@@ -18,6 +19,7 @@ public partial class EditGroupPage : ContentPage
         //GetRequests();
         Task t = Task.Run(async () => { await PopulateDataFields(); });
         t.Wait();
+        Debug.WriteLine("Pushed Edit Group Page");
 	}
 
     private async Task PopulateDataFields()
@@ -109,5 +111,11 @@ public partial class EditGroupPage : ContentPage
     public async Task ShowErrorMessage(string message, string title = "An Error Occurred")
     {
         await DisplayAlert(title, message, "Okay");
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        Debug.WriteLine("Popped Edit Grou Page");
     }
 }

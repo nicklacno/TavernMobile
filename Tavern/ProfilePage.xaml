@@ -10,8 +10,8 @@
     </ContentPage.Resources>
     <Grid Padding="15">
         <Image Source="/Resources/Images/paper_login.jpg" Aspect="AspectFill" />
-        <VerticalStackLayout VerticalOptions="Start">
-            <Button x:Name="ProfileEdit" HorizontalOptions="End" Text="Edit Profile" Clicked="EditProfile"/>
+        <VerticalStackLayout VerticalOptions="Start" Padding="10">
+            <Button x:Name="ProfileEdit" HorizontalOptions="End" Text="Edit Profile" Clicked="EditProfile" FontFamily="Seagram" FontSize="20"/>
             <Label 
                 x:Name="Name"
                 Text=""

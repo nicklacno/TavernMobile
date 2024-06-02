@@ -37,7 +37,7 @@
                     </CollectionView.Header>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Label Text="{Binding Name}" FontSize="20" FontFamily="Seagram"/>
+                            <Label Text="{Binding Name}" FontSize="20" FontFamily="Seagram" HorizontalTextAlignment="Center"/>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

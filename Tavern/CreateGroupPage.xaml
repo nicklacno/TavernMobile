@@ -38,6 +38,7 @@
                 x:Name="btnCreate"
                 Text="Create Group"
                 Clicked="CreateGroup"
+                FontFamily="Seagram"
                 />
         </VerticalStackLayout>
     </Grid>

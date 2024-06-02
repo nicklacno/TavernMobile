@@ -75,11 +75,11 @@ public partial class GroupPage : ContentPage
 		}
     }
 
-    protected override void OnNavigatedTo(NavigatedToEventArgs args)
-    {
-        base.OnNavigatedTo(args);
-		NavigationUpdate();
-    }
+  //  protected override void OnNavigatedTo(NavigatedToEventArgs args)
+  //  {
+  //      base.OnNavigatedTo(args);
+		//NavigationUpdate();
+  //  }
 
 	private async Task NavigationUpdate()
 	{
@@ -89,7 +89,9 @@ public partial class GroupPage : ContentPage
 
     private async void PushEditGroupPage(object sender, EventArgs e)
     {
-		await Navigation.PushAsync(new EditGroupPage(GroupData), true);
+		Group data = GroupData;
+		if (data == null) return;
+		await Navigation.PushAsync(new EditGroupPage(in data));
     }
 
     public async Task ShowErrorMessage(string message)
@@ -117,9 +119,9 @@ public partial class GroupPage : ContentPage
 
     private async void SelectMember(object sender, SelectionChangedEventArgs e)
     {
-		if (layoutMembers.SelectedItem is OtherUser o)
+		ProfileSingleton singleton = ProfileSingleton.GetInstance();
+		if (layoutMembers.SelectedItem is OtherUser o && o.Id != singleton.ProfileId)
 		{
-			ProfileSingleton singleton = ProfileSingleton.GetInstance();
 			Profile data = await singleton.GetProfile(o.Id);
 			if (data != null)
 			{
