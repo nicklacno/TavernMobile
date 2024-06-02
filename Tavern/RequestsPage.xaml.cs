@@ -13,7 +13,7 @@ public partial class RequestsPage : ContentPage
 	public RequestsPage()
 	{
 		InitializeComponent();
-
+		BindingContext = this;
 		//myFriendRequestsStack.ItemsSource = myFriendRequests;
 		//myGroupRequestsStack.ItemsSource= myGroupRequests;
 		requestStack.ItemsSource = requests;
@@ -55,6 +55,7 @@ public partial class RequestsPage : ContentPage
 				requests.Add(incoming);
 			}
 		}
+		Debug.WriteLine(requests.Count);
 	}
 
     protected async override void OnNavigatedTo(NavigatedToEventArgs args)
@@ -74,6 +75,11 @@ public partial class RequestsPage : ContentPage
 				"View Profile");
 			Debug.WriteLine(result);
 			if (result.Equals("Cancel")) return;
+			else if (result.Equals("View Profile"))
+			{
+				await Navigation.PushAsync(new OtherUserPage(r.UserId));
+				return;
+			}
 
 			bool isAccepted = result.Equals("Accept");
 			

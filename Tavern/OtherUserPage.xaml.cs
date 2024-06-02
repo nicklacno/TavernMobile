@@ -22,7 +22,7 @@ public partial class OtherUserPage : ContentPage
 	public OtherUserPage(int id)
 	{
 		InitializeComponent();
-		
+		ShowPreview(id);
 	}
 
 	private async void ShowPreview(int id)
