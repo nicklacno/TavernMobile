@@ -6,7 +6,6 @@ namespace Tavern.PrivateMessage;
 public partial class PrivateMessageNavigationPage : ContentPage
 {
 	ObservableCollection<OtherUser> friends = new ObservableCollection<OtherUser>();
-	PrivateMessagePage messagePage = null;
 
 	public PrivateMessageNavigationPage()
 	{
@@ -24,8 +23,8 @@ public partial class PrivateMessageNavigationPage : ContentPage
 		friendsList.SelectedItem = null;
 		if (selected is OtherUser o)
 		{
-			messagePage = new PrivateMessagePage(o);
-			await Navigation.PushAsync(messagePage);
+			Profile profile = await ProfileSingleton.GetInstance().GetProfile(o.Id);
+			await Navigation.PushAsync(new OtherUserPage(profile));
 		}
 	}
 }

@@ -39,7 +39,7 @@ public partial class GroupPage : ContentPage
 			lbGroupName.Text = GroupData.Name;
 			lbGroupBio.Text = GroupData.Bio;
 
-			if (GroupData.Tags != null && GroupData.Tags.Count == 0)
+			if (GroupData.Tags != null && GroupData.Tags.Count > 0)
 				layoutTags.ItemsSource = GroupData.Tags;
 
 			layoutMembers.ItemsSource = GroupData.Members;

@@ -11,28 +11,28 @@
         <VerticalStackLayout VerticalOptions="Start" Padding="10">
             <Button x:Name="btnRequest" Text="Send Friend Request" FontSize="24" FontFamily="Seagram" />
             <Label 
-            x:Name="Name"
-            Text=""
-            VerticalOptions="Center" 
-            HorizontalOptions="Fill" 
-            FontFamily="Seagram"
-            />
-            <Label
-            x:Name="Bio"
-            Text=""
-            FontSize="25"
-            HorizontalOptions="Fill" 
-            MaxLines="10"
-            FontFamily="Seagram"
-            />
+                x:Name="Name"
+                Text=""
+                VerticalOptions="Center" 
+                HorizontalOptions="Fill" 
+                FontFamily="Seagram"
+                />
+                        <Label
+                x:Name="Bio"
+                Text=""
+                FontSize="25"
+                HorizontalOptions="Fill" 
+                MaxLines="10"
+                FontFamily="Seagram"
+                />
             <BoxView HeightRequest="1" Color="#77000000"/>
-            <VerticalStackLayout x:Name="TagsList" Padding="10, 0">
-                <Label HorizontalTextAlignment="Center" FontSize="24" FontFamily="Seagram">Tags</Label>
+            <VerticalStackLayout x:Name="TagsList" Margin="5">
+                <Label HorizontalTextAlignment="Center" FontSize="24" FontFamily="Seagram" TextDecorations="Underline">Tags</Label>
                 <CollectionView x:Name="tagList" ItemsLayout="VerticalGrid, 2" MaximumHeightRequest="80" HorizontalOptions="CenterAndExpand">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid>
-                                <Label Text="{Binding Name}" HorizontalTextAlignment="Center" FontFamily="Seagram" FontSize="12"/>
+                                <Label Text="{Binding Name}" HorizontalTextAlignment="Center" FontFamily="Seagram" FontSize="16"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
@@ -40,14 +40,14 @@
             </VerticalStackLayout>
 
             <BoxView HeightRequest="1" Color="#77000000"/>
-            <VerticalStackLayout x:Name="GroupList">
-                <Label Text="Groups" FontFamily="Seagram" FontSize="24" TextDecorations="Underline"/>
-                <Rectangle HorizontalOptions="Fill" HeightRequest="4" Opacity="0"/>
-                <CollectionView x:Name="groupList" ItemsLayout="VerticalList" MaximumHeightRequest="140" VerticalScrollBarVisibility="Always">
+            <VerticalStackLayout x:Name="GroupList" Margin="5">
+                <Label Text="Groups" FontFamily="Seagram" FontSize="24" TextDecorations="Underline" HorizontalOptions="CenterAndExpand" 
+           HorizontalTextAlignment="Center"/>
+                <CollectionView x:Name="groupList" ItemsLayout="VerticalList" MaximumHeightRequest="140" HorizontalOptions="CenterAndExpand">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Label Text="{Binding Name}" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontFamily="Seagram"
-                               FontSize="20"/>
+                            <Label Text="{Binding Name}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontFamily="Seagram"
+                       FontSize="20"/>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                     <CollectionView.EmptyView>
@@ -55,6 +55,7 @@
                     </CollectionView.EmptyView>
                 </CollectionView>
             </VerticalStackLayout>
+            <Grid x:Name="PrivateChat"/>
         </VerticalStackLayout>
     </Grid>
 </ContentPage>

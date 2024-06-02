@@ -1022,6 +1022,29 @@ namespace Tavern
             }
         }
 
+        public async Task<int> SendFriendRequest(int otherId)
+        {
+            Dictionary<string, int> values = new Dictionary<string, int>()
+            {
+                { "userId", ProfileId },
+                { "otherId", otherId }
+            };
+
+            var json = JsonSerializer.Serialize(values);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            try
+            {
+                var response = await _httpClient.PostAsync("Profile/SendFriendRequest", content);
+                var ret = Convert.ToInt32(response.Content?.ReadAsStringAsync().Result);
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
         public async Task<int> ModifyFriendRequest(int otherId, bool isAccepted)
         {
             Dictionary<string, int> values = new Dictionary<string, int>()

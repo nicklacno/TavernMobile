@@ -49,7 +49,10 @@ public partial class EditGroupPage : ContentPage
         }
 
         int val = await ProfileSingleton.GetInstance().UpdateGroupTags(GroupData,  updatedValues);
-        await ShowErrorMessage(val == 0 ? "Successfully Updated Tags" : "Failed to Update Tags");
+        if (val == 0)
+            await ShowErrorMessage("Successfully Updated Tags", "Success");
+        else
+            await ShowErrorMessage("Failed to Update Tags");
     }
 
     public async void UpdateGroupInfo(object sender, EventArgs e)

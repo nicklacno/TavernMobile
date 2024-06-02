@@ -508,7 +508,7 @@ namespace WebApi
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
                         string query = "SELECT MessageID, UserName, Message, TimeStamp FROM Messages " +
-                            "JOIN Customers ON UserID = SenderID WHERE GroupChatID = @Group";
+                            "JOIN Customers ON UserID = SenderID WHERE GroupChatID = @Group AND (Announcement != 1 OR Announcement IS NULL)";
                         if (data.ContainsKey("timestamp") && data["timestamp"] != null)
                         {
                             query += " AND TimeStamp > @TimeStamp";
@@ -556,8 +556,8 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "INSERT INTO Messages(GroupChatID, SenderID, Message, TimeStamp) " +
-                            "VALUES (@groupid, @userid, @message, @time );";
+                        cmd.CommandText = "INSERT INTO Messages(GroupChatID, SenderID, Message, TimeStamp, Announcement) " +
+                            "VALUES (@groupid, @userid, @message, @time, 0);";
                         cmd.Parameters.AddWithValue("@groupid", id);
                         cmd.Parameters.AddWithValue("@userid", Convert.ToInt32(data["senderId"]));
                         cmd.Parameters.AddWithValue("@message", data["message"]);
