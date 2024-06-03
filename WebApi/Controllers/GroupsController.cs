@@ -111,9 +111,15 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("{id}/Announcements")]
-        public List<Dictionary<string, string>> PostAnnouncements(int id, Dictionary<string, string> data)
+        public List<Dictionary<string, string>> GetAnnouncements(int id, Dictionary<string, string> data)
         {
             return Group.GetAnnouncements(id, data);
+        }
+
+        [HttpPost("{id}/PostAnnouncement")]
+        public int PostAnnouncement(int id, Dictionary<string, string> data)
+        {
+            return Group.SendAnnouncement(id,data);
         }
     }
 }

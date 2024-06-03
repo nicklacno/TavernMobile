@@ -969,8 +969,22 @@ namespace WebApi
             if (!values.ContainsKey("senderId") || !IsOwner(groupId, Convert.ToInt32(values["senderId"]))) return -2;
             try
             {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "INSERT INTO Messages(GroupChatID, SenderID, Message, TimeStamp, Announcement) " +
+                            "VALUES (@groupid, @userid, @message, @time, 1);";
+                        cmd.Parameters.AddWithValue("@groupid", groupId);
+                        cmd.Parameters.AddWithValue("@userid", Convert.ToInt32(values["senderId"]));
+                        cmd.Parameters.AddWithValue("@message", values["message"]);
+                        cmd.Parameters.AddWithValue("@time", DateTime.UtcNow);
 
-                return 0;
+                        cmd.ExecuteNonQuery();
+                        return 0;
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -988,7 +1002,7 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "SELECT UserID FROM Groups WHERE GroupID = @group AND OwnerID = @sender";
+                        cmd.CommandText = "SELECT OwnerID FROM Groups WHERE GroupID = @group AND OwnerID = @sender";
                         cmd.Parameters.AddWithValue("@group", groupId);
                         cmd.Parameters.AddWithValue("@sender", senderId);
 
