@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
 using System.Diagnostics;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApi
 {
@@ -960,6 +961,98 @@ namespace WebApi
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, 6)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        public static int SendAnnouncement(int groupId, Dictionary<string, string> values)
+        {
+            SetConnectionString();
+            if (!values.ContainsKey("senderId") || !IsOwner(groupId, Convert.ToInt32(values["senderId"]))) return -2;
+            try
+            {
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+        private static bool IsOwner(int groupId, int senderId)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT UserID FROM Groups WHERE GroupID = @group AND OwnerID = @sender";
+                        cmd.Parameters.AddWithValue("@group", groupId);
+                        cmd.Parameters.AddWithValue("@sender", senderId);
+
+                        var reader = cmd.ExecuteReader();
+                        if (reader.HasRows)
+                            return true;
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return false;
+            }
+        }
+
+        public static List<Dictionary<string, string>> GetAnnouncements(int id, Dictionary<string, string> data)
+        {
+            SetConnectionString();
+            if (!Exists(id)) return null;
+            List<Dictionary<string,string>> log = new List<Dictionary<string, string>>();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        string query = "SELECT MessageID, UserName, Message, TimeStamp FROM Messages " +
+                            "JOIN Customers ON UserID = SenderID WHERE GroupChatID = @Group AND Announcement = 1";
+                        if (data.ContainsKey("timestamp") && data["timestamp"] != null)
+                        {
+                            query += " AND TimeStamp > @TimeStamp";
+                            cmd.Parameters.AddWithValue("@TimeStamp", Convert.ToDateTime(data["timestamp"]));
+                        }
+                        query += " ORDER BY TimeStamp ASC";
+
+                        cmd.CommandText = query;
+                        cmd.Parameters.AddWithValue("@Group", id);
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            Dictionary<string, string> message = new Dictionary<string, string>()
+                            {
+                                { "id", reader.GetInt32(0).ToString() },
+                                {"sender", reader.GetString(1) },
+                                {"message", reader.GetString(2) }
+                            };
+
+                            message["timestamp"] = reader.IsDBNull(3) ? null : reader.GetDateTime(3).ToString();
+
+                            log.Add(message);
+                        }
+                        return log;
+                    }
+                }    
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
         }
 
         //Delete Group

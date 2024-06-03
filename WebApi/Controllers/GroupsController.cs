@@ -109,5 +109,11 @@ namespace WebApi.Controllers
         {
             return Group.GetGroupCode(id);
         }
+
+        [HttpPost("{id}/Announcements")]
+        public List<Dictionary<string, string>> PostAnnouncements(int id, Dictionary<string, string> data)
+        {
+            return Group.GetAnnouncements(id, data);
+        }
     }
 }
