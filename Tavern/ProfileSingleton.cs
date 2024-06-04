@@ -429,11 +429,13 @@ namespace Tavern
                     if (messageByDay == null)
                     {
                         messageByDay = new MessageByDay(timestamp.ToLongDateString(), new ObservableCollection<Message>());
+                        messageByDay.FirstMessageTime = timestamp.ToUniversalTime();
                     }
                     else if (!messageByDay.DateSent.Equals(timestamp.ToLongDateString()))
                     {
                         messageList.Add(messageByDay);
                         messageByDay = new MessageByDay(timestamp.ToLongDateString(), new ObservableCollection<Message>());
+                        messageByDay.FirstMessageTime = timestamp.ToUniversalTime();
                     }
 
                     messageByDay.Add(new Message()

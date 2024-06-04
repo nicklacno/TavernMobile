@@ -9,6 +9,8 @@ public partial class GroupPage : ContentPage
 	GroupAnnouncementView Announcements { get; set; }
 	public bool Updating { get; set; }
 
+	public bool IsAnnouncmentsShown { get; set; }
+
 	public GroupPage(int id)
 	{
 		InitializeComponent();
@@ -21,6 +23,7 @@ public partial class GroupPage : ContentPage
 		GroupData = data;
 		UpdatePage();
 		Updating = true;
+		IsAnnouncmentsShown = true;
 		
 		Task.Run(BackgroundUpdate);
 	}
@@ -74,7 +77,9 @@ public partial class GroupPage : ContentPage
 			Announcements = new GroupAnnouncementView(GroupData.GroupId, this);
 			ChatView = new GroupChatView(GroupData.GroupId, this);
 			GroupChat.Add(Announcements);
-		}
+			chatViewBtn.Clicked += ToChat;
+            chatViewBtn.Text = "View Group Chat";
+        }
     }
 
   //  protected override void OnNavigatedTo(NavigatedToEventArgs args)
@@ -112,8 +117,8 @@ public partial class GroupPage : ContentPage
 	{
 		while (Updating)
 		{
-			await ChatView.RetrieveNewMessages();
-			//await UpdatePage();
+			if (IsAnnouncmentsShown) await Announcements.RetrieveNewMessages();
+			else await ChatView.RetrieveNewMessages();
 
 			Thread.Sleep(2000);
 		}
@@ -136,18 +141,20 @@ public partial class GroupPage : ContentPage
 	private void ToChat(object sender, EventArgs e)
 	{
 		GroupChat.Remove(Announcements);
-		GroupChat.Add(GroupChat);
+		GroupChat.Add(ChatView);
 		chatViewBtn.Text = "View Announcements";
 		chatViewBtn.Clicked -= ToChat;
 		chatViewBtn.Clicked += ToAnnouncements;
+		IsAnnouncmentsShown = false;
 	}
 
 	private void ToAnnouncements(object sender, EventArgs e)
 	{
-        GroupChat.Remove(GroupChat);
+        GroupChat.Remove(ChatView);
         GroupChat.Add(Announcements);
         chatViewBtn.Text = "View Group Chat";
         chatViewBtn.Clicked -= ToAnnouncements;
         chatViewBtn.Clicked += ToChat;
+		IsAnnouncmentsShown = true;
     }
 }
