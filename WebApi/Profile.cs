@@ -996,6 +996,67 @@ namespace WebApi
             }
         }
 
+
+        public static int RemoveFriend(Dictionary<string, int> data)
+        {
+            SetConnectionString();
+            if (!data.ContainsKey("userId") || !data.ContainsKey("otherId")) return -2;
+            int id = GetChatID(data["userId"], data["otherId"]);
+            if (id < 0) return -3;
+            if (RemoveAllMessages(id) != 0) return -4;
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using(SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "DELETE FROM Relationships WHERE Relationship = 'F' AND ((UserID_1 = @user AND UserID_2 = @other) " +
+                            "OR (UserID_1 = @other AND UserID_2 = @user))";
+                        cmd.Parameters.AddWithValue("@user", data["userId"]);
+                        cmd.Parameters.AddWithValue("@other", data["otherId"]);
+
+                        var rows = cmd.ExecuteNonQuery();
+                        if (rows != 2) return -5;
+                        return 0;
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+
+
+        }
+        private static int RemoveAllMessages(int chatId)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "DELETE FROM Messages WHERE GroupChatID IS NULL AND PrivateChatID = @id";
+                        cmd.Parameters.AddWithValue("@id", chatId);
+
+                        var rows = cmd.ExecuteNonQuery();
+                        if (rows >= 0) return 0;
+                        return -1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
         //Delete Account
         //Remove Friend
 

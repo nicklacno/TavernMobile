@@ -186,5 +186,11 @@ namespace WebApi.Controllers
             return Profile.GetChatID(data["userId"], data["otherId"]);
         }
 
+
+        [HttpPost("RemoveFriend")]
+        public int PostRemoveFriend(Dictionary<string, int> data)
+        {
+            return Profile.RemoveFriend(data);
+        }
     }
 }

@@ -589,7 +589,7 @@ namespace WebApi
                     {
                         cmd.CommandText = "SELECT TOP 10 GroupID FROM Groups g " +
                             "WHERE NOT EXISTS (SELECT 1 GroupID FROM GroupRequests WHERE GroupID = g.GroupID AND UserID = @id) " +
-                            "AND NOT EXISTS (SELECT 1 GroupID FROM MemberGroup WHERE GroupID = g.GroupID AND UserID = @id);";
+                            "AND NOT EXISTS (SELECT 1 GroupID FROM MemberGroup WHERE GroupID = g.GroupID AND UserID = @id) ORDER BY NEWID();";
                         cmd.Parameters.AddWithValue("@id", userId);
 
                         SqlDataReader reader = cmd.ExecuteReader();
