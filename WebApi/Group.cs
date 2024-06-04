@@ -1069,8 +1069,39 @@ namespace WebApi
             }
         }
 
+        public static int RemoveMember(int groupId, Dictionary<string, int> data)
+        {
+            SetConnectionString();
+            if (!data.ContainsKey("userId") || !data.ContainsKey("otherId")) return -1;
+            if (!IsOwner(groupId, data["userId"])) return -2;
+            if (IsOwner(groupId, data["otherId"])) return -3; //cant remove owner without removing the group
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "DELETE FROM MemberGroup WHERE GroupID = @groupId AND UserID = @userId";
+                        cmd.Parameters.AddWithValue("@groupId", groupId);
+                        cmd.Parameters.AddWithValue("@userId", data["otherId"]);
+
+                        if (cmd.ExecuteNonQuery() >= 1) //shouldnt be greater than one but who knows
+                        {
+                            return 0;
+                        }
+                        return -1; //if trying to remove someone whos not even in the group
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
         //Delete Group
-        //Kick member
         //Ban member
     }
 }

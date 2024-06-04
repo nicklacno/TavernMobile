@@ -121,5 +121,11 @@ namespace WebApi.Controllers
         {
             return Group.SendAnnouncement(id,data);
         }
+
+        [HttpPost("{id}/KickMember")]
+        public int RemoveMember(int id, Dictionary<string, int> data)
+        {
+            return Group.RemoveMember(id,data);
+        }
     }
 }
