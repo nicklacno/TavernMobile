@@ -2,9 +2,6 @@ namespace Tavern.SwipingFunctionality;
 
 public partial class SwipingPage : ContentPage
 {
-    string connectionString = null;
-	
-
 	public SwipingPage()
 	{
 		InitializeComponent();
