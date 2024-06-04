@@ -403,7 +403,7 @@ namespace Tavern
                 var response = await _httpClient.PostAsync($"Groups/{groupId}/Chat", content);
                 string messages = response.Content.ReadAsStringAsync().Result;
 
-                return await ConvertToMessageList(messages);
+                return ConvertToMessageList(messages);
             }
             catch (Exception ex)
             {
@@ -412,7 +412,7 @@ namespace Tavern
             }
         }
 
-        private async Task<MessageLog> ConvertToMessageList(string messages)
+        private MessageLog ConvertToMessageList(string messages)
         {
             MessageLog messageList = new MessageLog();
 
@@ -951,7 +951,7 @@ namespace Tavern
                 var response = await _httpClient.PostAsync($"Profile/PrivateChat/{chatId}", content);
                 string messages = response.Content.ReadAsStringAsync().Result;
 
-                return await ConvertToMessageList(messages);
+                return ConvertToMessageList(messages);
             }
             catch (Exception ex)
             {
@@ -1108,5 +1108,48 @@ namespace Tavern
             }
         }
 
+        public async Task<int> RemoveFriend(int otherId)
+        {
+            Dictionary<string, int> values = new Dictionary<string, int>()
+            { { "userId", ProfileId },
+              { "otherId", otherId}
+            };
+
+            var json = JsonSerializer.Serialize(values);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            try
+            {
+                var response = await _httpClient.PostAsync("Profile/RemoveFriend", content);
+                int ret = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
+
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+        public async Task<MessageLog> GetAnnouncements(int groupId, DateTime? latestRetrieval)
+        {
+            Dictionary<string, string> values = new Dictionary<string, string>();
+            values["timestamp"] = latestRetrieval == null ? null : latestRetrieval.ToString();
+
+            var json = JsonSerializer.Serialize(values);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            try
+            {
+                var response = await _httpClient.PostAsync($"Groups/{groupId}/Announcements", content);
+                return ConvertToMessageList(response.Content.ReadAsStringAsync().Result);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
     }
 }

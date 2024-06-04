@@ -1,10 +1,10 @@
+using System.Diagnostics;
 using Tavern.PrivateMessage;
 namespace Tavern;
 
 public partial class OtherUserPage : ContentPage
 {
 	Profile ProfileData { get; set; }
-
 	PrivateChatView chat { get; set; }
     public bool Updating { get; set; }
 
@@ -99,4 +99,11 @@ public partial class OtherUserPage : ContentPage
             Thread.Sleep(2000);
         }
     }
+	private async void RemoveFriend(object sender, EventArgs e)
+	{
+		ProfileSingleton singleton = ProfileSingleton.GetInstance();
+		int ret = await singleton.RemoveFriend(ProfileData.ProfileId);
+		Debug.WriteLine(ret);
+
+	}
 }

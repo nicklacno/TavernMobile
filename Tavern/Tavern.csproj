@@ -88,6 +88,9 @@
 	  <MauiXaml Update="FindGroupPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="GroupAnnouncementView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="GroupCard.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

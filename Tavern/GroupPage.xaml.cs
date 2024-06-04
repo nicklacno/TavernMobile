@@ -6,6 +6,7 @@ public partial class GroupPage : ContentPage
 {
 	public Group GroupData { get; set; }
 	GroupChatView ChatView { get; set; }
+	GroupAnnouncementView Announcements { get; set; }
 	public bool Updating { get; set; }
 
 	public GroupPage(int id)
@@ -70,8 +71,9 @@ public partial class GroupPage : ContentPage
 			{
 				ModifyButton.Text = "Leave Group";
 			}
+			Announcements = new GroupAnnouncementView(GroupData.GroupId, this);
 			ChatView = new GroupChatView(GroupData.GroupId, this);
-			GroupChat.Add(ChatView);
+			GroupChat.Add(Announcements);
 		}
     }
 
@@ -129,5 +131,23 @@ public partial class GroupPage : ContentPage
 			}
 		}
 		layoutMembers.SelectedItem = null;
+    }
+
+	private void ToChat(object sender, EventArgs e)
+	{
+		GroupChat.Remove(Announcements);
+		GroupChat.Add(GroupChat);
+		chatViewBtn.Text = "View Announcements";
+		chatViewBtn.Clicked -= ToChat;
+		chatViewBtn.Clicked += ToAnnouncements;
+	}
+
+	private void ToAnnouncements(object sender, EventArgs e)
+	{
+        GroupChat.Remove(GroupChat);
+        GroupChat.Add(Announcements);
+        chatViewBtn.Text = "View Group Chat";
+        chatViewBtn.Clicked -= ToAnnouncements;
+        chatViewBtn.Clicked += ToChat;
     }
 }

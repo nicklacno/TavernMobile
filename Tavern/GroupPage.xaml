@@ -52,6 +52,7 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
+                <Button x:Name="chatViewBtn" FontSize="24" FontFamily="Seagram"/>
                 <Grid x:Name="GroupChat" />
             </VerticalStackLayout>
         </ScrollView>
