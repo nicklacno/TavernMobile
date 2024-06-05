@@ -10,6 +10,8 @@ public partial class GroupAnnouncementView : ContentView
     GroupPage Parent { get; set; }
     MessageLog messageLog { get; set; } = new MessageLog();
 
+    int MessageCount { get; set; }
+
     public GroupAnnouncementView(int groupId, GroupPage groupPage, bool isOwner = false)
     {
         InitializeComponent();
@@ -37,33 +39,41 @@ public partial class GroupAnnouncementView : ContentView
         ProfileSingleton singleton = ProfileSingleton.GetInstance();
         messageLog = await singleton.GetAnnouncements(GroupId, null);
         if (messageLog == null) messageLog = new MessageLog();
+        MessageCount = messageLog.Count;
         if (messageLog.Count > 0 && messageLog.First().Count > 0)
         {
-            LatestRetrieval = messageLog.First().FirstMessageTime.AddSeconds(1);
+            LatestRetrieval = messageLog.Last().LastMessageTime.AddSeconds(1);
+            foreach (var message in messageLog)
+            {
+                MessageCount += message.Count;
+            }
         }
-        messageBox.ScrollTo(0);
+        messageBox.ScrollTo(MessageCount);
         messageBox.ItemsSource = messageLog;
     }
 
     public async Task RetrieveNewMessages()
     {
         var log = await ProfileSingleton.GetInstance().GetAnnouncements(GroupId, LatestRetrieval);
-        if (log == null || log.Count == 0) return;
-
-        LatestRetrieval = log.First().FirstMessageTime.AddSeconds(1);
-        if (log.Last().Count > 0 && messageLog.Count > 0 && messageLog.First().DateSent == log.Last().DateSent)
+        if (log != null && log.Count > 0)
         {
-            foreach (var message in log.Last())
+            if (log.Count > 0 && log.First().DateSent == messageLog.Last().DateSent)
             {
-                messageLog.First().Prepend(message);
+                foreach (var message in log.First())
+                {
+                    messageLog.Last().Add(message);
+                    MessageCount++;
+                }
+                messageLog.Last().LastMessageTime = log.First().LastMessageTime;
+                log.RemoveAt(0);
             }
-            log.Remove(log.Last());
+            foreach (var message in log)
+            {
+                MessageCount += message.Count;
+                messageLog.Add(message);
+            }
+            LatestRetrieval = messageLog.Last().LastMessageTime.AddSeconds(1);
+            messageBox.ScrollTo(MessageCount);
         }
-        foreach (var day in log)
-        {
-            messageLog.Prepend(day);
-        }
-        messageBox.ItemsSource = messageLog;
-        messageBox.ScrollTo(0);
     }
 }

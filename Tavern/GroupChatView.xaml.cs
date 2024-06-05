@@ -69,7 +69,7 @@ public partial class GroupChatView : ContentView
                     Messages.Last().Add(message);
                     totalMessages++;
                 }
-                Messages.Last().LastMessageTime = newMessages.First().LastMessageTime;
+                Messages.Last().LastMessageTime = newMessages.First().LastMessageTime.AddSeconds(1);
                 newMessages.RemoveAt(0);
             }
             foreach (var message in newMessages)

@@ -12,7 +12,7 @@
         <ScrollView>
             <VerticalStackLayout>
                 <CollectionView x:Name="requestStack" IsGrouped="True" SelectionMode="Single" Margin="15" HeightRequest="200" 
-                                SelectionChanged="UserSelected"  >
+                                SelectionChanged="UserSelected">
                     <CollectionView.Header>
                         <Label Text="Incoming Requests:" HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" FontSize="24"
                                FontFamily="Seagram" TextColor="Black" TextDecorations="Underline"/>
