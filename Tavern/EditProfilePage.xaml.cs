@@ -6,10 +6,13 @@ namespace Tavern;
 public partial class EditProfilePage : ContentPage
 {
 	public ObservableCollection<Tag> tagsList { set; get; } = new ObservableCollection<Tag>();
+
+	private ProfilePage ElementUnder {  get; set; }
 	
-    public EditProfilePage()
+    public EditProfilePage(ProfilePage element)
 	{
 		InitializeComponent();
+		ElementUnder = element;
 		PopulateEntryFields();
 	}
 
@@ -24,6 +27,18 @@ public partial class EditProfilePage : ContentPage
 		foreach (Tag tag in singleton.Tags)
 		{
 			tagList.SelectedItems.Add(tag);
+		}
+
+		var pfps = singleton.GetAllPFPs();
+		profilePics.ItemsSource = pfps;
+		
+		foreach (var pfp in pfps)
+		{
+			if (pfp.ImageId == singleton.ImageID)
+			{
+				profilePics.SelectedItem = pfp;
+				break;
+			}
 		}
 	}
 
@@ -53,15 +68,17 @@ public partial class EditProfilePage : ContentPage
 			entryPassword.Text = "";
 			//await Navigation.PopAsync();
 		}
+
+		await ElementUnder.UpdateProfile();
 	}
 
 	public void Logout(object sender, EventArgs e)
 	{
 		ProfileSingleton.GetInstance().Logout();
 	}
-    private async Task ShowErrorMessage(string message)
+    private async Task ShowErrorMessage(string message, string title = "An Error Occurred")
     {
-        await DisplayAlert("An Error Occurred", message, "Okay");
+        await DisplayAlert(title, message, "Okay");
     }
 
 	public async void UpdateTags(object sender, EventArgs e)
@@ -75,6 +92,37 @@ public partial class EditProfilePage : ContentPage
 		//tagList.SelectedItems.Clear();
 		int val = await singleton.UpdateProfile(updatedStatus);
 
-		await ShowErrorMessage(val == 0 ? "Successfully Updated Tags" : "Failed to Update Tags");
+		if (val == 0)
+		{
+			await ShowErrorMessage("Successfully Updated Tags", "Success");
+		}
+        else
+        {
+			await ShowErrorMessage("There was an Error Updating Tags");
+        }
+
+        await ElementUnder.UpdateProfile();
+	}
+
+	public async void UpdatePFP(object sender, EventArgs e)
+	{
+		var singleton = ProfileSingleton.GetInstance();
+		if (profilePics.SelectedItem == null) return;
+		
+		if (profilePics.SelectedItem is PFP p)
+		{
+			if (p.ImageId == singleton.ImageID) return;
+			int ret = await singleton.UpdateProfilePic(p.ImageId);
+			if (ret == 0)
+			{
+				singleton.ImageID = p.ImageId;
+				await ShowErrorMessage("Successfully Updated Profile Avatar", "Success");
+				await ElementUnder.UpdateProfile();
+			}
+			else
+			{
+				await ShowErrorMessage("There was an Error Updating your Profile Avatar");
+			}
+		}
 	}
 }

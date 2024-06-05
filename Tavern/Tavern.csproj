@@ -53,6 +53,8 @@
 	  <None Remove="Resources\Fonts\Ancient Medium.ttf" />
 	  <None Remove="Resources\Fonts\Seagram tfb.ttf" />
 	  <None Remove="Resources\Fonts\SeagramSC-Regular.ttf" />
+	  <None Remove="Resources\Images\AvatarImages\a1.png" />
+	  <None Remove="Resources\Images\AvatarImages\a4.png" />
 	  <None Remove="Resources\Images\home.png" />
 	  <None Remove="Resources\Images\logintavern.png" />
 	  <None Remove="Resources\Images\messages.png" />
@@ -61,6 +63,11 @@
 	  <None Remove="Resources\Images\search.png" />
 	  <None Remove="Resources\Images\tavern.png" />
 	  <None Remove="Resources\Images\user.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiImage Include="Resources\Images\AvatarImages\a1.png" />
+	  <MauiImage Include="Resources\Images\AvatarImages\a4.png" />
 	</ItemGroup>
 
 	<ItemGroup>

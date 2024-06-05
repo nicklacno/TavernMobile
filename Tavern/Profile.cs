@@ -20,5 +20,6 @@ namespace Tavern
         public ObservableCollection<Tag> Tags { get; set; } = new ObservableCollection<Tag>();
 
         public List<string> BlockedUsers { get; set; }
+        public int ImageID { get; set; }
     }
 }

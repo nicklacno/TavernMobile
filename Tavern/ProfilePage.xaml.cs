@@ -21,7 +21,7 @@ public partial class ProfilePage : ContentPage
 		groupList.ItemsSource = singleton.Groups;
 		tagList.ItemsSource = singleton.Tags;
 		friendsList.ItemsSource = singleton.Friends;
-
+		imgPfp.Source = singleton.imagePaths[singleton.ImageID].Path;
 		//Task.Run(BackgroundStuff);
 	}
 	/**
@@ -58,7 +58,7 @@ public partial class ProfilePage : ContentPage
 	 */
 	public async void EditProfile(object sender, EventArgs e)
 	{
-		await Navigation.PushAsync(new EditProfilePage()); //push onto stack
+		await Navigation.PushAsync(new EditProfilePage(this)); //push onto stack
 	}
 
 	/**
@@ -74,6 +74,8 @@ public partial class ProfilePage : ContentPage
 		//Need to add updating friends and groups !!!
 		groupList.ItemsSource = singleton.Groups;
 		tagList.ItemsSource = singleton.Tags;
+
+		imgPfp.Source = singleton.imagePaths[singleton.ImageID].Path;
     }
 
     protected override void OnNavigatedTo(NavigatedToEventArgs args)

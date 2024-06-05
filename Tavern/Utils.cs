@@ -13,7 +13,7 @@ namespace Tavern
     public class MessageByDay : ObservableCollection<Message>
     {
         public string DateSent { get; set; }
-        public DateTime LastMessageTime {  get; set; }
+        public DateTime LastMessageTime { get; set; }
         public DateTime FirstMessageTime { get; set; }
         public MessageByDay(string DateSent, ObservableCollection<Message> messages) : base(messages)
         {
@@ -50,6 +50,12 @@ namespace Tavern
             this.GroupId = GroupId;
             this.GroupName = GroupName;
         }
+    }
+
+    public class PFP
+    {
+        public int ImageId { get; set; }
+        public string Path { get; set; }
     }
 
 }

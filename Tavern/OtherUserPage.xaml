@@ -11,21 +11,26 @@
         <ScrollView>
             <VerticalStackLayout VerticalOptions="Start" Padding="10">
             <Button x:Name="btnRequest" Text="Send Friend Request" FontSize="24" FontFamily="Seagram" />
-            <Label 
-                x:Name="Name"
-                Text=""
-                VerticalOptions="Center" 
-                HorizontalOptions="Fill" 
-                FontFamily="Seagram"
-                />
-                        <Label
-                x:Name="Bio"
-                Text=""
-                FontSize="25"
-                HorizontalOptions="Fill" 
-                MaxLines="10"
-                FontFamily="Seagram"
-                />
+                <HorizontalStackLayout Padding="10">
+                    <Frame HeightRequest="70" WidthRequest="70" CornerRadius="10">
+                        <Image x:Name="imgPfp" Source="/Resources/Images/AvatarImages/a1.png" Aspect="AspectFill" HeightRequest="70" WidthRequest="70"/>
+                    </Frame>
+                        <Label 
+                            x:Name="Name"
+                            Text=""
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Fill" 
+                            FontFamily="Seagram"
+                            />
+                </HorizontalStackLayout>
+                <Label
+                    x:Name="Bio"
+                    Text=""
+                    FontSize="25"
+                    HorizontalOptions="Fill" 
+                    MaxLines="10"
+                    FontFamily="Seagram"
+                    />
             <BoxView HeightRequest="1" Color="#77000000"/>
             <VerticalStackLayout x:Name="TagsList" Margin="5">
                 <Label HorizontalTextAlignment="Center" FontSize="24" FontFamily="Seagram" TextDecorations="Underline">Tags</Label>

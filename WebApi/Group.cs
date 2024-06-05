@@ -332,8 +332,8 @@ namespace WebApi
             }
             catch (Exception ex)
             {
+                Debug.WriteLine(ex.Message);
                 return 0;
-                Console.WriteLine(ex.Message);
             }
         }
 

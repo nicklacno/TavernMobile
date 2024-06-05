@@ -1057,9 +1057,100 @@ namespace WebApi
             }
         }
 
-        
+        public static int GetProfilePic(int userId)
+        {
+            SetConnectionString();
+            if (!Exists(userId)) return -9;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "SELECT ImageID FROM ProfilePic WHERE UserID = @user";
+                        cmd.Parameters.AddWithValue("@user", userId);
+
+                        var reader = cmd.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            return reader.GetInt32(0);
+                        }
+                        
+                        int response = InsertProfilePic(userId);
+                        if (response != 0) return -1;
+
+                        return 1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+
+        public static int UpdateProfilePic(Dictionary<string, int> data)
+        {
+            SetConnectionString();
+            if (!data.ContainsKey("userId") || !data.ContainsKey("pictureId")) return -2;
+            if (!Exists(data["userId"])) return -9;
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "UPDATE ProfilePic SET ImageID = @pic WHERE UserID = @user";
+                        cmd.Parameters.AddWithValue("@pic", data["pictureId"]);
+                        cmd.Parameters.AddWithValue("@user", data["userId"]);
+
+                        int rows = cmd.ExecuteNonQuery();
+                        if (rows == 0) return InsertProfilePic(data["userId"], data["pictureId"]);
+                        else if (rows == 1) return 0;
+                        return -1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+        //assumes that the profile pic row does not exist
+        private static int InsertProfilePic(int userId, int pic = 1)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "INSERT INTO ProfilePic (UserID, ImageID) VALUES (@userId, @pic)";
+                        cmd.Parameters.AddWithValue("@userId", userId);
+                        cmd.Parameters.AddWithValue("@pic", pic);
+
+                        var rows = cmd.ExecuteNonQuery();
+                        if (rows == 1) return 0;
+                        return -1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
         //Delete Account
-        //Remove Friend
 
     }
 }

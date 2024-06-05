@@ -192,5 +192,18 @@ namespace WebApi.Controllers
         {
             return Profile.RemoveFriend(data);
         }
+
+        [HttpGet("{id}/ProfilePic")]
+        public int GetProfilePic(int id)
+        {
+            return Profile.GetProfilePic(id);
+        }
+
+        [HttpPost("UpdateProfilePic")]
+        public int PostProfilePic(Dictionary<string, int> data)
+        {
+            return Profile.UpdateProfilePic(data);
+        }
+
     }
 }

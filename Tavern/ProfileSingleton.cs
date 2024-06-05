@@ -13,6 +13,12 @@ namespace Tavern
         private static ProfileSingleton _instance;
         public bool isLoggedIn;
 
+        public Dictionary<int, PFP> imagePaths = new Dictionary<int, PFP>()
+        {
+            { 1, new PFP{ImageId = 1, Path="/Resources/Images/AvatarImages/a1.png" } },
+            { 4, new PFP{ImageId = 4, Path="/Resources/Images/AvatarImages/a4.png" } }
+        };
+
         public delegate void BasePageEvent(Page page);
         public BasePageEvent switchMainPage; //login successful delegate
 
@@ -66,6 +72,8 @@ namespace Tavern
                 await GetTags();
                 await GetFriendsList();
                 isLoggedIn = true;
+
+                ImageID = await GetProfilePic(ProfileId);
             }
             else
             {
@@ -1220,6 +1228,53 @@ namespace Tavern
                 Debug.WriteLine(ex);
                 return -1;
             }
+        }
+
+        public async Task<int> GetProfilePic(int id)
+        {
+
+            try
+            {
+                var response = await _httpClient.GetStringAsync($"Profile/{id}/ProfilePic");
+                return Convert.ToInt32(response);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+        public async Task<int> UpdateProfilePic(int image)
+        {
+            Dictionary<string, int> values = new Dictionary<string, int>()
+            {
+                { "pictureId", image },
+                { "userId", ProfileId }
+            };
+
+            var json = JsonSerializer.Serialize(values);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            try
+            {
+                var response = await _httpClient.PostAsync("Profile/UpdateProfilePic", content);
+                return Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
+
+        public List<PFP> GetAllPFPs()
+        {
+            List<PFP> pfps = new List<PFP>();
+            foreach (int key in imagePaths.Keys)
+            {
+                pfps.Add(imagePaths[key]);
+            }
+            return pfps;
         }
     }
 }
