@@ -78,6 +78,7 @@ public partial class GroupPage : ContentPage
 			else
 			{
 				ModifyButton.Text = "Leave Group";
+				ModifyButton.Clicked += LeaveGroup;
 			}
 			Announcements = new GroupAnnouncementView(GroupData.GroupId, this, isOwner);
 			ChatView = new GroupChatView(GroupData.GroupId, this);
@@ -87,13 +88,33 @@ public partial class GroupPage : ContentPage
         }
     }
 
-  //  protected override void OnNavigatedTo(NavigatedToEventArgs args)
-  //  {
-  //      base.OnNavigatedTo(args);
-		//NavigationUpdate();
-  //  }
+    private async void LeaveGroup(object sender, EventArgs e)
+    {
+		bool r = await DisplayAlert("Leave Group", $"Are you sure you want to leave {GroupData.Name}?", "Yes", "No");
+		if (r)
+		{
+			int ret = await ProfileSingleton.GetInstance().LeaveGroup(GroupData.GroupId);
+			if (ret == 0)
+			{
+                ModifyButton.Text = "Request to Join";
+                ModifyButton.Clicked += SendRequest;
+                layoutMembers.SelectionMode = SelectionMode.None;
+				GroupChat.Remove(Announcements);
+				GroupChat.Remove(ChatView);
+				ChatView = null;
+				Announcements = null;
+				chatViewBtn.IsVisible = false;
+            }
+		}
+    }
 
-	private async Task NavigationUpdate()
+    //  protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    //  {
+    //      base.OnNavigatedTo(args);
+    //NavigationUpdate();
+    //  }
+
+    private async Task NavigationUpdate()
 	{
 		GroupData = await ProfileSingleton.GetInstance().GetGroup(GroupData.GroupId);
 		await UpdatePage();
@@ -133,7 +154,7 @@ public partial class GroupPage : ContentPage
     protected override bool OnBackButtonPressed()
     {
 		Updating = false;
-		UpdateTask.Wait();
+		UpdateTask?.Wait();
         return base.OnBackButtonPressed();
     }
 

@@ -1115,7 +1115,7 @@ namespace WebApi
                     {
                         cmd.CommandText = "DELETE FROM MemberGroup WHERE GroupID = @group AND UserID = @user";
                         cmd.Parameters.AddWithValue("@group", data["groupId"]);
-                        cmd.Parameters.AddWithValue("userId", data["userId"]);
+                        cmd.Parameters.AddWithValue("@user", data["userId"]);
 
                         int rows = cmd.ExecuteNonQuery();
                         if (rows > 0) return 0;
