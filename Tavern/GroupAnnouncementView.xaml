@@ -5,7 +5,7 @@
     <ContentView.Resources>
         <StyleSheet Source="/Resources/Styles/PageStyles/Chat.css" />
     </ContentView.Resources>
-    <VerticalStackLayout Padding="0,15">
+    <VerticalStackLayout Padding="0,15" x:Name="stackAnnounce">
         <BoxView HeightRequest="1" Color="#77000000"/>
         <Label x:Name="lbChatHead" Text="Announcements" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="24" FontFamily="Seagram"
            TextDecorations="Underline"/>
@@ -35,13 +35,13 @@
                 </DataTemplate>
             </CollectionView.GroupHeaderTemplate>
             <CollectionView.EmptyView>
-                <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontFamily="Seagram" FontSize="16">No message History</Label>
+                <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontFamily="Seagram" FontSize="16">No Announcements</Label>
             </CollectionView.EmptyView>
         </CollectionView>
         <HorizontalStackLayout x:Name="stackPost" HorizontalOptions="CenterAndExpand">
-            <Editor x:Name="txtMessage" MaxLength="200" WidthRequest="250" TextColor="#77000000" Placeholder="Message" PlaceholderColor="#77000000" 
+            <Editor x:Name="txtMessage" MaxLength="200" WidthRequest="250" TextColor="#77000000" Placeholder="Announcement" PlaceholderColor="#77000000" 
                 FontFamily="Seagram" FontSize="16" />
-            <Button x:Name="btnSendMessage" Text="Send" WidthRequest="150" Clicked="PostAnnounement" FontFamily="Seagram" FontSize="16"/>
+            <Button x:Name="btnSendMessage" Text="Post" WidthRequest="150" Clicked="PostAnnounement" FontFamily="Seagram" FontSize="16"/>
         </HorizontalStackLayout>
     </VerticalStackLayout>
 </ContentView>

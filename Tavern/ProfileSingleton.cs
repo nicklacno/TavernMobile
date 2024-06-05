@@ -1153,5 +1153,28 @@ namespace Tavern
                 return null;
             }
         }
+
+        public async Task<int> PostAnnouncement(int groupId, string message)
+        {
+            Dictionary<string, string> values = new Dictionary<string, string>()
+            {
+                { "senderId", ProfileId.ToString() },
+                { "message", message }
+            };
+
+            var json = JsonSerializer.Serialize(values);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            try
+            {
+                var response = await _httpClient.PostAsync($"Groups/{groupId}/PostAnnouncement", content);
+                var ret = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
     }
 }

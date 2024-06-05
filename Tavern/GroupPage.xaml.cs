@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace Tavern;
 
@@ -8,6 +9,8 @@ public partial class GroupPage : ContentPage
 	GroupChatView ChatView { get; set; }
 	GroupAnnouncementView Announcements { get; set; }
 	public bool Updating { get; set; }
+	
+	Task UpdateTask { get; set; }
 
 	public bool IsAnnouncmentsShown { get; set; }
 
@@ -25,7 +28,8 @@ public partial class GroupPage : ContentPage
 		Updating = true;
 		IsAnnouncmentsShown = true;
 		
-		Task.Run(BackgroundUpdate);
+		UpdateTask = Task.Run(BackgroundUpdate);
+		Debug.WriteLine(data.GroupId);
 	}
 
 	/**
@@ -74,7 +78,8 @@ public partial class GroupPage : ContentPage
 			{
 				ModifyButton.Text = "Leave Group";
 			}
-			Announcements = new GroupAnnouncementView(GroupData.GroupId, this);
+			Announcements = new GroupAnnouncementView(GroupData.GroupId, this,
+				GroupData.OwnerId == ProfileSingleton.GetInstance().ProfileId);
 			ChatView = new GroupChatView(GroupData.GroupId, this);
 			GroupChat.Add(Announcements);
 			chatViewBtn.Clicked += ToChat;
@@ -122,7 +127,15 @@ public partial class GroupPage : ContentPage
 
 			Thread.Sleep(2000);
 		}
+		Debug.WriteLine("Updating Stopped");
 	}
+
+    protected override bool OnBackButtonPressed()
+    {
+		Updating = false;
+		UpdateTask.Wait();
+        return base.OnBackButtonPressed();
+    }
 
     private async void SelectMember(object sender, SelectionChangedEventArgs e)
     {
