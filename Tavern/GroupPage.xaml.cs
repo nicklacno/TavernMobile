@@ -13,6 +13,7 @@ public partial class GroupPage : ContentPage
 	Task UpdateTask { get; set; }
 
 	public bool IsAnnouncmentsShown { get; set; }
+	public bool IsOwner { get; set; }
 
 	public GroupPage(int id)
 	{
@@ -53,13 +54,13 @@ public partial class GroupPage : ContentPage
 			layoutMembers.ItemsSource = GroupData.Members;
 
 			bool isInGroup = false;
-			bool isOwner = false;
+			IsOwner = false;
 			foreach (OtherUser m in GroupData.Members)
 			{
 				if (m.Id == ProfileSingleton.GetInstance().ProfileId)
 				{
 					isInGroup = true;
-					isOwner = GroupData.OwnerId == ProfileSingleton.GetInstance().ProfileId;
+					IsOwner = GroupData.OwnerId == ProfileSingleton.GetInstance().ProfileId;
 					break;
 				}
 			}
@@ -70,7 +71,7 @@ public partial class GroupPage : ContentPage
 				layoutMembers.SelectionMode = SelectionMode.None;
 				return;
 			}
-			else if (isOwner)
+			else if (IsOwner)
 			{
 				ModifyButton.Text = "Edit Group";
 				ModifyButton.Clicked += PushEditGroupPage;
@@ -80,7 +81,7 @@ public partial class GroupPage : ContentPage
 				ModifyButton.Text = "Leave Group";
 				ModifyButton.Clicked += LeaveGroup;
 			}
-			Announcements = new GroupAnnouncementView(GroupData.GroupId, this, isOwner);
+			Announcements = new GroupAnnouncementView(GroupData.GroupId, this, IsOwner);
 			ChatView = new GroupChatView(GroupData.GroupId, this);
 			GroupChat.Add(Announcements);
 			chatViewBtn.Clicked += ToChat;
@@ -162,13 +163,37 @@ public partial class GroupPage : ContentPage
     {
 		ProfileSingleton singleton = ProfileSingleton.GetInstance();
 
-
 		if (layoutMembers.SelectedItem is OtherUser o && o.Id != singleton.ProfileId)
 		{
-			Profile data = await singleton.GetProfile(o.Id);
-			if (data != null)
+			string option = "View Profile";
+			if (IsOwner)
 			{
-				await Navigation.PushAsync(new OtherUserPage(data));
+				option = await DisplayActionSheet($"What would you like to do with {o.Name}?", "Cancel", null, "View Profile", $"Kick {o.Name}");
+				if (option.Equals($"Kick {o.Name}"))
+				{
+					//Kick Person
+					bool confirm = await DisplayAlert("Kick Member", $"Are you sure you want to kick {o.Name}?", "Yes", "No");
+					if (confirm)
+					{
+						//Properly Kick Person
+						int ret = await singleton.KickMember(GroupData.GroupId, o.Id);
+						if (ret == 0)
+						{
+							await DisplayAlert("Success", $"Kicked {o.Name} From {GroupData.Name}", "Okay");
+							await UpdatePage(GroupData.GroupId);
+							return;
+						}
+					}
+
+				}
+			}
+			if (option.Equals("View Profile"))
+			{
+				Profile data = await singleton.GetProfile(o.Id);
+				if (data != null)
+				{
+					await Navigation.PushAsync(new OtherUserPage(data));
+				}
 			}
 		}
 		layoutMembers.SelectedItem = null;
