@@ -1176,5 +1176,27 @@ namespace Tavern
                 return -1;
             }
         }
+
+        public async Task<int> KickMember(int groupId, int otherId)
+        {
+            Dictionary<string, int> values = new Dictionary<string, int>()
+            {
+                { "userId", ProfileId },
+                { "otherId", otherId }
+            };
+
+            var json = JsonSerializer.Serialize(values);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            try
+            {
+                var response = await _httpClient.PostAsync($"Groups/{groupId}/KickMember", content);
+                return Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return -1;
+            }
+        }
     }
 }

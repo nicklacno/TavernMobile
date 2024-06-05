@@ -31,6 +31,10 @@ public partial class GroupAnnouncementView : ContentView
         var ret = await ProfileSingleton.GetInstance().PostAnnouncement(GroupId, txtMessage.Text);
 
         Debug.WriteLine(ret);
+        if (ret != 0)
+        {
+            await Parent.DisplayAlert("An Error Occurred", "Failed to Post the Announcement", "Okay");
+        }
         txtMessage.Text = "";
     }
 

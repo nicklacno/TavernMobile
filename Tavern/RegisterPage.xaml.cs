@@ -17,48 +17,48 @@ public partial class RegisterPage : ContentPage
     {
         if (txtUsername.Text == "")
         {
-            ShowErrorMessage("Enter Valid Username");
+            await ShowErrorMessage("Enter Valid Username");
             return;
         }
         if (!txtConfirmPassword.Text.Equals(txtPassword.Text))
         {
             //error handling here
-            ShowErrorMessage("Confirm Password and Password don't match");
+            await ShowErrorMessage("Confirm Password and Password don't match");
             return;
         }
 
         if (!ValidEmail())
         {
             //error handling here
-            ShowErrorMessage("Invalid Email");
+            await ShowErrorMessage("Invalid Email");
             return;
         }
         int verification = PasswordVerification();
         if (verification == -1)
         {
             //error handnling here
-            ShowErrorMessage("Password missing lowercase character");
+            await ShowErrorMessage("Password missing lowercase character");
             return;
         }
         else if (verification == -2) 
         {
-            ShowErrorMessage("Password missing uppercase character");
+            await ShowErrorMessage("Password missing uppercase character");
             return;
         }
         else if (verification == -3)
         {
-            ShowErrorMessage("Password missing special character");
+            await ShowErrorMessage("Password missing special character");
             return;
         }
         else if (verification == -4)
         {
-            ShowErrorMessage("Password missing number");
+            await ShowErrorMessage("Password missing number");
             return;
         }
 
         if (txtDate.Date.AddYears(18) > DateTime.Now)
         {
-            ShowErrorMessage("You are under 18, Redirecting to Login Page");
+            await ShowErrorMessage("You are under 18, Redirecting to Login Page");
             Navigation.PopAsync();
             return;
         }
@@ -70,15 +70,15 @@ public partial class RegisterPage : ContentPage
         {
             case -1:
                 //error handling here
-                ShowErrorMessage("Failed to connect to server");
+                await ShowErrorMessage("Failed to connect to server");
                 break;
             case -2:
                 //error handling here
-                ShowErrorMessage("Duplicate Username");
+                await ShowErrorMessage("Duplicate Username");
                 break;
             case -3:
                 //error handling here
-                ShowErrorMessage("Duplicate Email");
+                await ShowErrorMessage("Duplicate Email");
                 break;
             default:
                 ProfileSingleton.GetInstance().switchMainPage(new NavigationPage(new TabbedMainPage()));

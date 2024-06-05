@@ -127,7 +127,7 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "SELECT UserID,SaltedPassword,Salt FROM Customers WHERE UserName = @UserP";
+                        cmd.CommandText = "SELECT UserID,SaltedPassword,Salt FROM Customers WHERE UserName COLLATE SQL_Latin1_General_CP1_CS_AS LIKE @UserP";
                         cmd.Parameters.AddWithValue("@UserP", username); //query parameter
 
                         SqlDataReader reader = cmd.ExecuteReader();
@@ -277,7 +277,7 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "SELECT UserID FROM Customers WHERE UserName = @UserP";
+                        cmd.CommandText = "SELECT UserID FROM Customers WHERE UserName COLLATE SQL_Latin1_General_CP1_CS_AS LIKE @UserP";
                         cmd.Parameters.AddWithValue("@UserP", name);
 
                         SqlDataReader reader = cmd.ExecuteReader();
@@ -310,7 +310,7 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "SELECT UserID FROM Customers WHERE UserEmail = @EmailP";
+                        cmd.CommandText = "SELECT UserID FROM Customers WHERE UserEmail COLLATE SQL_Latin1_General_CP1_CS_AS LIKE @EmailP";
                         cmd.Parameters.AddWithValue("@EmailP", email);
 
                         SqlDataReader reader = cmd.ExecuteReader();

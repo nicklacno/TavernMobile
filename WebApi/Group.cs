@@ -241,7 +241,7 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "SELECT GroupID FROM Groups WHERE GroupName = @GroupName";
+                        cmd.CommandText = "SELECT GroupID FROM Groups WHERE GroupName COLLATE SQL_Latin1_General_CP1_CS_AS LIKE @GroupName";
                         cmd.Parameters.AddWithValue("@GroupName", groupName);
 
                         SqlDataReader reader = cmd.ExecuteReader();
@@ -393,7 +393,7 @@ namespace WebApi
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = "SELECT GroupID FROM Groups WHERE GroupName = @GroupP";
+                        cmd.CommandText = "SELECT GroupID FROM Groups WHERE GroupName COLLATE SQL_Latin1_General_CP1_CS_AS LIKE @GroupP";
                         cmd.Parameters.AddWithValue("@GroupP", newName);
 
                         SqlDataReader reader = cmd.ExecuteReader();
