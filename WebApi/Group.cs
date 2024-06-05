@@ -1101,6 +1101,35 @@ namespace WebApi
             }
         }
 
+        public static int LeaveGroup(Dictionary<string, int> data)
+        {
+            SetConnectionString();
+            if (!data.ContainsKey("groupId") || !data.ContainsKey("userId")) return -3;
+            if (IsOwner(data["groupId"], data["userId"])) return -2;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "DELETE FROM MemberGroup WHERE GroupID = @group AND UserID = @user";
+                        cmd.Parameters.AddWithValue("@group", data["groupId"]);
+                        cmd.Parameters.AddWithValue("userId", data["userId"]);
+
+                        int rows = cmd.ExecuteNonQuery();
+                        if (rows > 0) return 0;
+                        return -1;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return -1;
+            }
+        }
+
         //Delete Group
         //Ban member
     }

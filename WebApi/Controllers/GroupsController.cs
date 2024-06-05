@@ -119,13 +119,19 @@ namespace WebApi.Controllers
         [HttpPost("{id}/PostAnnouncement")]
         public int PostAnnouncement(int id, Dictionary<string, string> data)
         {
-            return Group.SendAnnouncement(id,data);
+            return Group.SendAnnouncement(id, data);
         }
 
         [HttpPost("{id}/KickMember")]
         public int RemoveMember(int id, Dictionary<string, int> data)
         {
-            return Group.RemoveMember(id,data);
+            return Group.RemoveMember(id, data);
+        }
+
+        [HttpPost("LeaveGroup")]
+        public int LeaveGroup(Dictionary<string, int> data)
+        {
+            return Group.LeaveGroup(data);
         }
     }
 }

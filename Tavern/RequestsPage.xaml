@@ -14,7 +14,20 @@
                 <CollectionView x:Name="requestStack" IsGrouped="True" SelectionMode="Single" Margin="15" HeightRequest="200" 
                                 SelectionChanged="UserSelected">
                     <CollectionView.Header>
-                        <Label Text="Incoming Requests:" HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" FontSize="24"
+                        <Label Text="Incoming Group Requests:" HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" FontSize="24"
+                               FontFamily="Seagram" TextColor="Black" TextDecorations="Underline"/>
+                    </CollectionView.Header>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="local:Request">
+                            <Label Text="{Binding UserName}" HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start"
+                                   FontSize="20" FontFamily="Seagram" Padding="5,5" TextColor="Black"/>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <CollectionView x:Name="friendRequestStack" SelectionMode="Single" Margin="15" HeightRequest="200" 
+                                SelectionChanged="UserSelected">
+                    <CollectionView.Header>
+                        <Label Text="Incoming Friend Requests:" HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" FontSize="24"
                                FontFamily="Seagram" TextColor="Black" TextDecorations="Underline"/>
                     </CollectionView.Header>
                     <CollectionView.GroupHeaderTemplate>
@@ -30,39 +43,6 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                <!--<CollectionView x:Name="myFriendRequestsStack" SelectionMode="Single" Margin="15" HeightRequest="200">
-                    <CollectionView.Header>
-                        <Label Text="Outgoing Friend Requests:" HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" FontSize="24"
-                               FontFamily="Algerian" TextColor="Black" TextDecorations="Underline"/>
-                    </CollectionView.Header>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="local:OtherUser">
-                            <Label Text="{Binding Name}"/>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                    <CollectionView.EmptyViewTemplate>
-                        <DataTemplate>
-                            <Label>You have no open friend requests</Label>
-                        </DataTemplate>
-                    </CollectionView.EmptyViewTemplate>
-                </CollectionView>
-                <CollectionView x:Name="myGroupRequestsStack" SelectionMode="Single" Margin="15" HeightRequest="200">
-                    <CollectionView.Header>
-                        <Label Text="Outgoing Group Requests:" HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand" FontSize="24"
-                               FontFamily="Algerian" TextColor="Black" TextDecorations="Underline"/>
-                    </CollectionView.Header>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="local:Request">
-                            <Label Text="{Binding UserName}" HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Start"
-                                   FontSize="20" FontFamily="Seagram" Padding="5,5" TextColor="Black"/>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                    <CollectionView.EmptyViewTemplate>
-                        <DataTemplate>
-                            <Label>You have no open Group requests</Label>
-                        </DataTemplate>
-                    </CollectionView.EmptyViewTemplate>
-                </CollectionView>-->
             </VerticalStackLayout>
         </ScrollView>
     </Grid>

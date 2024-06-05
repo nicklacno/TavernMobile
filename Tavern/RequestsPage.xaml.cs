@@ -5,18 +5,18 @@ namespace Tavern;
 
 public partial class RequestsPage : ContentPage
 {
-	ObservableCollection<RequestByGroup> requests = new ObservableCollection<RequestByGroup>();
+	ObservableCollection<RequestByGroup> groupRequests = new ObservableCollection<RequestByGroup>();
 
-	ObservableCollection<OtherUser> myFriendRequests = new ObservableCollection<OtherUser>();
+	ObservableCollection<Request> friendRequests = new ObservableCollection<Request>();
 
-	ObservableCollection<Request> myGroupRequests = new ObservableCollection<Request>();
 	public RequestsPage()
 	{
 		InitializeComponent();
 		BindingContext = this;
 		//myFriendRequestsStack.ItemsSource = myFriendRequests;
 		//myGroupRequestsStack.ItemsSource= myGroupRequests;
-		requestStack.ItemsSource = requests;
+		requestStack.ItemsSource = groupRequests;
+		friendRequestStack.ItemsSource = friendRequests;
 		
 		Task t = Task.Run(async () => { await UpdateRequests(); });
 		t.Wait();
@@ -26,36 +26,26 @@ public partial class RequestsPage : ContentPage
 	{
 		var singleton = ProfileSingleton.GetInstance();
 
-		//myFriendRequests.Clear();
-		//var outgoingFriends = await singleton.MyFriendRequests();
-		//if (outgoingFriends.Count > 0)
-		//{
-		//	foreach (var friend in outgoingFriends)
-		//	{
-		//		myFriendRequests.Add(friend);
-		//	}
-		//}
-		
-		//myGroupRequests.Clear();
-		//var outgoingGroups = await singleton.MyGroupRequests();
-		//if (outgoingGroups.Count > 0)
-		//{
-		//	foreach(var group in outgoingGroups)
-		//	{
-		//		myGroupRequests.Add(group);
-		//	}
-		//}
-
-		requests.Clear();
+		groupRequests.Clear();
+		friendRequests.Clear();
 		var incomingRequests = await singleton.GetAllRequests();
 		if (incomingRequests.Count > 0)
 		{
-			foreach( var incoming in incomingRequests)
+			if (incomingRequests.First().GroupId == -1)
 			{
-				requests.Add(incoming);
+				foreach (var request in incomingRequests.First())
+				{
+					friendRequests.Add(request);
+				}
+				incomingRequests.RemoveAt(0);
+			}
+			foreach (var incoming in incomingRequests)
+			{
+				groupRequests.Add(incoming);
 			}
 		}
-		Debug.WriteLine(requests.Count);
+		Debug.WriteLine(groupRequests.Count);
+
 	}
 
     protected async override void OnNavigatedTo(NavigatedToEventArgs args)
@@ -77,7 +67,8 @@ public partial class RequestsPage : ContentPage
 			if (result.Equals("Cancel")) return;
 			else if (result.Equals("View Profile"))
 			{
-				await Navigation.PushAsync(new OtherUserPage(r.UserId));
+				var otherPage = new OtherUserPage(r.UserId);
+				await Navigation.PushAsync(otherPage);
 				return;
 			}
 
@@ -102,22 +93,15 @@ public partial class RequestsPage : ContentPage
 				await ShowErrorMessage("Failed to Process Request");
 				return;
 			}
-			foreach (var rbg in requests)
-			{
-				if (rbg.Remove(r))
-				{
-					if (rbg.Count == 0) requests.Remove(rbg);
-					requestStack.ItemsSource = requests;
-					break;
-				}
-			}
 			await singleton.SetValues();
-			await ShowErrorMessage("Successfully Processed Request");
+			await UpdateRequests();
+
+			await ShowErrorMessage("Successfully Processed Request", "Success");
 		}
     }
 
-    public async Task ShowErrorMessage(string message)
+    public async Task ShowErrorMessage(string message, string title = "An Error Occurred")
     {
-        await DisplayAlert("An Error Occurred", message, "Okay");
+        await DisplayAlert(title, message, "Okay");
     }
 }

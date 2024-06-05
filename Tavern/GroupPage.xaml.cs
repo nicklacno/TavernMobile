@@ -53,15 +53,16 @@ public partial class GroupPage : ContentPage
 			layoutMembers.ItemsSource = GroupData.Members;
 
 			bool isInGroup = false;
+			bool isOwner = false;
 			foreach (OtherUser m in GroupData.Members)
 			{
 				if (m.Id == ProfileSingleton.GetInstance().ProfileId)
 				{
 					isInGroup = true;
+					isOwner = GroupData.OwnerId == ProfileSingleton.GetInstance().ProfileId;
 					break;
 				}
 			}
-			
 			if (!isInGroup)
 			{
 				ModifyButton.Text = "Request to Join";
@@ -69,7 +70,7 @@ public partial class GroupPage : ContentPage
 				layoutMembers.SelectionMode = SelectionMode.None;
 				return;
 			}
-			else if (GroupData.OwnerId == ProfileSingleton.GetInstance().ProfileId)
+			else if (isOwner)
 			{
 				ModifyButton.Text = "Edit Group";
 				ModifyButton.Clicked += PushEditGroupPage;
@@ -78,8 +79,7 @@ public partial class GroupPage : ContentPage
 			{
 				ModifyButton.Text = "Leave Group";
 			}
-			Announcements = new GroupAnnouncementView(GroupData.GroupId, this,
-				GroupData.OwnerId == ProfileSingleton.GetInstance().ProfileId);
+			Announcements = new GroupAnnouncementView(GroupData.GroupId, this, isOwner);
 			ChatView = new GroupChatView(GroupData.GroupId, this);
 			GroupChat.Add(Announcements);
 			chatViewBtn.Clicked += ToChat;
@@ -140,6 +140,8 @@ public partial class GroupPage : ContentPage
     private async void SelectMember(object sender, SelectionChangedEventArgs e)
     {
 		ProfileSingleton singleton = ProfileSingleton.GetInstance();
+
+
 		if (layoutMembers.SelectedItem is OtherUser o && o.Id != singleton.ProfileId)
 		{
 			Profile data = await singleton.GetProfile(o.Id);
@@ -150,6 +152,9 @@ public partial class GroupPage : ContentPage
 		}
 		layoutMembers.SelectedItem = null;
     }
+
+
+
 
 	private void ToChat(object sender, EventArgs e)
 	{
