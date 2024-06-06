@@ -29,13 +29,12 @@ public partial class OtherUserPage : ContentPage
 	{
 		ProfileSingleton singleton = ProfileSingleton.GetInstance();
 		ProfileData = await singleton.GetProfile(id);
-
-		PopulateData();
+		await PopulateData();
 		btnRequest.Text = "";
 		btnRequest.IsEnabled = false;
 	}
 
-	public void PopulateData()
+	public async Task PopulateData()
 	{
 		Name.Text = ProfileData.ProfileName;
 		Bio.Text = ProfileData.ProfileBio == null ? "" : ProfileData.ProfileBio;
@@ -43,6 +42,10 @@ public partial class OtherUserPage : ContentPage
 		groupList.ItemsSource = ProfileData.Groups;
 
 		ProfileSingleton singleton = ProfileSingleton.GetInstance();
+		ProfileData.ImageID = await singleton.GetProfilePic(ProfileData.ProfileId);
+
+		imgPfp.Source = singleton.imagePaths[ProfileData.ImageID].Path;
+
 		bool isFriend = false;
 		foreach (var friend in singleton.Friends)
 		{
@@ -104,6 +107,6 @@ public partial class OtherUserPage : ContentPage
 		ProfileSingleton singleton = ProfileSingleton.GetInstance();
 		int ret = await singleton.RemoveFriend(ProfileData.ProfileId);
 		Debug.WriteLine(ret);
-
+		
 	}
 }

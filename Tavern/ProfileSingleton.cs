@@ -16,7 +16,9 @@ namespace Tavern
         public Dictionary<int, PFP> imagePaths = new Dictionary<int, PFP>()
         {
             { 1, new PFP{ImageId = 1, Path="/Resources/Images/AvatarImages/a1.png" } },
-            { 4, new PFP{ImageId = 4, Path="/Resources/Images/AvatarImages/a4.png" } }
+            { 2, new PFP{ImageId = 2, Path="/Resources/Images/AvatarImages/a2.png" } },
+            { 3, new PFP{ImageId = 3, Path="/Resources/Images/AvatarImages/a1.png" } },
+            { 4, new PFP{ImageId = 4, Path="/Resources/Images/AvatarImages/a1.png" } }
         };
 
         public delegate void BasePageEvent(Page page);
