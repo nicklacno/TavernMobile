@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Tavern;
 
@@ -29,8 +30,6 @@ public partial class GroupPage : ContentPage
 		Updating = true;
 		IsAnnouncmentsShown = true;
 		
-		UpdateTask = Task.Run(BackgroundUpdate);
-		Debug.WriteLine(data.GroupId);
 	}
 
 	/**
@@ -40,7 +39,13 @@ public partial class GroupPage : ContentPage
     private async Task UpdatePage(int id = -1)
     {
 		if (id > 0)
-			GroupData = await ProfileSingleton.GetInstance().GetGroup(id);
+		{
+			var group = await ProfileSingleton.GetInstance().GetGroup(id);
+			if (group != null)
+			{
+				GroupData = group;
+			}
+		}
 
         if (GroupData != null)
 		{
@@ -69,6 +74,7 @@ public partial class GroupPage : ContentPage
 				ModifyButton.Text = "Request to Join";
 				ModifyButton.Clicked += SendRequest;
 				layoutMembers.SelectionMode = SelectionMode.None;
+				chatViewBtn.IsVisible = false;
 				return;
 			}
 			else if (IsOwner)
@@ -86,6 +92,7 @@ public partial class GroupPage : ContentPage
 			GroupChat.Add(Announcements);
 			chatViewBtn.Clicked += ToChat;
             chatViewBtn.Text = "View Group Chat";
+            UpdateTask = Task.Run(BackgroundUpdate);
         }
     }
 
@@ -138,6 +145,7 @@ public partial class GroupPage : ContentPage
 		await SwipingFunctionality.SwipingSingleton.GetInstance().SwipeRight(GroupData);
 		ModifyButton.Text = "Request Sent";
 		ModifyButton.Clicked -= SendRequest;
+		ModifyButton.IsEnabled = false;
 	}
 
 	public async Task BackgroundUpdate()
@@ -155,7 +163,10 @@ public partial class GroupPage : ContentPage
     protected override bool OnBackButtonPressed()
     {
 		Updating = false;
-		UpdateTask?.Wait();
+		if (UpdateTask != null)
+		{
+			UpdateTask.Wait();
+		}
         return base.OnBackButtonPressed();
     }
 

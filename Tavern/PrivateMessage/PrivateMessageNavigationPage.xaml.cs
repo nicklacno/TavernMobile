@@ -10,22 +10,18 @@ public partial class PrivateMessageNavigationPage : ContentPage
 	public PrivateMessageNavigationPage()
 	{
 		InitializeComponent();
-		friendsList.ItemsSource = friends;
-        foreach (var friend in ProfileSingleton.GetInstance().Friends)
-        {
-            friends.Add(friend);
-        }
+		friendsList.ItemsSource = ProfileSingleton.GetInstance().Friends;
     }
 
-    protected override void OnNavigatedTo(NavigatedToEventArgs args)
-    {
-        base.OnNavigatedTo(args);
-		friends.Clear();
-		foreach (var friend in ProfileSingleton.GetInstance().Friends)
-		{
-			friends.Add(friend);
-		}
-    }
+  //  protected override void OnNavigatedTo(NavigatedToEventArgs args)
+  //  {
+  //      base.OnNavigatedTo(args);
+		//friends.Clear();
+		//foreach (var friend in ProfileSingleton.GetInstance().Friends)
+		//{
+		//	friends.Add(friend);
+		//}
+  //  }
 
 
     private async void ChatSelected(object sender, SelectionChangedEventArgs e)

@@ -15,10 +15,10 @@ namespace Tavern
 
         public Dictionary<int, PFP> imagePaths = new Dictionary<int, PFP>()
         {
-            { 1, new PFP{ImageId = 1, Path="/Resources/Images/AvatarImages/a1.png" } },
-            { 2, new PFP{ImageId = 2, Path="/Resources/Images/AvatarImages/a2.png" } },
-            { 3, new PFP{ImageId = 3, Path="/Resources/Images/AvatarImages/a1.png" } },
-            { 4, new PFP{ImageId = 4, Path="/Resources/Images/AvatarImages/a1.png" } }
+            { 1, new PFP{ImageId = 1, Path="/Resources/Images/AvatarImages/b1.jpg" } },
+            { 2, new PFP{ImageId = 2, Path="/Resources/Images/AvatarImages/b2.jpg" } },
+            { 3, new PFP{ImageId = 3, Path="/Resources/Images/AvatarImages/b3.jpg" } },
+            { 4, new PFP{ImageId = 4, Path="/Resources/Images/AvatarImages/b4.jpg" } }
         };
 
         public delegate void BasePageEvent(Page page);
@@ -161,7 +161,19 @@ namespace Tavern
             {
                 string json = await _httpClient.GetStringAsync($"Profile/{ProfileId}/Friends");
                 JToken token = JToken.Parse(json);
-                Friends = ConvertToMembers(token);
+
+                var friends = ConvertToMembers(token);
+                if (Friends == null)
+                    Friends = friends;
+                else
+                {
+                    Friends.Clear();
+                    foreach (var friend in friends)
+                    {
+                        friends.Add(friend);
+                    }
+                }
+                    
 
                 return Friends;
             }

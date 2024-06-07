@@ -21,7 +21,9 @@ public partial class ProfilePage : ContentPage
 		groupList.ItemsSource = singleton.Groups;
 		tagList.ItemsSource = singleton.Tags;
 		friendsList.ItemsSource = singleton.Friends;
-		imgPfp.Source = singleton.imagePaths[singleton.ImageID].Path;
+
+		var id = singleton.imagePaths.ContainsKey(singleton.ImageID) ? singleton.ImageID : 1;
+		imgPfp.Source = singleton.imagePaths[id].Path;
 		//Task.Run(BackgroundStuff);
 	}
 	/**
@@ -75,7 +77,8 @@ public partial class ProfilePage : ContentPage
 		groupList.ItemsSource = singleton.Groups;
 		tagList.ItemsSource = singleton.Tags;
 
-		imgPfp.Source = singleton.imagePaths[singleton.ImageID].Path;
+		var id = singleton.imagePaths.ContainsKey(singleton.ImageID) ? singleton.ImageID : 1;
+		imgPfp.Source = singleton.imagePaths[id].Path;
     }
 
     protected override void OnNavigatedTo(NavigatedToEventArgs args)

@@ -51,7 +51,7 @@
             <VerticalStackLayout x:Name="GroupList" Margin="5">
                 <Label Text="Groups" FontFamily="Seagram" FontSize="24" TextDecorations="Underline" HorizontalOptions="CenterAndExpand" 
                        HorizontalTextAlignment="Center"/>
-                <CollectionView x:Name="groupList" ItemsLayout="VerticalList" MaximumHeightRequest="140" HorizontalOptions="CenterAndExpand">
+                <CollectionView x:Name="groupList" ItemsLayout="VerticalList" MaximumHeightRequest="110" HorizontalOptions="CenterAndExpand" >
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Label Text="{Binding Name}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontFamily="Seagram"
@@ -68,7 +68,7 @@
             <VerticalStackLayout x:Name="FriendsList">
                 <Label Text="Friends" FontFamily="Seagram" FontSize="24" TextDecorations="Underline" />
                 <Rectangle HorizontalOptions="Fill" HeightRequest="4" Opacity="0"/>
-                <CollectionView x:Name="friendsList" ItemsLayout="VerticalList" MaximumHeightRequest="140">
+                <CollectionView x:Name="friendsList" ItemsLayout="VerticalList" MaximumHeightRequest="80">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="n:OtherUser">
                             <Label Text="{Binding Name}" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontFamily="Seagram"

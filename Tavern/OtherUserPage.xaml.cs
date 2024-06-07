@@ -44,7 +44,8 @@ public partial class OtherUserPage : ContentPage
 		ProfileSingleton singleton = ProfileSingleton.GetInstance();
 		ProfileData.ImageID = await singleton.GetProfilePic(ProfileData.ProfileId);
 
-		imgPfp.Source = singleton.imagePaths[ProfileData.ImageID].Path;
+		var id = singleton.imagePaths.ContainsKey(singleton.ImageID) ? singleton.ImageID : 1;
+		imgPfp.Source = singleton.imagePaths[id].Path;
 
 		bool isFriend = false;
 		foreach (var friend in singleton.Friends)
@@ -107,6 +108,16 @@ public partial class OtherUserPage : ContentPage
 		ProfileSingleton singleton = ProfileSingleton.GetInstance();
 		int ret = await singleton.RemoveFriend(ProfileData.ProfileId);
 		Debug.WriteLine(ret);
-		
+		if (ret == 0)
+		{
+			PrivateChat.Remove(chat);
+			chat = null;
+
+			btnRequest.Text = "Send Friend Request";
+			btnRequest.Clicked -= RemoveFriend;
+			btnRequest.Clicked += SendFriendRequest;
+
+			await singleton.GetFriendsList();
+        }
 	}
 }
