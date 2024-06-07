@@ -50,8 +50,7 @@
                     <CollectionView x:Name="tagList"
                                 HeightRequest="200"
                                 SelectionMode="Multiple"
-                                ItemsLayout="VerticalGrid 2"
-                                ItemsSource="{Binding tagList}"
+                                ItemsLayout="VerticalList"
                                 Margin="10"
                                 >
                         <CollectionView.ItemTemplate>

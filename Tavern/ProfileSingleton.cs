@@ -170,7 +170,7 @@ namespace Tavern
                     Friends.Clear();
                     foreach (var friend in friends)
                     {
-                        friends.Add(friend);
+                        Friends.Add(friend);
                     }
                 }
                     
@@ -1281,9 +1281,9 @@ namespace Tavern
             }
         }
 
-        public List<PFP> GetAllPFPs()
+        public ObservableCollection<PFP> GetAllPFPs()
         {
-            List<PFP> pfps = new List<PFP>();
+            ObservableCollection<PFP> pfps = new ObservableCollection<PFP>();
             foreach (int key in imagePaths.Keys)
             {
                 pfps.Add(imagePaths[key]);

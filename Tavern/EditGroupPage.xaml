@@ -45,7 +45,7 @@
                 </VerticalStackLayout>
                 <CollectionView
                     x:Name="GroupTagsList"
-                    SelectionMode="Multiple">
+                    SelectionMode="Multiple" HorizontalOptions="CenterAndExpand">
                     <CollectionView.Header>
                         <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" FontSize="25" FontFamily="Seagram"
                                TextDecorations="Underline">Tags</Label>
@@ -58,12 +58,8 @@
                                 FontFamily="Seagram"/>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
-                    <CollectionView.Footer>
-                        <Button Text="Update Tags" HorizontalOptions="CenterAndExpand" Clicked="UpdateTagsList"/>
-                    </CollectionView.Footer>
                 </CollectionView>
-                <VerticalStackLayout x:Name="RemovingMembers">
-                </VerticalStackLayout>
+                <Button Text="Update Tags" HorizontalOptions="CenterAndExpand" Clicked="UpdateTagsList" FontSize="20"/>
             </VerticalStackLayout>
         </ScrollView>
     </Grid>
